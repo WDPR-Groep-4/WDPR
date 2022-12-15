@@ -1,23 +1,12 @@
-import {
-    AppBar,
-    Button,
-    ClickAwayListener,
-    CssBaseline,
-    Grow,
-    IconButton,
-    MenuItem,
-    MenuList,
-    Paper,
-    Popper,
-    Toolbar,
-    Typography,
-} from "@mui/material";
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState, useRef, useEffect } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountPopper from "./AccountPopper";
+import NavLinks from "./NavLinks";
 
 export default function Navbar(props) {
     const [openAccount, setOpenAccount] = useState(false);
@@ -55,13 +44,6 @@ export default function Navbar(props) {
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography
-                    variant="h5"
-                    component="div"
-                    sx={{ fontWeight: "bold", flexGrow: 1 }}
-                >
-                    <Link to="/">Theater Laak</Link>
-                </Typography>
                 <IconButton
                     size="large"
                     edge="start"
@@ -71,21 +53,21 @@ export default function Navbar(props) {
                 >
                     <MenuIcon />
                 </IconButton>
+                <Typography
+                    variant="h5"
+                    component="div"
+                    sx={{ fontWeight: "bold", flexGrow: 1 }}
+                >
+                    <Link to="/">Theater Laak</Link>
+                </Typography>
                 <Stack
                     direction={"row"}
                     spacing={1.5}
                     sx={{ display: { xs: "none", sm: "block" } }}
                 >
-                    <Button color="inherit" sx={{ fontWeight: 600 }}>
-                        <Link to="/">Home</Link>
-                    </Button>
-                    <Button color="inherit" sx={{ fontWeight: 600 }}>
-                        <Link to="/agenda">Agenda</Link>
-                    </Button>
-                    <Button color="inherit" sx={{ fontWeight: 600 }}>
-                        <Link to="/steun-ons">Steun ons</Link>
-                    </Button>
-
+                    <NavLinks />
+                </Stack>
+                <Stack direction={"row"}>
                     <IconButton
                         color="inherit"
                         sx={{ fontWeight: 600 }}
@@ -102,48 +84,12 @@ export default function Navbar(props) {
                             <ShoppingCartIcon />
                         </Link>
                     </IconButton>
-                    <Popper
-                        open={openAccount}
-                        anchorEl={anchorRef.current}
-                        role={undefined}
-                        placement="bottom-start"
-                        transition
-                        disablePortal
-                    >
-                        {({ TransitionProps, placement }) => (
-                            <Grow
-                                {...TransitionProps}
-                                style={{
-                                    transformOrigin:
-                                        placement === "bottom-start"
-                                            ? "left top"
-                                            : "left bottom",
-                                }}
-                            >
-                                <Paper>
-                                    <ClickAwayListener onClickAway={handleCloseAccount}>
-                                        <MenuList
-                                            autoFocusItem={openAccount}
-                                            id="composition-button"
-                                            onKeyDown={handleListKeyDown}
-                                        >
-                                            <MenuItem onClick={handleCloseAccount}>
-                                                <Link to="/account">Account</Link>
-                                            </MenuItem>
-                                            <MenuItem onClick={handleCloseAccount}>
-                                                <Link to="/account/kaarten">
-                                                    Mijn kaartjes
-                                                </Link>
-                                            </MenuItem>
-                                            <MenuItem onClick={handleCloseAccount}>
-                                                Uitloggen
-                                            </MenuItem>
-                                        </MenuList>
-                                    </ClickAwayListener>
-                                </Paper>
-                            </Grow>
-                        )}
-                    </Popper>
+                    <AccountPopper
+                        openAccount={openAccount}
+                        anchorRef={anchorRef}
+                        handleCloseAccount={handleCloseAccount}
+                        handleListKeyDown={handleListKeyDown}
+                    />
                 </Stack>
             </Toolbar>
         </AppBar>
