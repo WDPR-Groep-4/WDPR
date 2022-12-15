@@ -1,7 +1,9 @@
+import { Container } from "@mui/system";
+
 export default function HomePage(props) {
     return (
-        <div className="home-page">
+        <Container maxWidth="xl">
             <h1>Home</h1>
-        </div>
+        </Container>
     );
 }
