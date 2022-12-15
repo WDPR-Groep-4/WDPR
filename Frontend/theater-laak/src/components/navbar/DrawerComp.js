@@ -1,4 +1,13 @@
-import { Drawer, List, ListItemButton } from "@mui/material";
+import {
+    Box,
+    Divider,
+    Drawer,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Typography,
+} from "@mui/material";
 
 import { Link } from "react-router-dom";
 
@@ -10,18 +19,26 @@ export default function DrawerComp(props) {
                 anchorEl={props.anchorRef.current}
                 onBackdropClick={props.handleCloseAccount}
             >
-                <List>
-                    {props.navLinks.map((link) => (
-                        <ListItemButton
-                            onClick={() => props.setOpenDrawer(false)}
-                            key={link.name}
-                            component={Link}
-                            to={link.path}
-                        >
-                            {link.name}
-                        </ListItemButton>
-                    ))}
-                </List>
+                <Typography variant="h6" sx={{ p: 2 }}>
+                    Theather Laak
+                </Typography>
+                <Divider />
+                <Box>
+                    <List>
+                        {props.navLinks.map((link) => (
+                            <ListItem>
+                                <ListItemButton
+                                    onClick={() => props.setOpenDrawer(false)}
+                                    key={link.name}
+                                    component={Link}
+                                    to={link.path}
+                                >
+                                    <ListItemText primary={link.name} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
             </Drawer>
         </>
     );
