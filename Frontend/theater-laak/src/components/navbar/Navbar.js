@@ -1,16 +1,12 @@
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { Link } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useState, useRef, useEffect } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import AccountPopper from "./AccountPopper";
 
-import DrawerComp from "./DrawerComp";
 import AccountButton from "./AccountButton";
+import MobileMenuButton from "./MobileMenuButton";
 export default function Navbar(props) {
-    const [openDrawer, setOpenDrawer] = useState(false);
     const navLinks = [
         { name: "Home", path: "/" },
         { name: "Agenda", path: "/agenda" },
@@ -20,16 +16,8 @@ export default function Navbar(props) {
     return (
         <AppBar position="static">
             <Toolbar>
-                <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="logo"
-                    sx={{ display: { sm: "none" } }}
-                    onClick={() => setOpenDrawer(true)}
-                >
-                    <MenuIcon />
-                </IconButton>
+                <MobileMenuButton navLinks={navLinks} />
+
                 <Typography
                     variant="h5"
                     component="div"
@@ -59,11 +47,6 @@ export default function Navbar(props) {
                         </Link>
                     </IconButton>
                 </Stack>
-                <DrawerComp
-                    navLinks={navLinks}
-                    openDrawer={openDrawer}
-                    setOpenDrawer={setOpenDrawer}
-                ></DrawerComp>
             </Toolbar>
         </AppBar>
     );
