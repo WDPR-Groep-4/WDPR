@@ -14,10 +14,9 @@ export default function Navbar(props) {
     ];
 
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             <Toolbar>
                 <MobileMenuButton navLinks={navLinks} />
-
                 <Typography
                     variant="h5"
                     component="div"
@@ -36,7 +35,6 @@ export default function Navbar(props) {
                         </Button>
                     ))}
                 </Stack>
-
                 <Stack direction={"row"}>
                     <AccountButton>
                         <PersonIcon />
