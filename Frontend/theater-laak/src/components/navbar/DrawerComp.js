@@ -26,10 +26,9 @@ export default function DrawerComp(props) {
                 <Box>
                     <List>
                         {props.navLinks.map((link) => (
-                            <ListItem>
+                            <ListItem key={link.name}>
                                 <ListItemButton
                                     onClick={() => props.setOpenDrawer(false)}
-                                    key={link.name}
                                     component={Link}
                                     to={link.path}
                                 >

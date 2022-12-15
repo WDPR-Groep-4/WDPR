@@ -14,7 +14,7 @@ export default function Navbar(props) {
     ];
 
     return (
-        <AppBar position="fixed">
+        <AppBar position="static">
             <Toolbar>
                 <MobileMenuButton navLinks={navLinks} />
                 <Typography
