@@ -47,6 +47,7 @@ export default function RegistreerPage() {
             return;
         }
     };
+
     return (
         <div
             style={{
