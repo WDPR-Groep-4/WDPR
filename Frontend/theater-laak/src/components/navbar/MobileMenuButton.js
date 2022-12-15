@@ -6,7 +6,6 @@ import { IconButton } from "@mui/material";
 export default function MobileMenuButton(props) {
     const [openDrawer, setOpenDrawer] = useState(false);
     const anchorRef = useRef(null);
-    console.log("openDrawer: ", openDrawer);
 
     const handleToggleAccount = () => {
         setOpenDrawer((prev) => !prev);
