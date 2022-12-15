@@ -33,13 +33,25 @@ export default function AccountPopper(props) {
                                 id="composition-button"
                                 onKeyDown={props.handleListKeyDown}
                             >
-                                <MenuItem onClick={props.handleCloseAccount}>
-                                    <Link to="/account">Account</Link>
+                                <MenuItem
+                                    onClick={props.handleCloseAccount}
+                                    component={Link}
+                                    to="/account"
+                                >
+                                    Account
                                 </MenuItem>
-                                <MenuItem onClick={props.handleCloseAccount}>
-                                    <Link to="/account/kaarten">Mijn kaartjes</Link>
+                                <MenuItem
+                                    onClick={props.handleCloseAccount}
+                                    component={Link}
+                                    to="/mijn-kaarten"
+                                >
+                                    Mijn kaartjes
                                 </MenuItem>
-                                <MenuItem onClick={props.handleCloseAccount}>
+                                <MenuItem
+                                    onClick={props.handleCloseAccount}
+                                    component={Link}
+                                    to="/"
+                                >
                                     Uitloggen
                                 </MenuItem>
                             </MenuList>
