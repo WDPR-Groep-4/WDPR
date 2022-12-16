@@ -1,0 +1,12 @@
+/* Provide sufficient contrast against white background */
+
+
+a {
+  text-decoration: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+a:hover {
+  color: inherit;
+}
