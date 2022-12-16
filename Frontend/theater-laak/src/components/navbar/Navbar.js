@@ -3,9 +3,10 @@ import { Stack } from "@mui/system";
 import { Link } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
 import AccountButton from "./AccountButton";
 import MobileMenuButton from "./MobileMenuButton";
+import account from "./account.json";
+
 export default function Navbar(props) {
     const navLinks = [
         { name: "Home", path: "/" },
@@ -36,7 +37,7 @@ export default function Navbar(props) {
                     ))}
                 </Stack>
                 <Stack direction={"row"}>
-                    <AccountButton>
+                    <AccountButton account={account}>
                         <PersonIcon />
                     </AccountButton>
                     <IconButton color="inherit" sx={{ fontWeight: 600 }}>

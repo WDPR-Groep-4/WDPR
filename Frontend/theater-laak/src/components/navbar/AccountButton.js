@@ -49,6 +49,7 @@ export default function AccountButton(props) {
                 {props.children}
             </IconButton>
             <AccountPopper
+                account={props.account}
                 openAccount={openAccount}
                 anchorRef={anchorRef}
                 handleCloseAccount={handleCloseAccount}
