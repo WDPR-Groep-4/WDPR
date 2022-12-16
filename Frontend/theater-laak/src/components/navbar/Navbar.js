@@ -15,8 +15,8 @@ export default function Navbar(props) {
 
     return (
         <AppBar position="static">
+
             <Toolbar sx={{ width: "100%", maxWidth: 1536, mx: "auto" }}>
-                <MobileMenuButton navLinks={navLinks} />
                 <Typography
                     variant="h5"
                     component="div"
@@ -44,6 +44,7 @@ export default function Navbar(props) {
                             <ShoppingCartIcon />
                         </Link>
                     </IconButton>
+                    <MobileMenuButton navLinks={navLinks} />
                 </Stack>
             </Toolbar>
         </AppBar>
