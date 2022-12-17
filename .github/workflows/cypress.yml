@@ -13,6 +13,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v5.0.0 # use the explicit version number
         with:
-          path: cd ClientApp
+          working-directory: cd ClientApp
           build: npm run build
           start: npm start
