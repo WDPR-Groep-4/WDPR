@@ -15,4 +15,4 @@ jobs:
         with:
           working-directory: ClientApp
           build: npm run build
-          start: npm start
+          start: npm install npm start 
