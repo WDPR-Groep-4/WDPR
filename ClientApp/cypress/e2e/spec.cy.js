@@ -1,6 +1,6 @@
 describe("navbar test", () => {
     it("Nav titel", () => {
-        cy.visit("https://localhost:44419", { timeout: 400000 });
+        cy.visit("https://localhost:44419", { timeout: 1000000 });
         cy.get("a").first().should("contain", "Theater Laak");
     });
     it("homepage knop", () => {
