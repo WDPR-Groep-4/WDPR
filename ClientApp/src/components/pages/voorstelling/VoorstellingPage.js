@@ -84,7 +84,7 @@ export default function VoorstellingPage(props) {
                     <Typography variant="h6" component={"h2"}>
                         Mis het niet
                     </Typography>
-                    <Button variant="contained" color="primary" sx={{ m: 3 }}>
+                    <Button variant="contained" color="primary" sx={{ mt: 3 }}>
                         Bestel Tickets
                     </Button>
                 </Container>
