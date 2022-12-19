@@ -66,9 +66,9 @@
     "extends": [
       "react-app"
     ],
-    "rules": [
-        "no-unused-vars": "warn"
-    ]
+    "rules": {
+        "no-unused-vars": ["warn"]
+    }
   },
   "browserslist": {
     "production": [
