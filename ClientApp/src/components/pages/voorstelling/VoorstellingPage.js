@@ -1,6 +1,7 @@
 import voorstelling from "./voorstelling.json";
 import { Box } from "@mui/system";
 import { Button, Typography, Container, Divider } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function VoorstellingPage(props) {
     return (
@@ -21,7 +22,7 @@ export default function VoorstellingPage(props) {
                             flexDirection: "column",
                             justifyContent: "center",
                             alignItems: "center",
-                            height: "100%",
+                            height: "400px",
                         }}
                     >
                         <Typography variant="h4" component={"h2"} color="white">
@@ -35,7 +36,12 @@ export default function VoorstellingPage(props) {
                         >
                             {voorstelling.prijs}
                         </Typography>
-                        <Button variant="contained" color="primary">
+                        <Button
+                            component={Link}
+                            to={`/voorstelling/${voorstelling.id}/bestel`}
+                            variant="contained"
+                            color="primary"
+                        >
                             Bestel Tickets
                         </Button>
                     </div>
@@ -52,7 +58,7 @@ export default function VoorstellingPage(props) {
                 <img
                     src={voorstelling.achtergrond}
                     alt=""
-                    style={{ maxHeight: 400, objectFit: "cover", width: "100%" }}
+                    style={{ height: 400, objectFit: "cover", width: "100%" }}
                 />
             </Box>
             <Container maxWidth="xl">
@@ -84,7 +90,13 @@ export default function VoorstellingPage(props) {
                     <Typography variant="h6" component={"h2"}>
                         Mis het niet
                     </Typography>
-                    <Button variant="contained" color="primary" sx={{ mt: 3 }}>
+                    <Button
+                        component={Link}
+                        to={`/voorstelling/${voorstelling.id}/bestel`}
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 3 }}
+                    >
                         Bestel Tickets
                     </Button>
                 </Container>
