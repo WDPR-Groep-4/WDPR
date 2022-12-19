@@ -1,8 +1,5 @@
 {
     "extends": [
         "plugin:cypress/recommended"
-      ],
-    "rules": [
-        "no-unused-vars": ["warn"]
-    ]
+      ]
 }
