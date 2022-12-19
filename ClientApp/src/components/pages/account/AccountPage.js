@@ -14,7 +14,11 @@ export default function AccountPage(props) {
     return (
         <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
             <Container maxWidth="xl">
-                <Typography variant="h4" component="h1" sx={{ py: 2 }}>
+                <Typography
+                    variant="h4"
+                    component="h1"
+                    sx={{ py: 2, textAlign: { xs: "center", sm: "left" } }}
+                >
                     Mijn Account
                 </Typography>
                 <Box sx={{ width: "100%", display: { sm: "flex", xs: "block" } }}>
