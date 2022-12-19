@@ -34,7 +34,7 @@ export default function VoorstellingPage(props) {
                             color="white"
                             sx={{ p: 3 }}
                         >
-                            {voorstelling.prijs}
+                            €{voorstelling.prijs[0].prijs}
                         </Typography>
                         <Button
                             component={Link}
