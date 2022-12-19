@@ -61,7 +61,7 @@ export default function Footer(props) {
                     </ListItem>
                     <ListItem component={Link} to="/account/donaties">
                         <Button variant="text" color="inherit">
-                            Mijn dontaties
+                            Mijn donaties
                         </Button>
                     </ListItem>
                 </Stack>
