@@ -41,6 +41,7 @@ export default function AccountPage(props) {
                             flexDirection: "column",
                             alignItems: { sm: "flex-start", xs: "center" },
                         }}
+                        variant="outlined"
                     >
                         <TabPanel value={value} index={0}>
                             <PersoonlijkeGegevens user={user} />
