@@ -16,7 +16,6 @@ export default function Navbar(props) {
 
     return (
         <AppBar position="static">
-
             <Toolbar sx={{ width: "100%", maxWidth: 1536, mx: "auto" }}>
                 <Typography
                     variant="h5"

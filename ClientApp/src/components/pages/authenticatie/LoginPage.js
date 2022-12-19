@@ -2,6 +2,7 @@ import { Button, TextField, Typography, Alert } from "@mui/material";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Footer from "../../footer/Footer";
 
 export default function LoginPage() {
     const form = useRef(null);
@@ -41,30 +42,18 @@ export default function LoginPage() {
     };
 
     return (
-        <div
-            style={{
-                height: "100vh",
-                width: "100vw",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                pt: 10,
-            }}
-        >
+        <div>
             <div
-                style={{ width: 300, display: "flex", flexDirection: "column", gap: 16 }}
+                style={{
+                    height: "100vh",
+                    width: "100vw",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    pt: 10,
+                }}
             >
-                <div>
-                    <Typography variant="h5" component="h1">
-                        Login
-                    </Typography>
-                    <Typography variant="body1" component="p">
-                        Log in om door te gaan.
-                    </Typography>
-                </div>
-                {error && <Alert severity="error">{error}</Alert>}
-                <form
-                    ref={form}
+                <div
                     style={{
                         width: 300,
                         display: "flex",
@@ -72,24 +61,44 @@ export default function LoginPage() {
                         gap: 16,
                     }}
                 >
-                    <TextField
-                        name="email"
-                        type="email"
-                        placeholder="name@mail.com"
-                        label="Email"
-                    />
-                    <TextField name="wachtwoord" type="password" label="Wachtwoord" />
-                </form>
-                <Button variant="contained" color="primary" onClick={onSubmit}>
-                    Log in
-                </Button>
-                <Typography fontSize="sm" sx={{ alignSelf: "center" }}>
-                    nog geen account?{" "}
-                    <Link style={{ color: "#1565c0" }} to="/registreer">
-                        Registreer
-                    </Link>
-                </Typography>
+                    <div>
+                        <Typography variant="h5" component="h1">
+                            Login
+                        </Typography>
+                        <Typography variant="body1" component="p">
+                            Log in om door te gaan.
+                        </Typography>
+                    </div>
+                    {error && <Alert severity="error">{error}</Alert>}
+                    <form
+                        ref={form}
+                        style={{
+                            width: 300,
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 16,
+                        }}
+                    >
+                        <TextField
+                            name="email"
+                            type="email"
+                            placeholder="name@mail.com"
+                            label="Email"
+                        />
+                        <TextField name="wachtwoord" type="password" label="Wachtwoord" />
+                    </form>
+                    <Button variant="contained" color="primary" onClick={onSubmit}>
+                        Log in
+                    </Button>
+                    <Typography fontSize="sm" sx={{ alignSelf: "center" }}>
+                        nog geen account?{" "}
+                        <Link style={{ color: "#1565c0" }} to="/registreer">
+                            Registreer
+                        </Link>
+                    </Typography>
+                </div>
             </div>
+            <Footer />
         </div>
     );
 }
