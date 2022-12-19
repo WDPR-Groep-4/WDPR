@@ -21,7 +21,7 @@ export default function Navbar(props) {
                 <Typography
                     variant="h5"
                     component="div"
-                    sx={{ fontWeight: "bold", flexGrow: 1 }}
+                    sx={{ fontWeight: "bold", flexGrow: 1, fontSize: 24 }}
                 >
                     <Link to="/">Theater Laak</Link>
                 </Typography>
