@@ -4,7 +4,7 @@ import Login from "./components/pages/authenticatie/LoginPage";
 import Registreer from "./components/pages/authenticatie/RegistreerPage";
 import VoorstellingPage from "./components/pages/voorstelling/VoorstellingPage";
 import AccountPage from "./components/pages/account/AccountPage";
-
+import KaartBestelPagina from "./components/pages/kaartBestel/KaartBestelPagina";
 
 const AppRoutes = [
     {
@@ -35,6 +35,10 @@ const AppRoutes = [
     {
         path: "/voorstelling/:id",
         element: <VoorstellingPage />,
+    },
+    {
+        path: "/voorstelling/1/bestel",
+        element: <KaartBestelPagina />,
     },
 ];
 

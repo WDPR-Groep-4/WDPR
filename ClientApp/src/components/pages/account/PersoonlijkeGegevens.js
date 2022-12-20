@@ -2,7 +2,6 @@ import { Typography, TextField, Button, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import { useRef } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 export default function PersoonlijkeGegevens(props) {
     const [error, setError] = useState();
