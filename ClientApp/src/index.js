@@ -9,6 +9,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import CartProvider from "./CartContext";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
@@ -16,7 +17,9 @@ const root = createRoot(rootElement);
 
 root.render(
     <BrowserRouter basename={baseUrl}>
-        <App />
+        <CartProvider>
+            <App />
+        </CartProvider>
     </BrowserRouter>
 );
 
