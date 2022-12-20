@@ -3,10 +3,45 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Footer from "../../footer/Footer";
+import { useSignIn } from "react-auth-kit";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function LoginPage() {
     const form = useRef(null);
     const [error, setError] = useState();
+    const signIn = useSignIn();
+    const navigate = useNavigate();
+
+    const login = async () => {
+        console.log(
+            "email: " +
+                form.current["email"].value +
+                "wachtwoord: " +
+                form.current["wachtwoord"].value
+        );
+        try {
+            const respone = await axios.post("/api/auth/login", {
+                email: form.current["email"].value,
+                password: form.current["wachtwoord"].value,
+            });
+            console.log(respone);
+
+            if (
+                signIn({
+                    token: respone.data.token,
+                    expiresIn: 3600,
+                    tokenType: "Bearer",
+                    authState: { email: form.current["email"].value },
+                })
+            ) {
+                navigate("/");
+            }
+        } catch (error) {
+            console.log(error);
+            setError(error.message);
+        }
+    };
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -39,6 +74,8 @@ export default function LoginPage() {
             setError("Geen geldig e-mailadres");
             return;
         }
+
+        login();
     };
 
     return (
