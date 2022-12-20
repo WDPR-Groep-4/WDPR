@@ -145,6 +145,26 @@ namespace Backend.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("Interesse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("GastId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InteresseNaam")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GastId");
+
+                    b.ToTable("Interesse");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -308,7 +328,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Plek")
+                    b.Property<string>("RangRijStoel")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -373,6 +393,13 @@ namespace Backend.Migrations
                     b.HasDiscriminator().HasValue("Gast");
                 });
 
+            modelBuilder.Entity("Medewerker", b =>
+                {
+                    b.HasBaseType("Gebruiker");
+
+                    b.HasDiscriminator().HasValue("Medewerker");
+                });
+
             modelBuilder.Entity("DatumBereik", b =>
                 {
                     b.HasOne("Voorstelling", null)
@@ -387,6 +414,13 @@ namespace Backend.Migrations
                         .HasForeignKey("GastId");
 
                     b.Navigation("Gast");
+                });
+
+            modelBuilder.Entity("Interesse", b =>
+                {
+                    b.HasOne("Gast", null)
+                        .WithMany("Interesses")
+                        .HasForeignKey("GastId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -479,6 +513,11 @@ namespace Backend.Migrations
                     b.Navigation("DatumBereiken");
 
                     b.Navigation("Prijs");
+                });
+
+            modelBuilder.Entity("Gast", b =>
+                {
+                    b.Navigation("Interesses");
                 });
 #pragma warning restore 612, 618
         }
