@@ -16,12 +16,11 @@ export default function Navbar(props) {
 
     return (
         <AppBar position="static">
-
             <Toolbar sx={{ width: "100%", maxWidth: 1536, mx: "auto" }}>
                 <Typography
                     variant="h5"
                     component="div"
-                    sx={{ fontWeight: "bold", flexGrow: 1 }}
+                    sx={{ fontWeight: "bold", flexGrow: 1, fontSize: 24 }}
                 >
                     <Link to="/">Theater Laak</Link>
                 </Typography>
