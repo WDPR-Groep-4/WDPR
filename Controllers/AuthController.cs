@@ -46,6 +46,8 @@ public class AuthController : ControllerBase
             Geboortedatum = gebruikerRegistreer.Geboortedatum
         };
         var resultaat = await _userManager.CreateAsync(gebruiker, gebruikerRegistreer.Password);
+        Task<IdentityResult> newUserRole = _userManager.AddToRoleAsync(gebruiker, "Gebruiker");
+
         return !resultaat.Succeeded ? new BadRequestObjectResult(resultaat) : StatusCode(201);
     }
 
