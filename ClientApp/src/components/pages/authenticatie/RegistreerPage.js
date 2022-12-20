@@ -2,6 +2,7 @@ import { Alert, Button, TextField, Typography } from "@mui/material";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Footer from "../../footer/Footer";
 
 export default function RegistreerPage() {
     const form = useRef(null);
@@ -49,30 +50,18 @@ export default function RegistreerPage() {
     };
 
     return (
-        <div
-            style={{
-                height: "100vh",
-                width: "100vw",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                pt: 10,
-            }}
-        >
+        <div>
             <div
-                style={{ width: 300, display: "flex", flexDirection: "column", gap: 16 }}
+                style={{
+                    height: "100vh",
+                    width: "100vw",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    pt: 10,
+                }}
             >
-                <div>
-                    <Typography variant="h5" component="h1">
-                        Registreer
-                    </Typography>
-                    <Typography variant="body1" component="p">
-                        Registreer om door te gaan.
-                    </Typography>
-                </div>
-                {error && <Alert severity="error">{error}</Alert>}
-                <form
-                    ref={form}
+                <div
                     style={{
                         width: 300,
                         display: "flex",
@@ -80,35 +69,55 @@ export default function RegistreerPage() {
                         gap: 16,
                     }}
                 >
-                    <TextField
-                        name="voornaam"
-                        type="text"
-                        placeholder="Voornaam"
-                        label="Voornaam"
-                    />
-                    <TextField
-                        name="email"
-                        type="email"
-                        placeholder="name@mail.com"
-                        label="Email"
-                    />
-                    <TextField name="wachtwoord" type="password" label="Wachtwoord" />
-                    <TextField
-                        name="herhaalWachtwoord"
-                        type="password"
-                        label="Herhaal wachtwoord"
-                    />
-                </form>
-                <Button variant="contained" color="primary" onClick={onSubmit}>
-                    Registreer
-                </Button>
-                <Typography fontSize="sm" sx={{ alignSelf: "center" }}>
-                    Al een account?{" "}
-                    <Link style={{ color: "#1565c0" }} to="/login">
-                        Log in
-                    </Link>
-                </Typography>
+                    <div>
+                        <Typography variant="h5" component="h1">
+                            Registreer
+                        </Typography>
+                        <Typography variant="body1" component="p">
+                            Registreer om door te gaan.
+                        </Typography>
+                    </div>
+                    {error && <Alert severity="error">{error}</Alert>}
+                    <form
+                        ref={form}
+                        style={{
+                            width: 300,
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 16,
+                        }}
+                    >
+                        <TextField
+                            name="voornaam"
+                            type="text"
+                            placeholder="Voornaam"
+                            label="Voornaam"
+                        />
+                        <TextField
+                            name="email"
+                            type="email"
+                            placeholder="name@mail.com"
+                            label="Email"
+                        />
+                        <TextField name="wachtwoord" type="password" label="Wachtwoord" />
+                        <TextField
+                            name="herhaalWachtwoord"
+                            type="password"
+                            label="Herhaal wachtwoord"
+                        />
+                    </form>
+                    <Button variant="contained" color="primary" onClick={onSubmit}>
+                        Registreer
+                    </Button>
+                    <Typography fontSize="sm" sx={{ alignSelf: "center" }}>
+                        Al een account?{" "}
+                        <Link style={{ color: "#1565c0" }} to="/login">
+                            Log in
+                        </Link>
+                    </Typography>
+                </div>
             </div>
+            <Footer />
         </div>
     );
 }
