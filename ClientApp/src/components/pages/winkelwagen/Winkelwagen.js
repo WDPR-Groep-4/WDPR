@@ -1,10 +1,14 @@
 import { Box, Container } from "@mui/system";
 import { Card, Divider, Stack, Typography, Button } from "@mui/material";
 import Product from "./Product";
+import config from "../../../config.json";
 
 //https://reactjs.org/docs/lists-and-keys.html
 
 export default function Winkelwagen(props) {
+
+  document.title = "Winkelwagen" + config.title;
+
   return (
     <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
       <Container maxWidth="xl">

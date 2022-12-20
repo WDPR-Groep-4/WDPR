@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Footer from "../../footer/Footer";
+import config from "../../../config.json";
 
 export default function LoginPage() {
     const form = useRef(null);
@@ -40,6 +41,8 @@ export default function LoginPage() {
             return;
         }
     };
+
+    document.title = "Login" + config.title;
 
     return (
         <div>
