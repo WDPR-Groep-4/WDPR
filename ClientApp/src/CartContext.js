@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import { createContext, useReducer } from "react";
 
 const reducer = (state, action) => {
@@ -57,4 +56,20 @@ export default function CartProvider({ children }) {
     });
 
     return <Cart.Provider value={{ cart, dispatch }}>{children}</Cart.Provider>;
+}
+
+// eslint-disable-next-line no-lone-blocks
+{
+    /* {cartElements}
+            <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
+            <button
+                onClick={() =>
+                    dispatch({
+                        type: "ADD_TO_CART",
+                        payload: { id: nanoid(), naam: input },
+                    })
+                }
+            >
+                Add to cart
+            </button> */
 }
