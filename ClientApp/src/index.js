@@ -17,7 +17,6 @@ const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
 root.render(
-            <App />
     <AuthProvider
         authType="cookie"
         authName="_auth"
