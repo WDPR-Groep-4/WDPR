@@ -1,0 +1,4 @@
+class Medewerker : Gebruiker
+{
+    
+}
