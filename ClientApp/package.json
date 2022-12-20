@@ -12,6 +12,7 @@
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.0",
     "merge": "^2.1.1",
+    "nanoid": "^4.0.0",
     "oidc-client": "^1.11.5",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -57,7 +58,7 @@
   "scripts": {
     "prestart": "node aspnetcore-https && node aspnetcore-react",
     "start": "rimraf ./build && react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI=false && react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint ./src/"

@@ -1,6 +1,11 @@
 name: Cypress Tests
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+      - development
+
 
 jobs:
   cypress-run:
