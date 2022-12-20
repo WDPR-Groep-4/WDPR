@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Footer from "../../footer/Footer";
+import config from "../../../config.json";
 
 export default function RegistreerPage() {
     const form = useRef(null);
@@ -48,6 +49,8 @@ export default function RegistreerPage() {
             return;
         }
     };
+
+    document.title = "Registreer" + config.title;
 
     return (
         <div>

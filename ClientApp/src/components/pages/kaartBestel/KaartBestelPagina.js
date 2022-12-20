@@ -6,12 +6,15 @@ import { Divider } from "@mui/material";
 import { useState } from "react";
 import RangCard from "./RangCard";
 import voorstelling from "../voorstelling/voorstelling.json";
+import config from "../../../config.json";
 
 export default function KaartBestelPagina(props) {
     const navigate = useNavigate();
     const [rang1, setRang1] = useState(0);
     const [rang2, setRang2] = useState(0);
     const [rang3, setRang3] = useState(0);
+
+    document.title = "Bestel" + config.title;
 
     return (
         <Container

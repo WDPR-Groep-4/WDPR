@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 import PersoonlijkeGegevens from "./PersoonlijkeGegevens";
 import user from "../../navbar/account.json";
+import config from "../../../config.json";
 
 export default function AccountPage(props) {
     const [value, setValue] = useState(0);
@@ -10,6 +11,8 @@ export default function AccountPage(props) {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    document.title = "Account" + config.title;
 
     return (
         <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}>

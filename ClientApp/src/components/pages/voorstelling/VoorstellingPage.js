@@ -2,8 +2,12 @@ import voorstelling from "./voorstelling.json";
 import { Box } from "@mui/system";
 import { Button, Typography, Container, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
+import config from "../../../config.json";
 
 export default function VoorstellingPage(props) {
+
+    document.title = voorstelling.titel + config.title;
+
     return (
         <Box>
             <Box sx={{ maxHeight: 400, width: "100%" }}>
