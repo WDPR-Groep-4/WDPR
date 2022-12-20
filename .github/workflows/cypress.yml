@@ -13,7 +13,8 @@ jobs:
       # and run all Cypress tests
       - name: Install dependencies
         working-directory: ClientApp
-        run: npm install
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
       - name: Cypress run
         uses: cypress-io/github-action@v5.0.0 # use the explicit version number
         with:
