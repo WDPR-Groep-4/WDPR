@@ -2,6 +2,7 @@ import { FetchData } from "./components/FetchData";
 import HomePage from "./components/pages/home/HomePage";
 import Login from "./components/pages/authenticatie/LoginPage";
 import Registreer from "./components/pages/authenticatie/RegistreerPage";
+import Winkelwagen from "./components/pages/winkelwagen/Winkelwagen";
 import VoorstellingPage from "./components/pages/voorstelling/VoorstellingPage";
 import AccountPage from "./components/pages/account/AccountPage";
 import KaartBestelPagina from "./components/pages/kaartBestel/KaartBestelPagina";
@@ -27,6 +28,10 @@ const AppRoutes = [
     {
         path: "/account",
         element: <AccountPage />,
+    },
+    {
+        path: "/winkelwagen",
+        element: <Winkelwagen />,
     },
     {
         path: "*",
