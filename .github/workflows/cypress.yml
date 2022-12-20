@@ -13,7 +13,7 @@ jobs:
       # and run all Cypress tests
       - name: Install dependencies
         working-directory: ClientApp
-        run: npm ci
+        run: npm install
       - name: Cypress run
         uses: cypress-io/github-action@v5.0.0 # use the explicit version number
         with:
