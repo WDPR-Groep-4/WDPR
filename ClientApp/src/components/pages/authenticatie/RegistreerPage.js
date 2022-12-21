@@ -3,11 +3,14 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Footer from "../../footer/Footer";
+
 import checkLeegVeld from "./Validatie";
 import axios from "axios";
 import { login } from "./LoginPage";
 import { useNavigate } from "react-router-dom";
 import { useSignIn } from "react-auth-kit";
+import config from "../../../config.json";
+
 
 export default function RegistreerPage() {
     const form = useRef(null);
@@ -61,6 +64,8 @@ export default function RegistreerPage() {
 
         registreer();
     };
+
+    document.title = "Registreer" + config.title;
 
     return (
         <div>

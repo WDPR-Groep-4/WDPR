@@ -2,11 +2,12 @@ import { Button, TextField, Typography, Alert, Card, Box } from "@mui/material";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Footer from "../../footer/Footer";
+import Footer from "../../footer/Footer";c
 import { useSignIn } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import checkLeegVeld from "./Validatie";
+import config from "../../../config.json";
 
 export const login = async (setError, form, signIn, navigate) => {
     try {
@@ -37,6 +38,9 @@ export const login = async (setError, form, signIn, navigate) => {
     }
 };
 
+
+
+
 export default function LoginPage() {
     const form = useRef(null);
     const [error, setError] = useState();
@@ -62,6 +66,8 @@ export default function LoginPage() {
 
         login(setError, form, signIn, navigate);
     };
+
+    document.title = "Login" + config.title;
 
     return (
         <div>
