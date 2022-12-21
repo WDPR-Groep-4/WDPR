@@ -1,6 +1,6 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
-import { Paper, Button, alpha } from '@mui/material';
+import { Paper, } from '@mui/material';
 import { red } from '@mui/material/colors';
 function HomePage(props) {
   var items = [
@@ -20,7 +20,23 @@ function HomePage(props) {
     name: "Random Name #3",
     description: "Very epic sauce!",
     image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg"
-    }
+    },
+    {
+        id: 4,
+        name: "Soldaat van Oranje",
+        description: "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
+        image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg"
+      },  {
+        id: 5,
+        name: "Soldaat van Oranje",
+        description: "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
+        image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg"
+      },  {
+        id: 6,
+        name: "Soldaat van Oranje",
+        description: "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
+        image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg"
+      },
   ]
   return (
     <div >
