@@ -8,26 +8,18 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import checkLeegVeld from "./Validatie";
 
-export default function LoginPage() {
-    const form = useRef(null);
-    const [error, setError] = useState();
-    const signIn = useSignIn();
-    const navigate = useNavigate();
-
-    const login = async () => {
-        console.log(
-            "email: " +
-                form.current["email"].value +
-                "wachtwoord: " +
-                form.current["wachtwoord"].value
-        );
-        try {
-            const respone = await axios.post("/api/auth/login", {
+export const login = async (setError, form, signIn, navigate) => {
+    try {
+        const respone = await axios
+            .post("/api/auth/login", {
                 email: form.current["email"].value,
                 password: form.current["wachtwoord"].value,
+            })
+            .catch((err) => {
+                setError(err.response.data.errors[0].description);
             });
-            console.log(respone);
 
+        if (respone.status === 200) {
             if (
                 signIn({
                     token: respone.data.token,
@@ -38,11 +30,18 @@ export default function LoginPage() {
             ) {
                 navigate("/");
             }
-        } catch (error) {
-            console.log(error);
-            setError(error.message);
         }
-    };
+    } catch (error) {
+        console.log(error);
+        setError(error.message);
+    }
+};
+
+export default function LoginPage() {
+    const form = useRef(null);
+    const [error, setError] = useState();
+    const signIn = useSignIn();
+    const navigate = useNavigate();
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -61,7 +60,7 @@ export default function LoginPage() {
             return;
         }
 
-        login();
+        login(setError, form, signIn, navigate);
     };
 
     return (

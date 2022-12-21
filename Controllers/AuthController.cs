@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 public class GebruikerRegistreer
 {
@@ -16,8 +17,6 @@ public class GebruikerRegistreer
     public string? Voornaam { get; init; }
     [Required(ErrorMessage = "Achternaam is required")]
     public string? Achternaam { get; init; }
-    [Required(ErrorMessage = "Geboortedatum is required")]
-    public string? Geboortedatum { get; init; }
 }
 
 [Route("api/[controller]")]
@@ -43,7 +42,6 @@ public class AuthController : ControllerBase
             Email = gebruikerRegistreer.Email,
             Voornaam = gebruikerRegistreer.Voornaam,
             Achternaam = gebruikerRegistreer.Achternaam,
-            Geboortedatum = gebruikerRegistreer.Geboortedatum
         };
         var resultaat = await _userManager.CreateAsync(gebruiker, gebruikerRegistreer.Password);
 
@@ -75,7 +73,7 @@ public class AuthController : ControllerBase
                     issuer: "https://localhost:7047",
                     audience: "https://localhost:7047",
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(10),
+                    expires: DateTime.Now.AddMinutes(60),
                     signingCredentials: signingCredentials
                 );
                 return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions) });

@@ -46,7 +46,6 @@ public class RollenController : ControllerBase
             Email = "admin@mail.com",
             Voornaam = "Admin",
             Achternaam = "Admin",
-            Geboortedatum = "01/01/2000"
         };
 
         Task<IdentityResult> taskCreateAdminUser = userManager.CreateAsync(adminUser, adminPwd);

@@ -6,6 +6,7 @@ function checkLeegVeld(form, setError, isLoginIn) {
     if (!isLoginIn) {
         dataArray = [
             { name: "voornaam", value: formData["voornaam"].value },
+            { name: "achternaam", value: formData["achternaam"].value },
             { name: "email", value: formData["email"].value },
             { name: "wachtwoord", value: formData["wachtwoord"].value },
             { name: "herhaalWachtwoord", value: formData["herhaalWachtwoord"].value },
