@@ -7,4 +7,4 @@ on:
 
 jobs:
   cypress-run:
-    uses: WDPR-Groep-4/WDPR/.github/workflows/cypress.yml@CypressTests
+    uses: WDPR-Groep-4/WDPR/.github/workflows/cypress.yml@Tests
