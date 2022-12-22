@@ -8,7 +8,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import logo from './plaatjes/soldaat-van-oranje-de.jpg';
 import AgendaItem from "./AgendaItem";
 
 
@@ -44,13 +43,7 @@ export default function AgendaPage() {
 
     return(
         <box>
-            <div style={{
-                height: "40vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                pt: 10,
-            }}>
+            <div style={{height:"200px"}}>
             <Container maxWidth="xl">
                 <h1>Agenda</h1>
             </Container>
@@ -59,7 +52,7 @@ export default function AgendaPage() {
             <Box>
                 <div style={{
                     alignContent: "top",
-                    height: "40vh",
+                    height: "300px",
                     display: "flex",
                     justifyContent: "center",
                     pt: 10,
