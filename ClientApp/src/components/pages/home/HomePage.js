@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Container } from "@mui/system";
 
 function HomePage(props) {
+    document.title = "Home" + config.title;
     var items = [
         {
             id: 1,
@@ -145,6 +146,7 @@ function HomePage(props) {
                 </p>
                 <p>More paragraphs</p>
             </div>
+            <Footer />
         </div>
     );
 }

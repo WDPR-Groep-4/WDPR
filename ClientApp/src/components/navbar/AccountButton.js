@@ -1,12 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import { IconButton } from "@mui/material";
 import AccountPopper from "./AccountPopper";
+import { useIsAuthenticated } from "react-auth-kit";
+import { useNavigate } from "react-router-dom";
 
 export default function AccountButton(props) {
     const [openAccount, setOpenAccount] = useState(false);
     const anchorRef = useRef(null);
+    const isAuthenticated = useIsAuthenticated();
+    const navigate = useNavigate();
 
     const handleToggleAccount = () => {
+        if (!isAuthenticated()) {
+            navigate("/login");
+            setOpenAccount(false);
+            return;
+        }
         setOpenAccount((prev) => !prev);
     };
 

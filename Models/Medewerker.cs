@@ -1,4 +1,4 @@
-class Medewerker : Gebruiker
+public class Medewerker : Gebruiker
 {
-    
+
 }

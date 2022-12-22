@@ -10,17 +10,25 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import CartProvider from "./CartContext";
+import { AuthProvider } from "react-auth-kit";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
 root.render(
-    <BrowserRouter basename={baseUrl}>
-        <CartProvider>
-            <App />
-        </CartProvider>
-    </BrowserRouter>
+    <AuthProvider
+        authType="cookie"
+        authName="_auth"
+        cookieDomain={window.location.hostname}
+        cookieSecure={false}
+    >
+        <BrowserRouter basename={baseUrl}>
+            <CartProvider>
+                <App />
+            </CartProvider>
+        </BrowserRouter>
+    </AuthProvider>
 );
 
 // If you want your app to work offline and load faster, you can change

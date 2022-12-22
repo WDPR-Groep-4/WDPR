@@ -8,16 +8,15 @@ namespace Backend
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
         }
-
-
-
         public DbSet<Voorstelling> Voorstellingen { get; set; }
         public DbSet<Donatie> Donaties { get; set; }
-        //public DbSet<Gebruiker> Gebruikers { get; set; }
+        public DbSet<Gebruiker> Gebruikers { get; set; }
+        public DbSet<Gast> Gasten { get; set; }
+        public DbSet<Medewerker> Medewerkers { get; set; }
         // Medewerkers en Gasten moeten in Gebruiker tabel
         public DbSet<Ticket> Tickets { get; set; }
 
 
     }
-    
+
 }
