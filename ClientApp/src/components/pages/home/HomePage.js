@@ -4,6 +4,8 @@ import { Paper } from "@mui/material";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Container } from "@mui/system";
+import Footer from "../../footer/Footer";
+import config from "../../../config.json";
 
 function HomePage(props) {
     document.title = "Home" + config.title;
