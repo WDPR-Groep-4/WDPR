@@ -6,6 +6,7 @@ import Winkelwagen from "./components/pages/winkelwagen/Winkelwagen";
 import VoorstellingPage from "./components/pages/voorstelling/VoorstellingPage";
 import AccountPage from "./components/pages/account/AccountPage";
 import KaartBestelPagina from "./components/pages/kaartBestel/KaartBestelPagina";
+import { RequireAuth } from "react-auth-kit";
 
 const AppRoutes = [
     {
@@ -27,7 +28,11 @@ const AppRoutes = [
 
     {
         path: "/account",
-        element: <AccountPage />,
+        element: (
+            <RequireAuth loginPath={"/login"}>
+                <AccountPage />
+            </RequireAuth>
+        ),
     },
     {
         path: "/winkelwagen",

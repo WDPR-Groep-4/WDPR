@@ -1,11 +1,7 @@
 name: Cypress Tests
 
 on:
-  push:
-    branches:
-      - main
-      - development
-
+  pull_request:
 
 jobs:
   cypress-run:
@@ -18,6 +14,9 @@ jobs:
       - name: Install dependencies
         working-directory: ClientApp
         run: npm install
+      - name: Clean install
+        working-directory: ClientApp
+        run: npm ci
       - name: Cypress run
         uses: cypress-io/github-action@v5.0.0 # use the explicit version number
         with:
