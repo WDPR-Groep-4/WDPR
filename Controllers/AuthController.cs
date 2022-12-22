@@ -27,12 +27,14 @@ public class AuthController : ControllerBase
     private readonly UserManager<Gebruiker> _userManager;
     private readonly SignInManager<Gebruiker> _signInManager;
     private readonly IEmailSender _emailSender;
+    private readonly ILogger _logger;
 
-    public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager, IEmailSender emailSender)
+    public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager, IEmailSender emailSender, ILogger<AuthController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
+        _logger = logger;
     }
 
 
@@ -64,7 +66,8 @@ public class AuthController : ControllerBase
     public async Task<ActionResult> sendConfirmationEmail(Gebruiker gebruiker)
     {
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(gebruiker);
-        var confirmationLink = Url.Action("ConfirmEmail", "api/auth/verifieer", new { userId = gebruiker.Id, token = token }, Request.Scheme);
+        _logger.LogInformation("Token: " + token);
+        var confirmationLink = Url.Action("ConfirmEmail", "bevestig", new { userId = gebruiker.Id, token = token }, Request.Scheme);
         await _emailSender.SendEmailAsync(gebruiker.Email, "Bevestig uw email", confirmationLink);
         return Ok();
     }
