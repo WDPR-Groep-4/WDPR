@@ -1,52 +1,36 @@
 import { Typography, TextField, Button, Alert } from "@mui/material";
 import { Box } from "@mui/system";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
+import axios from "axios";
+import { useAuthHeader } from "react-auth-kit";
 
 export default function PersoonlijkeGegevens(props) {
     const [error, setError] = useState();
+    const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
     const form = useRef(null);
+    const authHeader = useAuthHeader();
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        const formData = form.current;
-        setError(null);
-
-        // alle velden in een array zetten
-        const dataArray = [
-            { name: "voornaam", value: formData["voornaam"].value },
-            { name: "email", value: formData["email"].value },
-            { name: "wachtwoord", value: formData["wachtwoord"].value },
-            { name: "herhaalWachtwoord", value: formData["herhaalWachtwoord"].value },
-        ];
-
-        // checken of er lege velden zijn
-        const emptyFields = dataArray.filter((field) => field.value === "");
-        if (emptyFields.length > 1) {
-            setError(
-                "Vul de volgende velden in: " +
-                    emptyFields.map((field) => field.name).join(", ")
-            );
-            return;
-        } else if (emptyFields.length === 1) {
-            setError("Vul het volgende veld in: " + emptyFields[0].name);
-            return;
-        }
-
-        // checken of wachtwoorden overeenkomen
-        if (formData["wachtwoord"].value !== formData["herhaalWachtwoord"].value) {
-            setError("Wachtwoorden komen niet overeen");
-            return;
-        }
-
-        const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-
-        // checken of e-mailadres geldig is
-        if (!formData["email"].value.match(regex)) {
-            setError("Geen geldig e-mailadres");
-            return;
-        }
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
     };
+
+    useEffect(() => {
+        const account = async () => {
+            const response = await axios.get("/api/account", yourConfig).catch((err) => {
+                console.log(err);
+            });
+            console.log(response.data);
+            if (response.status === 200) {
+                setUser(response.data);
+                setLoading(false);
+            }
+        };
+        account();
+    }, []);
 
     return (
         <Box sx={{ p: 3 }}>
@@ -57,46 +41,59 @@ export default function PersoonlijkeGegevens(props) {
                 Hier kan je je persoonlijke gegevens aanpassen.
             </Typography>
             <div>
-                <form
-                    ref={form}
-                    style={{
-                        width: 300,
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 16,
-                    }}
-                >
-                    {error && <Alert severity="error">{error}</Alert>}
-                    <TextField
-                        name="voornaam"
-                        type="text"
-                        placeholder="Voornaam"
-                        label="Voornaam"
-                        defaultValue={props.user.naam}
-                    />
-                    <TextField
-                        name="email"
-                        type="email"
-                        placeholder="name@mail.com"
-                        label="Email"
-                        defaultValue={props.user.email}
-                    />
-                    <TextField
-                        name="wachtwoord"
-                        type="password"
-                        label="Wachtwoord"
-                        defaultValue={props.user.email}
-                    />
-                    <TextField
-                        name="herhaalWachtwoord"
-                        type="password"
-                        label="Herhaal wachtwoord"
-                        defaultValue={props.user.email}
-                    />
-                    <Button variant="contained" color="primary" onClick={onSubmit}>
-                        Pas aan
-                    </Button>
-                </form>
+                {loading ? (
+                    <Typography variant="body1" component={"p"}>
+                        Gegevens laden...
+                    </Typography>
+                ) : (
+                    <form
+                        ref={form}
+                        style={{
+                            width: 300,
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 16,
+                        }}
+                    >
+                        {error && <Alert severity="error">{error}</Alert>}
+                        <TextField
+                            name="voornaam"
+                            type="text"
+                            placeholder="Voornaam"
+                            label="Voornaam"
+                            defaultValue={user.voornaam}
+                        />
+                        <TextField
+                            name="achternaam"
+                            type="text"
+                            placeholder="Achternaam"
+                            label="Achternaam"
+                            defaultValue={user.achternaam}
+                        />
+                        <TextField
+                            name="email"
+                            type="email"
+                            placeholder="name@mail.com"
+                            label="Email"
+                            defaultValue={user.email}
+                        />
+                        <TextField
+                            name="wachtwoord"
+                            type="password"
+                            label="Wachtwoord"
+                            defaultValue={user.email}
+                        />
+                        <TextField
+                            name="herhaalWachtwoord"
+                            type="password"
+                            label="Herhaal wachtwoord"
+                            defaultValue={user.email}
+                        />
+                        <Button variant="contained" color="primary" disabled>
+                            Pas aan
+                        </Button>
+                    </form>
+                )}
             </div>
         </Box>
     );
