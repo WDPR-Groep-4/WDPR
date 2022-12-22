@@ -13,8 +13,18 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useSignOut } from "react-auth-kit";
+import { useAuthUser } from "react-auth-kit";
 
 export default function AccountPopper(props) {
+    const signOut = useSignOut();
+    const account = useAuthUser();
+
+    const handleLogout = (e) => {
+        signOut();
+        props.handleCloseAccount(e);
+    };
+
     return (
         <Popper
             open={props.openAccount}
@@ -22,7 +32,6 @@ export default function AccountPopper(props) {
             role={undefined}
             placement="bottom-start"
             transition
-            disablePortal
         >
             {({ TransitionProps, placement }) => (
                 <Grow
@@ -36,11 +45,9 @@ export default function AccountPopper(props) {
                         <ClickAwayListener onClickAway={props.handleCloseAccount}>
                             <div>
                                 <Box sx={{ p: 1 }}>
-                                    <Typography variant="h6">
-                                        {props.account.naam}
-                                    </Typography>
+                                    <Typography variant="h6">Welkom</Typography>
                                     <Typography variant="body2">
-                                        {props.account.email}
+                                        {account() && account().email}
                                     </Typography>
                                 </Box>
                                 <Divider />
@@ -65,11 +72,7 @@ export default function AccountPopper(props) {
                                         Mijn kaarten
                                     </MenuItem>
                                     <Divider />
-                                    <MenuItem
-                                        onClick={props.handleCloseAccount}
-                                        component={Link}
-                                        to="/"
-                                    >
+                                    <MenuItem onClick={handleLogout}>
                                         <ListItemIcon>
                                             <LogoutIcon />
                                         </ListItemIcon>

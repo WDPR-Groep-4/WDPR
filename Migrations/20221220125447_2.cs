@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class _1 : Migration
+    public partial class _2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -201,6 +201,25 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Interesse",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    InteresseNaam = table.Column<string>(type: "TEXT", nullable: false),
+                    GastId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Interesse", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Interesse_AspNetUsers_GastId",
+                        column: x => x.GastId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DatumBereik",
                 columns: table => new
                 {
@@ -249,7 +268,7 @@ namespace Backend.Migrations
                     GastId = table.Column<string>(type: "TEXT", nullable: false),
                     VoorstellingId = table.Column<int>(type: "INTEGER", nullable: false),
                     DatumBereikId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Plek = table.Column<string>(type: "TEXT", nullable: false)
+                    RangRijStoel = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -322,6 +341,11 @@ namespace Backend.Migrations
                 column: "GastId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Interesse_GastId",
+                table: "Interesse",
+                column: "GastId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RangPrijs_VoorstellingId",
                 table: "RangPrijs",
                 column: "VoorstellingId");
@@ -362,6 +386,9 @@ namespace Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Donaties");
+
+            migrationBuilder.DropTable(
+                name: "Interesse");
 
             migrationBuilder.DropTable(
                 name: "RangPrijs");
