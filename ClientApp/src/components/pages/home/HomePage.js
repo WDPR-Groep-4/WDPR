@@ -1,14 +1,18 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { Paper, } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { Button,} from "@mui/material";
+import { Link } from "react-router-dom";
+
 function HomePage(props) {
   var items = [
     {
       id: 1,
       name: "Soldaat van Oranje",
       description: "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
-      image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg"
+      image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
+      width: "100%",
+      link: "https://www.soldaatvanoranje.nl/"
     },
     {
       id: 2,
@@ -40,12 +44,34 @@ function HomePage(props) {
   ]
   return (
     <div >
+    <div style={{ position: 'relative',}}>
+  <img src="/Theater.png" alt="Theater" width="100%" />
+  <div style={{ position: 'absolute', top: '20px', left: '20px', color:'white', padding:"100px" }}>
+    <h5 style={{}}> Theater Laak
+    </h5>
+    <p>
+      Bekijk de mooiste voorstellingen in het theater van de regio.
+    </p>
+    <Link to="/agenda">
+    <Button sx={{ color: "white",
+    backgroundColor: "primary.main",
+                mt: 3,
+                borderRadius: 0,
+                width: "100%",
+                boxSizing: "border-box",
+              }}>AGENDA
+    </Button>
+    </Link>
+    </div>
+</div>
+ <div>
     <Carousel interval={4000}>
       {
         items.map((item, i) => <Item key={item.id} item={item} />)
       }
     </Carousel>
-    <div style={{ width: '50%', margin: 'auto' }}>
+    </div>
+    <div style={{ width: '50%', margin: 'auto',}}>
       <h3>Lorem</h3>
       <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
 
@@ -57,15 +83,15 @@ Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper
 }
 function Item(props) {
     return (
-        <div>
       <Paper>
         <div style={{ display: 'flex',
          alignItems: 'center',
-          backgroundColor: '#90caf9',
+          
            justifyContent: 'center' }}>
-          <a href="https://www.soldaatvanoranje.nl/">
+          <a href= {props.item.link}>
+            <div style={{ position: 'relative' }}>
+          <div style={{display:'flex', flexWrap:'wrap'}}>
             <img src={props.item.image} alt={props.item.name} style={{ maxHeight: '45vh' }} />
-          </a>
           <div style={{ position: 'absolute',
            top: 0,
             left: 0,
@@ -80,10 +106,10 @@ function Item(props) {
             {{backgroundColor: 'rgba(0,0,0,0.5)',
              backgroundClip: 'text',
               position: 'absolute',
-               bottom: 0 }}>
+               bottom: 0, }}>
               <h2 style=
-              {{ color: 'white',
-               fontSize: '100%' }}>
+              {{color: 'white',
+               fontSize: '100%', textAlign:'center'  }}>
                 {props.item.name}
               </h2>
               <p style=
@@ -91,18 +117,13 @@ function Item(props) {
                fontSize: '70%' }}>
                 {props.item.description}
               </p>
+              </div>
             </div>
           </div>
-        </div>
-        <div style=
-        {{ display: 'flex',
-         justifyContent: 'center',
-          alignItems: 'center',
-           flexDirection: 'column',
-            backgroundColor: red }}>
+          </div>
+          </a>
         </div>
       </Paper>
-      </div>
     );
   }
   
