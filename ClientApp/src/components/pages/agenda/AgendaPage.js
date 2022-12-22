@@ -14,10 +14,14 @@ import AgendaItem from "./AgendaItem";
 export default function AgendaPage() {
     const [error, setError] = useState();
 
+    // foto's met link importen en niet een lokale path
+    // accessiblity is heel slecht
     const [items, setAgendaItem] = useState([
         { name: "Voorstelling1", datum: "2022-12-24", tijd: "20:00", zaal: "zaal 1", beschikbaarheid: "vrij", image: "soldaat-van-oranje-de.jpg" },
         { name: "Voorstelling2", datum: "2022-12-24", tijd: "20:00", zaal: "zaal 1", beschikbaarheid: "vrij" }
         ])
+
+        //???
         const bull = (
             <Box
               component="span"
@@ -28,12 +32,14 @@ export default function AgendaPage() {
           );
     
 
+          //???
     function handle(e){
         e.preventDefault();
         console.log(e);
     }
 
     // Afbeeldingen importeren
+    // hoeft niet
     function importAll(r) {
         let images = {};
         r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
@@ -49,6 +55,7 @@ export default function AgendaPage() {
             </Container>
             </div>
             
+            {/* Waarom hardcode je de shows 1 voor 1 als je een AgendaItem function hebt */}
             <Box>
                 <div style={{
                     alignContent: "top",
@@ -91,6 +98,7 @@ export default function AgendaPage() {
                         </Button>
                     </Card>
                     </Box>
+                    {/* Waarom 2 ticket buttons? */}
                     <CardActions>
                         <Button size="small">Tickets</Button>
                     </CardActions>
