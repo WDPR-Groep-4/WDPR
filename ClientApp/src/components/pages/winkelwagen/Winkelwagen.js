@@ -37,10 +37,11 @@ export default function Winkelwagen(props) {
           {/* Producten */}
           <Card
             sx={{
-              flexGrow: { sm: 1, md: 2 },
+              flexGrow: { sm: 1, md: 3 },
               p: 0,
               backgroundColor: "#f5f5f5EB",
               border: "none",
+              width: { xs: "100%", sm: "100%", md: null },
             }}
             variant="outlined"
           >
@@ -48,6 +49,7 @@ export default function Winkelwagen(props) {
               direction="column"
               sx={{
                 gap: 2,
+                width: { xs: "100%", sm: "100%", md: null },
               }}
             >
               <Product />

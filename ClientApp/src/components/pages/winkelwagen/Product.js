@@ -9,7 +9,7 @@ export default function Product(props) {
         flexDirection: { md: "row", sm: "row", xs: "column" },
         backgroundColor: "#FFFFFF",
         border: "1px solid #0000001f",
-        width: { xs: "92vw", sm: "92vw", md: "100%" },
+        width: { xs: "100%", sm: "100%", md: "100%" },
       }}
     >
       <img
