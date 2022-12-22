@@ -1,13 +1,27 @@
 import { Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, Container } from "@mui/system";
 
 export default function Product(props) {
   return (
-    <Box sx={{ display: "flex", backgroundColor:"#FFFFFF", border:"1px solid #0000001f" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: { md: "row", sm: "row", xs: "column" },
+        backgroundColor: "#FFFFFF",
+        border: "1px solid #0000001f",
+        width: { xs: "92vw", sm: "92vw", md: "100%" },
+      }}
+    >
       <img
         src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa%2FAATXAJwgTVW9Q0515s_Ictfu26EMKLVOacosqk36YQ%3Ds900-c-k-c0xffffffff-no-rj-mo&f=1&nofb=1&ipt=1c419947164e6fa5decb0504ac194fc5ec7529749865b81cd8ebe0222d9dfa16&ipo=images"
         alt="product"
-        style={{ maxWidth: "12rem", maxHeight: "12rem", borderRight:"1px solid #0000001f" }}
+        style={{
+          maxWidth: "12rem",
+          maxHeight: "12rem",
+          height: "25vw",
+          width: "25vw",
+          borderRight: "1px solid #0000001f",
+        }}
       />
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1, ml: 3 }}>
         <Typography
