@@ -17,7 +17,7 @@ function HomePage(props) {
                 "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "https://www.soldaatvanoranje.nl/",
+            link: "/voorstelling/1",
         },
         {
             id: 2,
@@ -26,7 +26,7 @@ function HomePage(props) {
                 "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "https://www.soldaatvanoranje.nl/",
+            link: "/voorstelling/1",
         },
         {
             id: 3,
@@ -35,7 +35,7 @@ function HomePage(props) {
                 "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "https://www.soldaatvanoranje.nl/",
+            link: "/voorstelling/1",
         },
         {
             id: 4,
@@ -44,21 +44,7 @@ function HomePage(props) {
                 "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "https://www.soldaatvanoranje.nl/",
-        },
-        {
-            id: 5,
-            name: "Spongebob Musical",
-            description:
-                "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
-            image: "https://media.nu.nl/m/wl9xlv7aptcd_wd854/meeste-tony-nominaties-voor-spongebob-musical-en-harry-potter-toneelstuk.jpg",
-        },
-        {
-            id: 6,
-            name: "Soldaat van Oranje",
-            description:
-                "Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!Wegens succes verlengd tot 1 mei 2077!",
-            image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
+            link: "/voorstelling/1",
         },
     ];
     return (
@@ -107,15 +93,12 @@ function HomePage(props) {
                 </div>
             </div>
             <div style={{ width: "700px", margin: "auto" }}>
-                <Carousel interval={4000} sx={{
-                    
-                }}>
+                <Carousel interval={4000} sx={{}}>
                     {items.map((item, i) => (
                         <Item key={item.id} item={item} />
                     ))}
                 </Carousel>
-           
-                </div>
+            </div>
             <div style={{ width: "700px", margin: "auto" }}>
                 <h3>Lorem</h3>
                 <p>
@@ -160,12 +143,11 @@ function Item(props) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    
                 }}
             >
                 <a href={props.item.link}>
-                    <div style={{ position: "relative", }}>
-                        <div style={{ display: "flex", flexWrap: "wrap",  }}>
+                    <div style={{ position: "relative" }}>
+                        <div style={{ display: "flex", flexWrap: "wrap" }}>
                             <img
                                 src={props.item.image}
                                 alt={props.item.name}
