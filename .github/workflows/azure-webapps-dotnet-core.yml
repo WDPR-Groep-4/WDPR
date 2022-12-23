@@ -54,14 +54,6 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
-        
-      - name: Build db file
-        run: |
-          dotnet add package Microsoft.EntityFrameworkCore.Design
-          dotnet add package Microsoft.EntityFrameworkCore.Sqlite
-          dotnet add package Microsoft.EntityFrameworkCore.Tools
-          dotnet ef migrations add 1
-          dotnet ef database update
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
