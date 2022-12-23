@@ -52,12 +52,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Build frontend
-        run: |
-          cd ClientApp
-          npm install
-          npm run build
-
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -84,15 +78,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: .net-app
-
-      - name: Deploy frontend to Azure Web App
-        run: azure/webapps-deploy@v2
-        working-directory: ClientApp
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/build/*
-
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
