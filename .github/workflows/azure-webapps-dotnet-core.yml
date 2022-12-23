@@ -57,6 +57,7 @@ jobs:
         
       - name: Build db file
         run: |
+          dotnet install
           dotnet ef migrations add 1
           dotnet ef database update
 
