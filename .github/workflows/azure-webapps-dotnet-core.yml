@@ -54,6 +54,11 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+        
+      - name: Build db file
+        run: |
+          dotnet ef migrations add 1
+          dotnet ef database update
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
