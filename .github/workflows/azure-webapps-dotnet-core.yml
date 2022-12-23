@@ -89,7 +89,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ path.join(env.AZURE_WEBAPP_PACKAGE_PATH, 'ClientApp') }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/ClientApp
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
