@@ -55,6 +55,7 @@ jobs:
       - name: Build frontend
         run: |
           cd ClientApp
+          npm install
           npm run build
 
       - name: Build with dotnet
