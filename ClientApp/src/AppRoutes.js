@@ -8,6 +8,7 @@ import AccountPage from "./components/pages/account/AccountPage";
 import KaartBestelPagina from "./components/pages/kaartBestel/KaartBestelPagina";
 import { RequireAuth } from "react-auth-kit";
 import BevestigEmailPage from "./components/pages/authenticatie/BevestigEmailPage";
+import EmailVerzondenPage from "./components/pages/authenticatie/EmailVerzondenPage";
 
 const AppRoutes = [
     {
@@ -50,6 +51,10 @@ const AppRoutes = [
     {
         path: "/bevestig/ConfirmEmail",
         element: <BevestigEmailPage />,
+    },
+    {
+        path: "/EmailVerzonden",
+        element: <EmailVerzondenPage />,
     },
     {
         path: "/voorstelling/1/bestel",

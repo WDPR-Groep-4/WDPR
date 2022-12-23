@@ -17,6 +17,7 @@ export const login = async (setError, email, wachtwoord, signIn) => {
                 password: wachtwoord,
             })
             .catch((err) => {
+                console.log("err: ", err);
                 const error = err.response.statusText;
                 if (error === "Unauthorized") {
                     setError("Verkeerde email of wachtwoord");
