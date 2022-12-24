@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { useSignIn } from "react-auth-kit";
 import config from "../../../config.json";
 
-
 export default function RegistreerPage() {
     const form = useRef(null);
     const [error, setError] = useState();
@@ -28,7 +27,8 @@ export default function RegistreerPage() {
                     password: form.current["wachtwoord"].value,
                 })
                 .catch((err) => {
-                    setError(err.response.data.errors[0].description);
+                    console.log(err);
+                    setError(err.message);
                 });
 
             if (response && response.status === 201) {
