@@ -6,7 +6,6 @@ import config from "../../../config.json";
 //https://reactjs.org/docs/lists-and-keys.html
 
 export default function Winkelwagen(props) {
-
   document.title = "Winkelwagen" + config.title;
 
   return (
@@ -27,7 +26,11 @@ export default function Winkelwagen(props) {
           sx={{
             display: "flex",
             gap: 2,
-            flexDirection: { sm: "column", md: "row" },
+            flexDirection: {
+              sm: "column-reverse",
+              md: "row",
+              xs: "column-reverse",
+            },
             alignItems: "flex-start",
           }}
         >
@@ -38,6 +41,7 @@ export default function Winkelwagen(props) {
               p: 0,
               backgroundColor: "#f5f5f5EB",
               border: "none",
+              width: { xs: "100%", sm: "100%", md: "initial" },
             }}
             variant="outlined"
           >
@@ -45,6 +49,7 @@ export default function Winkelwagen(props) {
               direction="column"
               sx={{
                 gap: 2,
+                width: { xs: "100%", sm: "100%", md: "initial" },
               }}
             >
               <Product />
@@ -55,7 +60,12 @@ export default function Winkelwagen(props) {
 
           {/* Totaal */}
           <Card
-            sx={{ flexGrow: 1, p: 3, justifyContent: "center" }}
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              justifyContent: "center",
+              width: { sm: "100%", xs: "100%", md: "10%" },
+            }}
             variant="outlined"
           >
             <Typography

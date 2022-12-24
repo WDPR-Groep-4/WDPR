@@ -11,12 +11,13 @@ import config from "../../../config.json";
 
 export const login = async (setError, email, wachtwoord, signIn) => {
     try {
-        const respone = await axios
+        const response = await axios
             .post("/api/auth/login", {
                 email: email,
                 password: wachtwoord,
             })
             .catch((err) => {
+
                 console.log("err: ", err);
                 const error = err.response.statusText;
                 if (error === "Unauthorized") {
@@ -25,11 +26,10 @@ export const login = async (setError, email, wachtwoord, signIn) => {
                 return false;
             });
 
-        if (respone.status === 200) {
-            console.log("login");
+        if (response && response.status === 200) {
             if (
                 await signIn({
-                    token: respone.data.token,
+                    token: response.data.token,
                     expiresIn: 3600,
                     tokenType: "Bearer",
                     authState: { email: email },
