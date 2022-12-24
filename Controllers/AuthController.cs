@@ -19,7 +19,7 @@ public class GebruikerRegistreer
     public string? Achternaam { get; init; }
 }
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
