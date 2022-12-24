@@ -11,19 +11,20 @@ import config from "../../../config.json";
 
 export const login = async (setError, form, signIn, navigate) => {
     try {
-        const respone = await axios
+        const response = await axios
             .post("/api/auth/login", {
                 email: form.current["email"].value,
                 password: form.current["wachtwoord"].value,
             })
             .catch((err) => {
-                setError(err.response.data.errors[0].description);
+                console.log(err);
+                setError(err.response.statusText);
             });
 
-        if (respone.status === 200) {
+        if (response && response.status === 200) {
             if (
                 signIn({
-                    token: respone.data.token,
+                    token: response.data.token,
                     expiresIn: 3600,
                     tokenType: "Bearer",
                     authState: { email: form.current["email"].value },
@@ -37,9 +38,6 @@ export const login = async (setError, form, signIn, navigate) => {
         setError(error.message);
     }
 };
-
-
-
 
 export default function LoginPage() {
     const form = useRef(null);
