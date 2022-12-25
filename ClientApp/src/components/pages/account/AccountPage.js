@@ -2,7 +2,6 @@ import { Container, Tabs, Tab, Card, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import PersoonlijkeGegevens from "./PersoonlijkeGegevens";
-import user from "../../navbar/account.json";
 import config from "../../../config.json";
 
 export default function AccountPage(props) {
@@ -51,7 +50,7 @@ export default function AccountPage(props) {
                         variant="outlined"
                     >
                         <TabPanel value={value} index={0}>
-                            <PersoonlijkeGegevens user={user} />
+                            <PersoonlijkeGegevens />
                         </TabPanel>
                         <TabPanel value={value} index={1}>
                             Interesses
