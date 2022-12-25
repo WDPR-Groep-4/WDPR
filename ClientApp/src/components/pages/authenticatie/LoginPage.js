@@ -131,7 +131,7 @@ export default function LoginPage() {
                             />
                         </form>
                         <Typography sx={{ alignSelf: "start", my: -1 }}>
-                            <Link style={{ color: "#1565c0" }} to="/wachtwoord-vergeten">
+                            <Link style={{ color: "#1565c0" }} to="/wachtwoordvergeten">
                                 Wachtwoord vergeten?
                             </Link>
                         </Typography>

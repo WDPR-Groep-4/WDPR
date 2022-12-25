@@ -2,10 +2,20 @@ import { Typography, Card, Box, Alert, TextField, Button } from "@mui/material";
 import { useRef } from "react";
 import { useState } from "react";
 import Footer from "../../../footer/Footer";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function WachtwoordWijzigenPagina() {
+export default function ResetWachtwoordPagina() {
     const form = useRef(null);
     const [error, setError] = useState();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const email = searchParams.get("email");
+    console.log("email: ", email);
+    const token = searchParams.get("token");
+    console.log("token: ", token);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -24,6 +34,25 @@ export default function WachtwoordWijzigenPagina() {
 
         if (formData["wachtwoord"].value !== formData["herhaalWachtwoord"].value) {
             setError("Wachtwoorden komen niet overeen");
+            return;
+        }
+
+        try {
+            const response = await axios
+                .post("/api/auth/resetwachtwoord", {
+                    email: email,
+                    token: token,
+                    newpassword: formData["wachtwoord"].value,
+                })
+                .catch((err) => {
+                    console.log("err: ", err);
+                });
+
+            if (response && response.status === 200) {
+                navigate("/");
+            }
+        } catch (error) {
+            console.log(error);
             return;
         }
     };
@@ -53,7 +82,7 @@ export default function WachtwoordWijzigenPagina() {
                     >
                         <div>
                             <Typography variant="h5" component="h1">
-                                Wachtwoord wijzigen
+                                Reset wachtwoord
                             </Typography>
                             <Typography variant="body1" component="p">
                                 Vul hieronder uw nieuwe wachtwoord in.

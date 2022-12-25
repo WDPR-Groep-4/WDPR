@@ -16,30 +16,6 @@ public class EmailController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost]
-    [Route("bevestig")]
-    public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailDTO confirmEmailDTO)
-    {
-        var user = await _userManager.FindByIdAsync(confirmEmailDTO.userId);
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        var result = await _userManager.ConfirmEmailAsync(user, confirmEmailDTO.Token);
-        if (result.Succeeded)
-        {
-            _logger.LogInformation("Email bevestigd");
-            return Ok();
-        }
-
-        return BadRequest();
-    }
 
 }
 
-public class ConfirmEmailDTO
-{
-    public string userId { get; set; }
-    public string Token { get; set; }
-}
