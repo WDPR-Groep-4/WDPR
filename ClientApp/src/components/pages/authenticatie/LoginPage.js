@@ -17,7 +17,6 @@ export const login = async (setError, email, wachtwoord, signIn) => {
                 password: wachtwoord,
             })
             .catch((err) => {
-
                 console.log("err: ", err);
                 const error = err.response.statusText;
                 if (error === "Unauthorized") {
@@ -131,10 +130,16 @@ export default function LoginPage() {
                                 label="Wachtwoord"
                             />
                         </form>
+                        <Typography sx={{ alignSelf: "start", my: -1 }}>
+                            <Link style={{ color: "#1565c0" }} to="/wachtwoord-vergeten">
+                                Wachtwoord vergeten?
+                            </Link>
+                        </Typography>
+
                         <Button variant="contained" color="primary" onClick={onSubmit}>
                             Log in
                         </Button>
-                        <Typography fontSize="sm" sx={{ alignSelf: "center" }}>
+                        <Typography fontSize="xs" sx={{ alignSelf: "center" }}>
                             nog geen account?{" "}
                             <Link style={{ color: "#1565c0" }} to="/registreer">
                                 Registreer

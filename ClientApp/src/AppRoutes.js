@@ -9,6 +9,8 @@ import KaartBestelPagina from "./components/pages/kaartBestel/KaartBestelPagina"
 import { RequireAuth } from "react-auth-kit";
 import BevestigEmailPage from "./components/pages/authenticatie/BevestigEmailPage";
 import EmailVerzondenPage from "./components/pages/authenticatie/EmailVerzondenPage";
+import WachtwoordVergetenPage from "./components/pages/authenticatie/wachtwoordvergeten/WachtwoordVergetenPage";
+import WachtwoordWijzigenPagina from "./components/pages/authenticatie/wachtwoordvergeten/WachtwoordWijzigenPagina";
 
 const AppRoutes = [
     {
@@ -49,6 +51,10 @@ const AppRoutes = [
         element: <VoorstellingPage />,
     },
     {
+        path: "/voorstelling/1/bestel",
+        element: <KaartBestelPagina />,
+    },
+    {
         path: "/bevestig/ConfirmEmail",
         element: <BevestigEmailPage />,
     },
@@ -57,8 +63,12 @@ const AppRoutes = [
         element: <EmailVerzondenPage />,
     },
     {
-        path: "/voorstelling/1/bestel",
-        element: <KaartBestelPagina />,
+        path: "/wachtwoord-vergeten",
+        element: <WachtwoordVergetenPage />,
+    },
+    {
+        path: "/wachtwoord-wijzigen",
+        element: <WachtwoordWijzigenPagina />,
     },
 ];
 
