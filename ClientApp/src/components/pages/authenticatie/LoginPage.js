@@ -9,37 +9,41 @@ import axios from "axios";
 import checkLeegVeld from "./Validatie";
 import config from "../../../config.json";
 
-export const login = async (setError, form, signIn, navigate) => {
+export const login = async (setError, email, wachtwoord, signIn) => {
     try {
-        const respone = await axios
+        const response = await axios
             .post("/api/auth/login", {
-                email: form.current["email"].value,
-                password: form.current["wachtwoord"].value,
+                email: email,
+                password: wachtwoord,
             })
             .catch((err) => {
-                setError(err.response.data.errors[0].description);
+
+                console.log("err: ", err);
+                const error = err.response.statusText;
+                if (error === "Unauthorized") {
+                    setError("Verkeerde email of wachtwoord");
+                }
+                return false;
             });
 
-        if (respone.status === 200) {
+        if (response && response.status === 200) {
             if (
-                signIn({
-                    token: respone.data.token,
+                await signIn({
+                    token: response.data.token,
                     expiresIn: 3600,
                     tokenType: "Bearer",
-                    authState: { email: form.current["email"].value },
+                    authState: { email: email },
                 })
             ) {
-                navigate("/");
+                return true;
             }
         }
     } catch (error) {
         console.log(error);
         setError(error.message);
+        return false;
     }
 };
-
-
-
 
 export default function LoginPage() {
     const form = useRef(null);
@@ -47,7 +51,7 @@ export default function LoginPage() {
     const signIn = useSignIn();
     const navigate = useNavigate();
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         const formData = form.current;
         setError(null);
@@ -64,7 +68,12 @@ export default function LoginPage() {
             return;
         }
 
-        login(setError, form, signIn, navigate);
+        const email = formData["email"].value;
+        const wachtwoord = formData["wachtwoord"].value;
+
+        if (await login(setError, email, wachtwoord, signIn)) {
+            navigate("/ass");
+        }
     };
 
     document.title = "Login" + config.title;

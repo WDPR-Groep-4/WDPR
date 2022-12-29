@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -19,18 +20,23 @@ public class GebruikerRegistreer
     public string? Achternaam { get; init; }
 }
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
     private readonly UserManager<Gebruiker> _userManager;
     private readonly SignInManager<Gebruiker> _signInManager;
+    private readonly IEmailSender _emailSender;
+    private readonly ILogger _logger;
 
-    public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager)
+    public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager, IEmailSender emailSender, ILogger<AuthController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _emailSender = emailSender;
+        _logger = logger;
     }
+
 
     [HttpPost]
     [Route("registreer")]
@@ -48,10 +54,22 @@ public class AuthController : ControllerBase
         if (resultaat.Succeeded)
         {
             await _userManager.AddToRoleAsync(gebruiker, "Gebruiker");
+            await sendConfirmationEmail(gebruiker);
+
             return StatusCode(201);
         }
 
+
         return !resultaat.Succeeded ? new BadRequestObjectResult(resultaat) : StatusCode(201);
+    }
+
+    public async Task<ActionResult> sendConfirmationEmail(Gebruiker gebruiker)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(gebruiker);
+        _logger.LogInformation("Token: " + token);
+        var confirmationLink = Url.Action("ConfirmEmail", "bevestig", new { userId = gebruiker.Id, token = token }, Request.Scheme);
+        await _emailSender.SendEmailAsync(gebruiker.Email, "Bevestig uw email", confirmationLink);
+        return Ok();
     }
 
     [HttpPost("login")]

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace PretparkApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class RollenController : ControllerBase
 {
     private readonly UserManager<Gebruiker> _userManager;
