@@ -9,6 +9,7 @@ import KaartBestelPagina from "./components/pages/kaartBestel/KaartBestelPagina"
 import { RequireAuth } from "react-auth-kit";
 import BevestigEmailPage from "./components/pages/authenticatie/BevestigEmailPage";
 import EmailVerzondenPage from "./components/pages/authenticatie/EmailVerzondenPage";
+import SteunOnsPage from "./components/pages/SteunOns/SteunOnsPage";
 
 const AppRoutes = [
     {
@@ -60,6 +61,10 @@ const AppRoutes = [
         path: "/voorstelling/1/bestel",
         element: <KaartBestelPagina />,
     },
+{
+    path: "/steun-ons",
+    element: <SteunOnsPage/>,
+},
 ];
 
 export default AppRoutes;
