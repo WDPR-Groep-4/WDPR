@@ -10,6 +10,7 @@ import { RequireAuth } from "react-auth-kit";
 import BevestigEmailPage from "./components/pages/authenticatie/BevestigEmailPage";
 import EmailVerzondenPage from "./components/pages/authenticatie/EmailVerzondenPage";
 import SteunOnsPage from "./components/pages/SteunOns/SteunOnsPage";
+import Medewerker from "./components/pages/medewerker/MedewerkerPage";
 
 const AppRoutes = [
     {
@@ -28,7 +29,10 @@ const AppRoutes = [
         path: "/registreer",
         element: <Registreer />,
     },
-
+    {
+        path: "/medewerker",
+        element: <Medewerker />,
+    },
     {
         path: "/account",
         element: (
