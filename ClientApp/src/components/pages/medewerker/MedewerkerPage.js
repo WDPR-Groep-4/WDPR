@@ -2,10 +2,12 @@ import { Container, Tabs, Tab, Card, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import VoorstellingenGegevens from "./VoorstellingGegevens";
+import config from "../../../config.json";
 
 
 
 export default function MedewerkerPage() {
+    document.title = "Medewerker" + config.title;
     const [value, setValue] = useState(0);
     
     const handleChange = (event, newValue) => {

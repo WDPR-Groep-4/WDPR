@@ -64,7 +64,9 @@ function Bruh(props){
                     <Box sx={{ display: 'block', m:2 }}>
 
                         {filtered.map((voorstelling) => (
+                          <div style={{height:150}}>
                             <Voorstellingen key={voorstelling.id} voorstelling={voorstelling}/>
+                          </div> 
                         ))}
                     </Box>
                 </AccordionDetails>
