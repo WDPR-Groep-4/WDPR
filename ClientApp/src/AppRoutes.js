@@ -9,6 +9,9 @@ import KaartBestelPagina from "./components/pages/kaartBestel/KaartBestelPagina"
 import { RequireAuth } from "react-auth-kit";
 import BevestigEmailPage from "./components/pages/authenticatie/BevestigEmailPage";
 import EmailVerzondenPage from "./components/pages/authenticatie/EmailVerzondenPage";
+import WachtwoordVergetenPage from "./components/pages/authenticatie/wachtwoordvergeten/WachtwoordVergetenPage";
+import ResetWachtwoordPagina from "./components/pages/authenticatie/wachtwoordvergeten/WachtwoordResetPagina";
+import SuccesResetWachtwoord from "./components/pages/authenticatie/wachtwoordvergeten/SuccesResetWachtwoord";
 import SteunOnsPage from "./components/pages/SteunOns/SteunOnsPage";
 import Medewerker from "./components/pages/medewerker/MedewerkerPage";
 
@@ -54,6 +57,10 @@ const AppRoutes = [
         element: <VoorstellingPage />,
     },
     {
+        path: "/voorstelling/1/bestel",
+        element: <KaartBestelPagina />,
+    },
+    {
         path: "/bevestig/ConfirmEmail",
         element: <BevestigEmailPage />,
     },
@@ -62,8 +69,16 @@ const AppRoutes = [
         element: <EmailVerzondenPage />,
     },
     {
-        path: "/voorstelling/1/bestel",
-        element: <KaartBestelPagina />,
+        path: "/wachtwoordvergeten",
+        element: <WachtwoordVergetenPage />,
+    },
+    {
+        path: "/reset/resetwachtwoord",
+        element: <ResetWachtwoordPagina />,
+    },
+    {
+        path: "/resetwachtwoordsucces",
+        element: <SuccesResetWachtwoord />,
     },
 {
     path: "/steun-ons",

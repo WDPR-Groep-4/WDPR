@@ -27,8 +27,15 @@ export default function RegistreerPage() {
                     password: form.current["wachtwoord"].value,
                 })
                 .catch((err) => {
-                    console.log(err);
-                    setError(err.message);
+                    console.log("err: ", err);
+                    const error = err.response.data.errors[0];
+                    console.log("error: ", error);
+
+                    if (error.code === "DuplicateUserName") {
+                        setError("E-mailadres is al in gebruik");
+                    } else {
+                        setError(error.description);
+                    }
                 });
 
             if (response && response.status === 201) {

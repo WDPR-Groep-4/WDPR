@@ -63,14 +63,7 @@ public class AuthController : ControllerBase
         return !resultaat.Succeeded ? new BadRequestObjectResult(resultaat) : StatusCode(201);
     }
 
-    public async Task<ActionResult> sendConfirmationEmail(Gebruiker gebruiker)
-    {
-        var token = await _userManager.GenerateEmailConfirmationTokenAsync(gebruiker);
-        _logger.LogInformation("Token: " + token);
-        var confirmationLink = Url.Action("ConfirmEmail", "bevestig", new { userId = gebruiker.Id, token = token }, Request.Scheme);
-        await _emailSender.SendEmailAsync(gebruiker.Email, "Bevestig uw email", confirmationLink);
-        return Ok();
-    }
+
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] GebruikerLogin gebruikerLogin)
@@ -99,6 +92,71 @@ public class AuthController : ControllerBase
 
         return Unauthorized();
     }
+
+    public async Task<ActionResult> sendConfirmationEmail(Gebruiker gebruiker)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(gebruiker);
+        _logger.LogInformation("Token: " + token);
+        var confirmationLink = Url.Action("ConfirmEmail", "bevestig", new { userId = gebruiker.Id, token = token }, Request.Scheme);
+        await _emailSender.SendEmailAsync(gebruiker.Email, "Bevestig uw email", confirmationLink);
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("bevestig")]
+    public async Task<ActionResult> ConfirmEmail([FromBody] ConfirmEmailDTO confirmEmailDTO)
+    {
+        var user = await _userManager.FindByIdAsync(confirmEmailDTO.userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, confirmEmailDTO.Token);
+        if (result.Succeeded)
+        {
+            _logger.LogInformation("Email bevestigd");
+            return Ok();
+        }
+
+        return BadRequest();
+    }
+
+    [HttpPost]
+    [Route("wachtwoordvergeten")]
+    public async Task<IActionResult> WachtwoordVergeten(Email email)
+    {
+        var gebruiker = await _userManager.FindByEmailAsync(email.email);
+        if (gebruiker == null)
+            return NotFound();
+        var token = await _userManager.GeneratePasswordResetTokenAsync(gebruiker);
+        _logger.LogInformation("Token: " + token);
+        var resetLink = Url.Action("resetwachtwoord", "reset", new { email = gebruiker.Email, token = token }, Request.Scheme);
+        await _emailSender.SendEmailAsync(gebruiker.Email, "Reset uw wachtwoord", resetLink);
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("resetwachtwoord")]
+    public async Task<ActionResult> ResetWachtwoord([FromBody] ResetWachtwoordDTO resetWachtwoordDTO)
+    {
+        var gebruiker = await _userManager.FindByEmailAsync(resetWachtwoordDTO.email);
+        if (gebruiker == null)
+        {
+            return NotFound();
+        }
+
+        var result = await _userManager.ResetPasswordAsync(gebruiker, resetWachtwoordDTO.Token, resetWachtwoordDTO.NewPassword);
+        if (result.Succeeded)
+        {
+            _logger.LogInformation("Wachtwoord gereset");
+            return Ok();
+        }
+
+        return BadRequest();
+    }
+
+
 }
 
 public class GebruikerLogin
@@ -108,4 +166,22 @@ public class GebruikerLogin
 
     [Required(ErrorMessage = "Password is required")]
     public string? Password { get; init; }
+}
+
+public class ConfirmEmailDTO
+{
+    public string userId { get; set; }
+    public string Token { get; set; }
+}
+
+public class ResetWachtwoordDTO
+{
+    public string email { get; set; }
+    public string NewPassword { get; set; }
+    public string Token { get; set; }
+}
+
+public class Email
+{
+    public string email { get; set; }
 }
