@@ -16,7 +16,6 @@ namespace Backend
         // Medewerkers en Gasten moeten in Gebruiker tabel
         public DbSet<Ticket> Tickets { get; set; }
 
-
     }
 
 }

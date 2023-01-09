@@ -17,6 +17,7 @@ const context = [
     "/api/auth/resetwachtwoord",
     "/api/account",
     "/api/rollen/start",
+    "/api/voorstelling",
 ];
 
 module.exports = function (app) {
