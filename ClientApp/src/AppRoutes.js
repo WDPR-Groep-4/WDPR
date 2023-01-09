@@ -12,6 +12,8 @@ import EmailVerzondenPage from "./components/pages/authenticatie/EmailVerzondenP
 import WachtwoordVergetenPage from "./components/pages/authenticatie/wachtwoordvergeten/WachtwoordVergetenPage";
 import ResetWachtwoordPagina from "./components/pages/authenticatie/wachtwoordvergeten/WachtwoordResetPagina";
 import SuccesResetWachtwoord from "./components/pages/authenticatie/wachtwoordvergeten/SuccesResetWachtwoord";
+import SteunOnsPage from "./components/pages/SteunOns/SteunOnsPage";
+import Medewerker from "./components/pages/medewerker/MedewerkerPage";
 
 const AppRoutes = [
     {
@@ -30,7 +32,10 @@ const AppRoutes = [
         path: "/registreer",
         element: <Registreer />,
     },
-
+    {
+        path: "/medewerker",
+        element: <Medewerker />,
+    },
     {
         path: "/account",
         element: (
@@ -75,6 +80,10 @@ const AppRoutes = [
         path: "/resetwachtwoordsucces",
         element: <SuccesResetWachtwoord />,
     },
+{
+    path: "/steun-ons",
+    element: <SteunOnsPage/>,
+},
 ];
 
 export default AppRoutes;

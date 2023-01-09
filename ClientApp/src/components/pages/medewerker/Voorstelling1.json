@@ -1,0 +1,30 @@
+{
+    "id": 1,
+    "voorstellingId": 1,
+    "titel": "Soldaat van Oranje",
+    "groep": "NEW Productions",
+    "datum": "24 dec",
+    "tijd": "20:30",
+    "afbeelding": "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
+    "beschrijving": "Soldaat van Oranje - De Musical is gebaseerd op het waargebeurde verhaal van één van onze grootste verzetsstrijders: Erik Hazelhoff Roelfzema. Het publiek beleeft de voorstelling, met inmiddels meer dan 3,2 miljoen bezoekers, in een 360 graden draaiende theaterzaal en wordt zo het waarachtige verhaal ingetrokken.",
+    "zaal": "4",
+    "stoelen":[
+        {
+            "rang": "1",
+            "stoelen": 20
+        },
+        {
+            "rang": "2",
+            "stoelen": 100
+        },
+        {
+            "rang": "3",
+            "stoelen": 120
+        },
+        {
+            "rang": "alle",
+            "stoelen": 240
+        }
+    ],
+    "bezoekers": "69"
+}
