@@ -6,12 +6,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import React from 'react'
+import config from "../../../config.json";
 
 import Voorstelling1 from '../medewerker/Voorstelling1.json';
 import Voorstelling2 from '../medewerker/Voorstelling2.json';
 import Voorstelling3 from '../medewerker/Voorstelling3.json';
 
 export default function AgendaPage() {
+    document.title = "Medewerker" + config.title;
     var voorstellingen = [Voorstelling1, Voorstelling2, Voorstelling3];
 
     return(
@@ -19,7 +21,6 @@ export default function AgendaPage() {
             <div style={{height:"100px"}}>
                 <Container width="200" sx={{py:2}}>
                     <Typography sx={{fontSize:42, fontWeight:"medium"}}>Agenda</Typography>
-
                 </Container>
             </div>
             <Container sx={{ width: "100%", display: { sm: "flex", xs: "block" } }}>
