@@ -10,3 +10,8 @@ a {
 a:hover {
   color: inherit;
 }
+
+a[role="button"]:hover {
+  text-decoration: none;
+  color: inherit;
+}

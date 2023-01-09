@@ -39,6 +39,7 @@ export const Cart = createContext();
 export default function CartProvider({ children }) {
     const [cart, dispatch] = useReducer(reducer, {
         voorstellingen: [],
+        currentVoorstelling: {},
         producten: [
             {
                 id: 1,
