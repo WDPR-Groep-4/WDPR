@@ -14,6 +14,7 @@ import ResetWachtwoordPagina from "./components/pages/authenticatie/wachtwoordve
 import SuccesResetWachtwoord from "./components/pages/authenticatie/wachtwoordvergeten/SuccesResetWachtwoord";
 import SteunOnsPage from "./components/pages/SteunOns/SteunOnsPage";
 import Medewerker from "./components/pages/medewerker/MedewerkerPage";
+import Agenda from "./components/pages/agenda/AgendaPage";
 
 const AppRoutes = [
     {
@@ -31,6 +32,10 @@ const AppRoutes = [
     {
         path: "/registreer",
         element: <Registreer />,
+    },
+    {
+        path: "/agenda",
+        element: <Agenda />,
     },
     {
         path: "/medewerker",
