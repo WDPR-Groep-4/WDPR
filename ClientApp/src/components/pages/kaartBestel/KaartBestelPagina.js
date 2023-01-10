@@ -38,7 +38,8 @@ export default function KaartBestelPagina(props) {
     }, []);
 
     function handleBestel() {
-        addToWinkelwagen();
+        addToWinkelwagen(id, aantal, rang);
+        navigate("/winkelwagen");
     }
 
     function PrijsCards() {
@@ -109,7 +110,12 @@ export default function KaartBestelPagina(props) {
                         </Typography>
                     </Box>
 
-                    <Button variant="contained" color="primary" sx={{ mt: 3 }}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 3 }}
+                        onClick={handleBestel}
+                    >
                         Bestel kaarten
                     </Button>
                 </Card>

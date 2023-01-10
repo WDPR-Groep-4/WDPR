@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { useContext } from "react";
 import { createContext, useState } from "react";
 
@@ -14,7 +15,13 @@ export function WikelwagenProvider({ children }) {
         currentVoorstelling: null,
     });
 
-    function addToWinkelwagen(winkelwagenItem) {
+    function addToWinkelwagen(voorstellingId, hoeveelheid, rang) {
+        const winkelwagenItem = {
+            id: nanoid(),
+            voorstellingId: voorstellingId,
+            hoeveelheid: hoeveelheid,
+            rang: rang,
+        };
         setState((state) => ({
             ...state,
             winkelwagen: [...state.winkelwagen, winkelwagenItem],
