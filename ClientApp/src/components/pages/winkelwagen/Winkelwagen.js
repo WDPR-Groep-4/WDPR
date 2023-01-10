@@ -2,7 +2,9 @@ import { Box, Container } from "@mui/system";
 import { Card, Divider, Stack, Typography, Button } from "@mui/material";
 import Product from "./Product";
 import config from "../../../config.json";
-import { useWinkelWagen } from "../../../WinkelwagenContext";
+import { useWinkelWagen } from "../../../services/WinkelwagenContext";
+import { useQuery } from "@tanstack/react-query";
+import { getVoorstellingen } from "../../../services/FetchFunctions";
 
 //https://reactjs.org/docs/lists-and-keys.html
 
@@ -11,7 +13,14 @@ export default function Winkelwagen(props) {
 
     document.title = "Winkelwagen" + config.title;
 
-    console.log(state.winkelwagen);
+    const { status, data, error } = useQuery({
+        queryKey: ["voorstellingen"],
+        queryFn: getVoorstellingen,
+    });
+
+    if (status === "loading") return <Typography variant="h4">Loading...</Typography>;
+    if (status === "error")
+        return <Typography variant="h4">Error: {error.message}</Typography>;
 
     return (
         <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}>

@@ -14,7 +14,7 @@ import { Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 import RangCard from "./RangCard";
 import config from "../../../config.json";
-import { useWinkelWagen } from "../../../WinkelwagenContext";
+import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import AantalKaarten from "./AantalKaarten";
 import { fetchVoorstelling } from "../voorstelling/FetchVoorstelling";
 import { useParams } from "react-router-dom";

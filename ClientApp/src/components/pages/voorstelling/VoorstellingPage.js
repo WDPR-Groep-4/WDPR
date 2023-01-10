@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import config from "../../../config.json";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useWinkelWagen } from "../../../WinkelwagenContext";
+import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { fetchVoorstelling } from "./FetchVoorstelling";
 
 export default function VoorstellingPage(props) {

@@ -11,7 +11,6 @@ export function useWinkelWagen() {
 export function WikelwagenProvider({ children }) {
     const [state, setState] = useState({
         winkelwagen: [],
-        voorstellingen: [],
         currentVoorstelling: null,
     });
 

@@ -10,11 +10,14 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { AuthProvider } from "react-auth-kit";
-import { WikelwagenProvider } from "./WinkelwagenContext";
+import { WikelwagenProvider } from "./services/WinkelwagenContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
+
+const queryClient = new QueryClient();
 
 root.render(
     <AuthProvider
@@ -25,7 +28,9 @@ root.render(
     >
         <BrowserRouter basename={baseUrl}>
             <WikelwagenProvider>
-                <App />
+                <QueryClientProvider client={queryClient}>
+                    <App />
+                </QueryClientProvider>
             </WikelwagenProvider>
         </BrowserRouter>
     </AuthProvider>
