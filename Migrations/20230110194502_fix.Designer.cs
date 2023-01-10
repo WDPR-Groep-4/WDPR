@@ -3,6 +3,7 @@ using System;
 using Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230110194502_fix")]
+    partial class fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
@@ -29,7 +32,7 @@ namespace Backend.Migrations
                     b.Property<DateTime>("Van")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("VoorstellingId")
+                    b.Property<int?>("VoorstellingId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -301,7 +304,7 @@ namespace Backend.Migrations
                     b.Property<int>("Rang")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("VoorstellingId")
+                    b.Property<int?>("VoorstellingId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -397,9 +400,7 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Voorstelling", null)
                         .WithMany("DatumBereiken")
-                        .HasForeignKey("VoorstellingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VoorstellingId");
                 });
 
             modelBuilder.Entity("Donatie", b =>
@@ -473,9 +474,7 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Voorstelling", null)
                         .WithMany("PrijzenPerRang")
-                        .HasForeignKey("VoorstellingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VoorstellingId");
                 });
 
             modelBuilder.Entity("Ticket", b =>
