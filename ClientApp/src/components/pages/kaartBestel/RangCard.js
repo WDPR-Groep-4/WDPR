@@ -1,8 +1,8 @@
-import { Card, Typography, FormControlLabel, Radio } from "@mui/material";
+import { Card, Typography, FormControlLabel, Radio, useThemeProps } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-export default function RangCard({ rang, children }) {
+export default function RangCard({ rang, children, rangState, setRang }) {
     return (
         <Card
             variant="outlined"
@@ -17,6 +17,8 @@ export default function RangCard({ rang, children }) {
                 <FormControlLabel
                     value={rang.rang}
                     control={<Radio />}
+                    checked={rangState === rang.rang}
+                    onChange={() => setRang(rang.rang)}
                 ></FormControlLabel>
                 Rang {rang.rang}
             </Typography>

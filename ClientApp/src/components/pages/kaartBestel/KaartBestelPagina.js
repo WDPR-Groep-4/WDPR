@@ -27,6 +27,7 @@ export default function KaartBestelPagina(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
     const { id } = useParams();
+    const [rang, setRang] = useState(1);
 
     document.title = "Bestel" + config.title;
 
@@ -46,8 +47,14 @@ export default function KaartBestelPagina(props) {
 
         for (let i = 0; i < prijzenPerRang.length; i++) {
             const rangItem = prijzenPerRang[i];
-
-            elements.push(<RangCard key={rangItem} rang={rangItem}></RangCard>);
+            elements.push(
+                <RangCard
+                    key={rangItem}
+                    rang={rangItem}
+                    setRang={setRang}
+                    rangState={rang}
+                ></RangCard>
+            );
         }
 
         return elements;
@@ -85,6 +92,7 @@ export default function KaartBestelPagina(props) {
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                         <AantalKaarten aantal={aantal} setAantal={setAantal} />
+
                         <FormControl>
                             <RadioGroup
                                 name="rang"
@@ -94,6 +102,11 @@ export default function KaartBestelPagina(props) {
                                 <PrijsCards />
                             </RadioGroup>
                         </FormControl>
+
+                        <Typography variant="body1" component="p">
+                            <span style={{ fontWeight: 500 }}>Totaal:</span> €
+                            {aantal * voorstelling.prijzenPerRang[0].prijs}
+                        </Typography>
                     </Box>
 
                     <Button variant="contained" color="primary" sx={{ mt: 3 }}>
