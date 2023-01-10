@@ -34,7 +34,9 @@ export default function KaartBestelPagina(props) {
     useEffect(() => {
         if (!voorstelling) {
             fetchVoorstelling(setIsLoading, setError, setCurrentVoorstelling, id);
+            return;
         }
+        setIsLoading(false);
     }, []);
 
     function handleBestel() {
@@ -50,7 +52,7 @@ export default function KaartBestelPagina(props) {
             const rangItem = prijzenPerRang[i];
             elements.push(
                 <RangCard
-                    key={rangItem}
+                    key={rangItem.rang}
                     rang={rangItem}
                     setRang={setRang}
                     rangState={rang}
@@ -106,7 +108,7 @@ export default function KaartBestelPagina(props) {
 
                         <Typography variant="body1" component="p">
                             <span style={{ fontWeight: 500 }}>Totaal:</span> €
-                            {aantal * voorstelling.prijzenPerRang[0].prijs}
+                            {aantal * voorstelling.prijzenPerRang[rang - 1].prijs}
                         </Typography>
                     </Box>
 
