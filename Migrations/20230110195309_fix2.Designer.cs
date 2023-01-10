@@ -3,6 +3,7 @@ using System;
 using Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230110195309_fix2")]
+    partial class fix2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
@@ -395,11 +398,13 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("DatumBereik", b =>
                 {
-                    b.HasOne("Voorstelling", null)
+                    b.HasOne("Voorstelling", "Voorstelling")
                         .WithMany("DatumBereiken")
                         .HasForeignKey("VoorstellingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Voorstelling");
                 });
 
             modelBuilder.Entity("Donatie", b =>
@@ -471,11 +476,13 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("RangPrijs", b =>
                 {
-                    b.HasOne("Voorstelling", null)
+                    b.HasOne("Voorstelling", "Voorstelling")
                         .WithMany("PrijzenPerRang")
                         .HasForeignKey("VoorstellingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Voorstelling");
                 });
 
             modelBuilder.Entity("Ticket", b =>

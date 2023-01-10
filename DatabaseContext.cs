@@ -16,6 +16,19 @@ namespace Backend
         // Medewerkers en Gasten moeten in Gebruiker tabel
         public DbSet<Ticket> Tickets { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Voorstelling>()
+                .HasMany(v => v.DatumBereiken)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Voorstelling>()
+                .HasMany(v => v.PrijzenPerRang)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
+
 
 }
