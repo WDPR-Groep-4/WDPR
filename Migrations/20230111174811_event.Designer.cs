@@ -3,6 +3,7 @@ using System;
 using Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,17 +11,22 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230111174811_event")]
+    partial class @event
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
 
-            modelBuilder.Entity("Backend.PlanningEvent", b =>
+            modelBuilder.Entity("Backend.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DatumBereikId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Discriminator")
@@ -29,9 +35,11 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DatumBereikId");
+
                     b.ToTable("Events");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("PlanningEvent");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Event");
 
                     b.UseTphMappingStrategy();
                 });
@@ -39,6 +47,7 @@ namespace Backend.Migrations
             modelBuilder.Entity("DatumBereik", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Tot")
@@ -51,6 +60,8 @@ namespace Backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("VoorstellingId");
 
                     b.ToTable("DatumBereik");
                 });
@@ -397,9 +408,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.VerhuurEvent", b =>
                 {
-                    b.HasBaseType("Backend.PlanningEvent");
+                    b.HasBaseType("Backend.Event");
 
-                    b.Property<string>("Eigenaar")
+                    b.Property<string>("eigenaar")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -408,7 +419,7 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.VoorstellingEvent", b =>
                 {
-                    b.HasBaseType("Backend.PlanningEvent");
+                    b.HasBaseType("Backend.Event");
 
                     b.Property<int>("VoorstellingId")
                         .HasColumnType("INTEGER");
@@ -432,11 +443,22 @@ namespace Backend.Migrations
                     b.HasDiscriminator().HasValue("Medewerker");
                 });
 
+            modelBuilder.Entity("Backend.Event", b =>
+                {
+                    b.HasOne("DatumBereik", "DatumBereik")
+                        .WithMany()
+                        .HasForeignKey("DatumBereikId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DatumBereik");
+                });
+
             modelBuilder.Entity("DatumBereik", b =>
                 {
-                    b.HasOne("Backend.PlanningEvent", null)
-                        .WithOne("DatumBereik")
-                        .HasForeignKey("DatumBereik", "Id")
+                    b.HasOne("Voorstelling", null)
+                        .WithMany("DatumBereiken")
+                        .HasForeignKey("VoorstellingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -555,14 +577,10 @@ namespace Backend.Migrations
                     b.Navigation("Voorstelling");
                 });
 
-            modelBuilder.Entity("Backend.PlanningEvent", b =>
-                {
-                    b.Navigation("DatumBereik")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Voorstelling", b =>
                 {
+                    b.Navigation("DatumBereiken");
+
                     b.Navigation("PrijzenPerRang");
                 });
 
