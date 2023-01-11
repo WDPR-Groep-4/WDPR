@@ -3,21 +3,26 @@ import { Route, Routes } from "react-router-dom";
 import AppRoutes from "./AppRoutes";
 import "./custom.css";
 import Navbar from "./components/navbar/Navbar";
+import { useQuery } from "@tanstack/react-query";
+import { getVoorstellingen } from "./services/FetchFunctions";
 
-export default class App extends Component {
-    static displayName = App.name;
+export default function App() {
+    const { status, data, error } = useQuery({
+        queryKey: ["voorstellingen"],
+        queryFn: getVoorstellingen,
+    });
 
-    render() {
-        return (
-            <div>
-                <Navbar />
-                <Routes>
-                    {AppRoutes.map((route, index) => {
-                        const { element, ...rest } = route;
-                        return <Route key={index} {...rest} element={element} />;
-                    })}
-                </Routes>
-            </div>
-        );
-    }
+    console.log(data);
+
+    return (
+        <div>
+            <Navbar />
+            <Routes>
+                {AppRoutes.map((route, index) => {
+                    const { element, ...rest } = route;
+                    return <Route key={index} {...rest} element={element} />;
+                })}
+            </Routes>
+        </div>
+    );
 }

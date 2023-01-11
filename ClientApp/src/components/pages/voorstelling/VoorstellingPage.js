@@ -4,35 +4,23 @@ import { Link, useParams } from "react-router-dom";
 import config from "../../../config.json";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useWinkelWagen } from "../../../services/WinkelwagenContext";
+import { fetchVoorstelling } from "./FetchVoorstelling";
 
 export default function VoorstellingPage(props) {
     const [voorstelling, setVoorstelling] = useState();
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
+    const { setCurrentVoorstelling } = useWinkelWagen();
 
     useEffect(() => {
-        fetch();
+        fetchVoorstelling(setIsLoading, setError, setVoorstelling, id);
     }, []);
 
-    async function fetch() {
-        try {
-            const response = await axios.get(`/api/voorstelling/${id}`).catch((err) => {
-                console.log(err);
-                setIsLoading(false);
-                setError(true);
-            });
-            console.log(response);
-            setVoorstelling(response.data);
-            setIsLoading(false);
-        } catch {
-            console.log("error");
-            setIsLoading(false);
-            setError(true);
-        }
+    function handleClick() {
+        setCurrentVoorstelling(voorstelling);
     }
-
-    console.log(voorstelling);
 
     function Datum() {
         const datums = voorstelling.datumBereiken;
@@ -102,15 +90,17 @@ export default function VoorstellingPage(props) {
                                 color="white"
                                 sx={{ p: 3 }}
                             >
-                                {!isLoading
-                                    ? "vanaf: €" + voorstelling.prijzenPerRang[2].prijs
-                                    : ""}
+                                {"vanaf: €" +
+                                    voorstelling.prijzenPerRang[
+                                        voorstelling.prijzenPerRang.length - 1
+                                    ].prijs}
                             </Typography>
                             <Button
                                 component={Link}
                                 to={`/voorstelling/${id}/bestel`}
                                 variant="contained"
                                 color="primary"
+                                onClick={handleClick}
                             >
                                 Bestel Tickets
                             </Button>
@@ -162,6 +152,7 @@ export default function VoorstellingPage(props) {
                             to={`/voorstelling/${voorstelling.voorstellingId}/bestel`}
                             variant="contained"
                             sx={{ mt: 3 }}
+                            onClick={handleClick}
                         >
                             Bestel Tickets
                         </Button>

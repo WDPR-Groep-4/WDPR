@@ -9,12 +9,15 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import CartProvider from "./CartContext";
 import { AuthProvider } from "react-auth-kit";
+import { WikelwagenProvider } from "./services/WinkelwagenContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
+
+const queryClient = new QueryClient();
 
 root.render(
     <AuthProvider
@@ -24,9 +27,11 @@ root.render(
         cookieSecure={false}
     >
         <BrowserRouter basename={baseUrl}>
-            <CartProvider>
-                <App />
-            </CartProvider>
+            <WikelwagenProvider>
+                <QueryClientProvider client={queryClient}>
+                    <App />
+                </QueryClientProvider>
+            </WikelwagenProvider>
         </BrowserRouter>
     </AuthProvider>
 );

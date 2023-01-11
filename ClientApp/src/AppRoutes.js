@@ -62,7 +62,7 @@ const AppRoutes = [
         element: <VoorstellingPage />,
     },
     {
-        path: "/voorstelling/1/bestel",
+        path: "/voorstelling/:id/bestel",
         element: <KaartBestelPagina />,
     },
     {
@@ -85,10 +85,10 @@ const AppRoutes = [
         path: "/resetwachtwoordsucces",
         element: <SuccesResetWachtwoord />,
     },
-{
-    path: "/steun-ons",
-    element: <SteunOnsPage/>,
-},
+    {
+        path: "/steun-ons",
+        element: <SteunOnsPage />,
+    },
 ];
 
 export default AppRoutes;
