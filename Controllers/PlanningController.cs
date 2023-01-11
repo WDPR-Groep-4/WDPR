@@ -21,7 +21,7 @@ public class PlanningController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<PlanningEvent>>> GetEvents()
     {
-        var events = await _context.Events.ToListAsync();
+        var events = await _context.Events.Include(e => e.DatumBereik).ToListAsync();
         if (events == null)
         {
             return NotFound();
@@ -32,7 +32,7 @@ public class PlanningController : ControllerBase
     [HttpGet("voorstellingen")]
     public async Task<ActionResult<List<VoorstellingEvent>>> GetVoorstellingEvents()
     {
-        var voorstellingEvents = await _context.Events.OfType<VoorstellingEvent>().Include(e => e.Voorstelling).ToListAsync();
+        var voorstellingEvents = await _context.Events.OfType<VoorstellingEvent>().Include(e => e.Voorstelling).Include(e => e.DatumBereik).ToListAsync();
         if (voorstellingEvents == null)
         {
             return NotFound();
@@ -54,9 +54,60 @@ public class PlanningController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<PlanningEvent>> PostEvent(PlanningEvent planningEvent)
     {
+        if (!IsDatumVrij(planningEvent.DatumBereik))
+        {
+            return BadRequest();
+        }
         await _context.Events.AddAsync(planningEvent);
         await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(GetEvents), new { id = planningEvent.Id }, planningEvent);
+    }
+
+    bool IsDatumVrij(DatumBereik datumBereik)
+    {
+        var events = _context.Events.Include(e => e.DatumBereik).ToList();
+        foreach (var e in events)
+        {
+            if (e.DatumBereik.Van <= datumBereik.Tot && e.DatumBereik.Tot >= datumBereik.Van)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    [HttpPost("voorstellingen")]
+    public async Task<ActionResult<VoorstellingEvent>> PostVoorstellingEvent(VoorstellingEventDto voorstellingEventDto)
+    {
+        var voorstelling = await _context.Voorstellingen.FindAsync(voorstellingEventDto.VoorstellingId);
+        if (voorstelling == null)
+        {
+            return NotFound();
+        }
+
+        DatumBereik datumBereik = new DatumBereik
+        {
+            Id = voorstellingEventDto.Id,
+            Van = voorstellingEventDto.Van,
+            Tot = voorstellingEventDto.Tot
+        };
+        var voorstellingEvent = new VoorstellingEvent
+        {
+            Voorstelling = voorstelling,
+            DatumBereik = datumBereik
+        };
+
+        if (!IsDatumVrij(voorstellingEvent.DatumBereik))
+        {
+            return BadRequest();
+        }
+
+        await _context.Events.AddAsync(voorstellingEvent);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetVoorstellingEvents), new
+        {
+            id = voorstellingEvent.Id
+        }, voorstellingEvent);
     }
 
     [HttpPut("{id}")]
@@ -84,3 +135,14 @@ public class PlanningController : ControllerBase
         return planningEvent;
     }
 }
+
+public class VoorstellingEventDto
+{
+    public int VoorstellingId { get; set; }
+    public DateTime Van { get; set; }
+    public DateTime Tot { get; set; }
+    public int Id { get; set; }
+
+}
+
+

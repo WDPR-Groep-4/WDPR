@@ -18,6 +18,7 @@ const context = [
     "/api/account",
     "/api/rollen/start",
     "/api/voorstelling",
+    "/api/planning",
 ];
 
 module.exports = function (app) {

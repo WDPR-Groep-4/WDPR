@@ -23,13 +23,14 @@ namespace Backend
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Voorstelling>()
-                .HasMany(v => v.DatumBereiken)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Voorstelling>()
                 .HasMany(v => v.PrijzenPerRang)
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<PlanningEvent>()
+                .HasOne(e => e.DatumBereik)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey<DatumBereik>(e => e.Id);
         }
     }
 
