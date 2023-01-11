@@ -15,6 +15,9 @@ namespace Backend
         public DbSet<Medewerker> Medewerkers { get; set; }
         // Medewerkers en Gasten moeten in Gebruiker tabel
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<PlanningEvent> Events { get; set; }
+        public DbSet<VerhuurEvent> VerhuurEvents { get; set; }
+        public DbSet<VoorstellingEvent> VoorstellingEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
