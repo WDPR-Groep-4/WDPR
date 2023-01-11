@@ -1,3 +1,4 @@
+namespace Backend;
 public class Ticket
 {
     public Guid TicketId { get; set; }
