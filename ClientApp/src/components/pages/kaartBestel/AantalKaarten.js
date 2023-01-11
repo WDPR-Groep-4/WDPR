@@ -13,7 +13,7 @@ export default function AantalKaarten(props) {
                 props.setAantal((prev) => prev + 1);
                 break;
             case "remove":
-                if (props.aantal < 1) {
+                if (props.aantal < 2) {
                     return;
                 }
                 props.setAantal((prev) => prev - 1);

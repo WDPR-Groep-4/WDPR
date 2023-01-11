@@ -14,10 +14,10 @@ export function WikelwagenProvider({ children }) {
         currentVoorstelling: null,
     });
 
-    function addToWinkelwagen(voorstellingId, hoeveelheid, rang) {
+    function addToWinkelwagen(voorstelling, hoeveelheid, rang) {
         const winkelwagenItem = {
             id: nanoid(),
-            voorstellingId: voorstellingId,
+            voorstelling: voorstelling,
             hoeveelheid: hoeveelheid,
             rang: rang,
         };

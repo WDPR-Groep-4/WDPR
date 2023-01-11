@@ -3,24 +3,32 @@ import { Card, Divider, Stack, Typography, Button } from "@mui/material";
 import Product from "./Product";
 import config from "../../../config.json";
 import { useWinkelWagen } from "../../../services/WinkelwagenContext";
-import { useQuery } from "@tanstack/react-query";
-import { getVoorstellingen } from "../../../services/FetchFunctions";
+import { nanoid } from "nanoid";
+import { useState } from "react";
 
 //https://reactjs.org/docs/lists-and-keys.html
 
 export default function Winkelwagen(props) {
     const { state } = useWinkelWagen();
+    const totaal = state.winkelwagen.reduce((acc, item) => {
+        const prijs = item.voorstelling.prijzenPerRang.find(
+            (prijs) => prijs.rang === item.rang
+        );
+        return acc + prijs.prijs * item.hoeveelheid;
+    }, 0);
 
     document.title = "Winkelwagen" + config.title;
 
-    const { status, data, error } = useQuery({
-        queryKey: ["voorstellingen"],
-        queryFn: getVoorstellingen,
+    const winkelwagenItems = state.winkelwagen.map((item) => {
+        return (
+            <Product
+                key={nanoid()}
+                voorstelling={item.voorstelling}
+                hoeveelheid={item.hoeveelheid}
+                rang={item.rang}
+            />
+        );
     });
-
-    if (status === "loading") return <Typography variant="h4">Loading...</Typography>;
-    if (status === "error")
-        return <Typography variant="h4">Error: {error.message}</Typography>;
 
     return (
         <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
@@ -66,9 +74,7 @@ export default function Winkelwagen(props) {
                                 width: { xs: "100%", sm: "100%", md: "initial" },
                             }}
                         >
-                            <Product />
-                            <Product />
-                            <Product />
+                            {winkelwagenItems}
                         </Stack>
                     </Card>
 
@@ -108,7 +114,7 @@ export default function Winkelwagen(props) {
                                 component="h4"
                                 sx={{ fontSize: 16, fontWeight: 600 }}
                             >
-                                € 239,94
+                                € {totaal.toFixed(2)}
                             </Typography>
                         </Box>
                         <Divider

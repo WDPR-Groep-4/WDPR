@@ -23,7 +23,7 @@ export default function KaartBestelPagina(props) {
     const { state, addToWinkelwagen, setCurrentVoorstelling } = useWinkelWagen();
     const voorstelling = state.currentVoorstelling;
     const navigate = useNavigate();
-    const [aantal, setAantal] = useState(0);
+    const [aantal, setAantal] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
     const { id } = useParams();
@@ -40,7 +40,7 @@ export default function KaartBestelPagina(props) {
     }, []);
 
     function handleBestel() {
-        addToWinkelwagen(id, aantal, rang);
+        addToWinkelwagen(voorstelling, aantal, rang);
         navigate("/winkelwagen");
     }
 
