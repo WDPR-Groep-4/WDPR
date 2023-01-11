@@ -18,6 +18,7 @@ import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import AantalKaarten from "./AantalKaarten";
 import { fetchVoorstelling } from "../voorstelling/FetchVoorstelling";
 import { useParams } from "react-router-dom";
+import WinkelwagenModal from "./WinkelwagenModal";
 
 export default function KaartBestelPagina(props) {
     const { state, addToWinkelwagen, setCurrentVoorstelling } = useWinkelWagen();
@@ -28,6 +29,7 @@ export default function KaartBestelPagina(props) {
     const [error, setError] = useState(false);
     const { id } = useParams();
     const [rang, setRang] = useState(1);
+    const [modal, setModal] = useState(false);
 
     document.title = "Bestel" + config.title;
 
@@ -41,7 +43,7 @@ export default function KaartBestelPagina(props) {
 
     function handleBestel() {
         addToWinkelwagen(voorstelling, aantal, rang);
-        navigate("/winkelwagen");
+        setModal(true);
     }
 
     function PrijsCards() {
@@ -130,6 +132,7 @@ export default function KaartBestelPagina(props) {
             maxWidth="xl"
             sx={{ py: 3, backgroundColor: "#f5f5f5", minHeight: "100vh" }}
         >
+            <WinkelwagenModal open={modal} onClose={() => setModal(false)} />
             {isLoading ? (
                 <Typography variant="h5" component="h1">
                     Laden...
