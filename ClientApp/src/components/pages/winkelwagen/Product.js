@@ -74,23 +74,7 @@ export default function Product(props) {
             mt: 1,
           }}
         >
-          <Button
-            variant="text"
-            endIcon={
-              <img
-                src="./delete.png"
-                style={{ maxWidth: "16px", maxHeight: "16px" }}
-              />
-            }
-            onClick={onDelete}
-            sx={{
-              fontWeight: 400,
-              fontSize: 10,
-              color: "#727272",
-            }}
-          >
-            Verwijderen
-          </Button>
+          <DeleteButton onDelete={onDelete} />
         </Box>
         <Box
           sx={{
@@ -122,7 +106,6 @@ export default function Product(props) {
             € {prijs.prijs * hoeveelheid}
           </Typography>
         </Box>
-        <DeleteButton onDelete={onDelete}></DeleteButton>
       </Box>
     </Box>
   );
