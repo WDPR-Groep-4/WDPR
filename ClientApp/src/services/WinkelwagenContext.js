@@ -1,5 +1,6 @@
+import { useBadge } from "@mui/base";
 import { nanoid } from "nanoid";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { createContext, useState } from "react";
 
 const WinkelwagenContext = createContext({});
@@ -8,11 +9,23 @@ export function useWinkelWagen() {
     return useContext(WinkelwagenContext);
 }
 
-export function WikelwagenProvider({ children }) {
-    const [state, setState] = useState({
+function getInitialState() {
+    const winkelwagen = localStorage.getItem("winkelwagen");
+    if (winkelwagen) {
+        return JSON.parse(winkelwagen);
+    }
+    return {
         winkelwagen: [],
         currentVoorstelling: null,
-    });
+    };
+}
+
+export function WikelwagenProvider({ children }) {
+    const [state, setState] = useState(getInitialState());
+
+    useEffect(() => {
+        localStorage.setItem("winkelwagen", JSON.stringify(state));
+    }, [state]);
 
     function addToWinkelwagen(voorstelling, hoeveelheid, rang) {
         const winkelwagenItem = {
