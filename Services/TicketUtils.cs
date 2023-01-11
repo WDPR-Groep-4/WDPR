@@ -5,7 +5,7 @@ using QRCoder;
 public class TicketUtils
 {
 
-    public static Ticket CreateTicket(VoorstellingEvent voorstelling, string email, int rang, int rij, int stoel, DatabaseContext context)
+    public static Ticket GenerateTicket(VoorstellingEvent voorstelling, string email, int rang, int rij, int stoel, DatabaseContext context)
     {
         Ticket ticket = new Ticket();
         ticket.VoorstellingEvent = voorstelling;

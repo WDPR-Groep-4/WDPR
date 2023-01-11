@@ -18,6 +18,7 @@ namespace Backend
         public DbSet<PlanningEvent> Events { get; set; }
         public DbSet<VerhuurEvent> VerhuurEvents { get; set; }
         public DbSet<VoorstellingEvent> VoorstellingEvents { get; set; }
+        public DbSet<Betaling> Betalingen { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

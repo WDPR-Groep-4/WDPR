@@ -14,7 +14,7 @@ public class TicketController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("email")]
+    [HttpGet("all_from_single_email")]
     public async Task<ActionResult<List<Ticket>>> GetAllTicketsFromEmail(string email)
     {
         var tickets = await _context.Tickets.Where(t => t.Email == email).ToListAsync();
@@ -25,7 +25,7 @@ public class TicketController : ControllerBase
         return tickets;
     }
 
-    [HttpGet("voorstelling")]
+    [HttpGet("all_from_single_email_and_event")]
     public async Task<ActionResult<Ticket>> GetTicketsOneVoorstellingEventFromEmail(int voorstellingId, string email)
     {
         var ticket = await _context.Tickets.Where(t => t.VoorstellingEvent.Id == voorstellingId && t.Email == email).FirstOrDefaultAsync();
@@ -36,7 +36,7 @@ public class TicketController : ControllerBase
         return ticket;
     }
 
-    [HttpGet("voorstelling")]
+    [HttpGet("all_from_single_event")]
     public async Task<ActionResult<List<Ticket>>> GetAllTicketsFromVoorstellingEvent(int eventId)
     {
         var tickets = await _context.Tickets.Where(t => t.VoorstellingEvent.Id == eventId).ToListAsync();
