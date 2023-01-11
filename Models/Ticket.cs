@@ -1,6 +1,6 @@
 public class Ticket
 {
-    public int Id { get; set; }
+    public Guid TicketId { get; set; }
     public Gast Gast { get; set; }
     public Voorstelling Voorstelling { get; set; }
     public DatumBereik DatumBereik { get; set; }
