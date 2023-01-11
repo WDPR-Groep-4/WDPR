@@ -4,6 +4,7 @@ import { Modal, Typography, Card } from "@mui/material";
 import { Box } from "@mui/system";
 import { grey, red } from "@mui/material/colors";
 import PopupModal from "../../Utility/PopupModal";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 export default function DeleteButton(props) {
   const [modal, setModal] = useState(false);
@@ -57,10 +58,7 @@ export default function DeleteButton(props) {
       <Button
         variant="text"
         endIcon={
-          <img
-            src="./delete.png"
-            style={{ maxWidth: "16px", maxHeight: "16px" }}
-          />
+          <DeleteOutlinedIcon style={{ maxWidth: 16, maxHeight: 16 }}/>
         }
         onClick={() => setModal(true)}
         sx={{
