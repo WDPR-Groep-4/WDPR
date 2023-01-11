@@ -1,10 +1,21 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import { useEffect } from "react";
+import DeleteButton from "./DeleteButton";
+import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 
 export default function Product(props) {
-    const { voorstelling, hoeveelheid, rang } = props;
+    const { item, setTotaal } = props;
+    const voorstelling = item.voorstelling;
+    const rang = item.rang;
+    const hoeveelheid = item.hoeveelheid;
     const prijs = voorstelling.prijzenPerRang.find((item) => item.rang === rang);
+    const { removeFromWinkelwagen } = useWinkelWagen();
+
+    function onDelete() {
+        removeFromWinkelwagen(item.id);
+        setTotaal((prev) => prev - prijs.prijs * hoeveelheid);
+    }
 
     return (
         <Box
@@ -74,6 +85,7 @@ export default function Product(props) {
                     € {prijs.prijs * hoeveelheid}
                 </Typography>
             </Box>
+            <DeleteButton onDelete={onDelete}></DeleteButton>
         </Box>
     );
 }

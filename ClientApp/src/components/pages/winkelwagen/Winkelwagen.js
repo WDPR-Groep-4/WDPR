@@ -10,24 +10,19 @@ import { useState } from "react";
 
 export default function Winkelwagen(props) {
     const { state } = useWinkelWagen();
-    const totaal = state.winkelwagen.reduce((acc, item) => {
-        const prijs = item.voorstelling.prijzenPerRang.find(
-            (prijs) => prijs.rang === item.rang
-        );
-        return acc + prijs.prijs * item.hoeveelheid;
-    }, 0);
+    const [totaal, setTotaal] = useState(
+        state.winkelwagen.reduce((acc, item) => {
+            const prijs = item.voorstelling.prijzenPerRang.find(
+                (prijs) => prijs.rang === item.rang
+            );
+            return acc + prijs.prijs * item.hoeveelheid;
+        }, 0)
+    );
 
     document.title = "Winkelwagen" + config.title;
 
     const winkelwagenItems = state.winkelwagen.map((item) => {
-        return (
-            <Product
-                key={nanoid()}
-                voorstelling={item.voorstelling}
-                hoeveelheid={item.hoeveelheid}
-                rang={item.rang}
-            />
-        );
+        return <Product key={nanoid()} item={item} setTotaal={setTotaal} />;
     });
 
     return (
