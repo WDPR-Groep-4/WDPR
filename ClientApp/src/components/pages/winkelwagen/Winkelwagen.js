@@ -5,6 +5,7 @@ import config from "../../../config.json";
 import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { nanoid } from "nanoid";
 import { useState } from "react";
+import axios from "axios";
 
 //https://reactjs.org/docs/lists-and-keys.html
 

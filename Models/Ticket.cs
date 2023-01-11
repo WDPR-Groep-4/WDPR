@@ -1,9 +1,8 @@
 public class Ticket
 {
-    public int Id { get; set; }
-    public Gast Gast { get; set; }
-    public Voorstelling Voorstelling { get; set; }
-    public DatumBereik DatumBereik { get; set; }
+    public Guid TicketId { get; set; }
+    public string Email { get; set; }
+    public VoorstellingEvent VoorstellingEvent { get; set; }
     public string RangRijStoel { get; set; }
 }
 
