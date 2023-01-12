@@ -63,6 +63,7 @@ public class PlanningController : ControllerBase
         return CreatedAtAction(nameof(GetEvents), new { id = planningEvent.Id }, planningEvent);
     }
 
+    // zaal check toevoegen
     bool IsDatumVrij(DatumBereik datumBereik)
     {
         var events = _context.Events.Include(e => e.DatumBereik).ToList();
