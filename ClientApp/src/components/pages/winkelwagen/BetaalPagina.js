@@ -23,8 +23,8 @@ export default function BetaalPopup(props) {
                     Rang: item.rang,
                 };
             });
-            const betaalIdRespone = await axios
-                .post("https://localhost:5001/api/betaal/setup", {
+            const betaalIdResponse = await axios
+                .post("https://localhost:44419/api/betaal/setup", {
                     winkelwagenItems: winkelWagenItems,
                     email: email,
                 })
@@ -32,7 +32,7 @@ export default function BetaalPopup(props) {
                     console.log(error);
                 });
 
-            if (betaalIdRespone.status !== 200) {
+            if ((await betaalIdResponse.status) !== 200) {
                 setError(
                     "Er is iets fout gegaan bij het aanmaken van de betaling, probeer het later opnieuw."
                 );
@@ -44,7 +44,7 @@ export default function BetaalPopup(props) {
                     "https://fakepay.azurewebsites.net/",
                     new URLSearchParams({
                         amount: totaal,
-                        reference: betaalIdRespone.data,
+                        reference: await betaalIdResponse.data,
                         url: "https://localhost:44419/winkelwagen/betaald",
                     })
                 )
