@@ -1,8 +1,7 @@
 import { Box } from "@mui/system";
-import { Card, Container, Typography, Alert, TextField, Button } from "@mui/material";
+import { Card, Typography, Alert, TextField, Button } from "@mui/material";
 import { useState, useRef } from "react";
 import axios from "axios";
-import { nanoid } from "nanoid";
 import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { useAuthUser } from "react-auth-kit";
 
@@ -15,28 +14,44 @@ export default function BetaalPopup(props) {
     const [error, setError] = useState("");
     const form = useRef(null);
 
-    async function handleBetaal() {
+    async function handleBetaal(email) {
         try {
-            const betaalId = nanoid();
+            const winkelWagenItems = state.winkelwagen.map((item) => {
+                return {
+                    VoorstellingId: item.voorstelling.voorstellingId,
+                    Aantal: item.aantal,
+                    Rang: item.rang,
+                };
+            });
+            const betaalIdRespone = await axios
+                .post("https://localhost:5001/api/betaal/setup", {
+                    winkelwagenItems: winkelWagenItems,
+                    email: email,
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
+            if (betaalIdRespone.status !== 200) {
+                setError(
+                    "Er is iets fout gegaan bij het aanmaken van de betaling, probeer het later opnieuw."
+                );
+                return;
+            }
+
             const betaalResponse = await axios
                 .post(
                     "https://fakepay.azurewebsites.net/",
                     new URLSearchParams({
                         amount: totaal,
-                        reference: "test",
+                        reference: betaalIdRespone.data,
                         url: "https://localhost:44419/winkelwagen/betaald",
                     })
                 )
                 .catch((error) => {
                     console.log(error);
                 });
-            // const backendBetaalResponse = await axios
-            //     .post("https://localhost:5001/api/betaal", {
-            //         betaalId: betaalId,
-            //     })
-            //     .catch((error) => {
-            //         console.log(error);
-            //     });
+
             if (betaalResponse.status === 200) {
                 setBetaal(true);
                 setHtml(betaalResponse.data);
@@ -47,7 +62,7 @@ export default function BetaalPopup(props) {
     }
 
     if (account()) {
-        handleBetaal();
+        handleBetaal(account().email);
 
         return (
             <Box>
@@ -120,7 +135,11 @@ export default function BetaalPopup(props) {
                                 label="Email"
                             />
                         </form>
-                        <Button variant="contained" color="primary">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => handleBetaal(form.current.email.value)}
+                        >
                             Verstuur
                         </Button>
                     </Box>

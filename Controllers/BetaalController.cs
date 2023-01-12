@@ -2,7 +2,7 @@ namespace Backend;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class BetaalController : ControllerBase
 {
@@ -13,9 +13,19 @@ public class BetaalController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("api/setup")]
-    public async Task<ActionResult<int>> SetupBetalingAndGetId(string email)
+    [HttpGet("setup")]
+    public async Task<ActionResult<string>> SetupBetalingAndGetId(string email, List<WinkelwagenItem> winkelwagenItems)
     {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return BadRequest("Invalid email");
+        }
+
+        if (winkelwagenItems.Count == 0 || winkelwagenItems == null)
+        {
+            return BadRequest("No items in cart");
+        }
+
         Betaling betaling = new Betaling();
         betaling.Email = email;
         betaling.Pending = true;
@@ -24,13 +34,13 @@ public class BetaalController : ControllerBase
         await _context.AddAsync(betaling);
         await _context.SaveChangesAsync();
 
-        return betaling.Id;
+        return betaling.Id.ToString();
     }
 
-    [HttpGet("api/check")]
-    public async Task<ActionResult<bool?>> CheckBetalingSucces(int id)
+    [HttpGet("check")]
+    public async Task<ActionResult<bool?>> CheckBetalingSucces(string id)
     {
-        Betaling? betaling = await _context.Betalingen.Where(b => b.Id == id).FirstOrDefaultAsync();
+        Betaling? betaling = await _context.Betalingen.Where(b => b.Id.ToString().Equals(id)).FirstOrDefaultAsync();
         if (betaling == null)
         {
             return NotFound();
@@ -65,13 +75,13 @@ public class BetaalController : ControllerBase
             return BadRequest("Invalid succes");
         }
 
-        if (!int.TryParse(reference, out int id))
+        if (string.IsNullOrWhiteSpace(reference))
         {
             return BadRequest("Invalid reference");
         }
 
         //Get betaling
-        Betaling? betaling = await _context.Betalingen.Where(b => b.Id == id).FirstOrDefaultAsync();
+        Betaling? betaling = await _context.Betalingen.Where(b => b.Id.ToString().Equals(reference)).FirstOrDefaultAsync();
 
         if (betaling == null)
         {
@@ -87,7 +97,20 @@ public class BetaalController : ControllerBase
         {
             betaling.Succes = true;
 
-            //Generate tickets
+            var winkelwagenItems = await _context.Betalingen.Where(w => w.Id.ToString().Equals(reference)).SelectMany(w => w.WinkelwagenItems).ToListAsync();
+            if (winkelwagenItems == null || winkelwagenItems.Count == 0)
+            {
+                return BadRequest("Invalid reference");
+            }
+            foreach (WinkelwagenItem wItem in winkelwagenItems)
+            {
+                var voorstellingEvent = await _context.VoorstellingEvents.Where(v => v.Id == wItem.VoorstellingEventId).FirstOrDefaultAsync();
+                if (voorstellingEvent == null)
+                {
+                    return BadRequest("Invalid reference");
+                }
+                TicketController.GenerateTickets(voorstellingEvent, betaling.Email, wItem.Rang, wItem.Aantal, _context);
+            }
         }
         else
         {

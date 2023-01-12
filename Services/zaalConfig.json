@@ -1,30 +1,30 @@
 [
     {
-        "zaal" : 1,
-        "rangen" : {
-            "1": 20,
-            "2": 100,
-            "3": 120
-        }
+        "ZaalNummer" : 1,
+        "Rangen" : [
+            20,
+            100,
+            120
+        ]
     },
     {
-        "zaal" : 2,
-        "rangen" : {
-            "1": 20,
-            "2": 160
-        }
+        "ZaalNummer" : 2,
+        "Rangen" : [
+            20,
+            160
+        ]
     },
     {
-        "zaal" : 3,
-        "rangen" : {
-            "1": 10,
-            "2": 80
-        }
+        "ZaalNummer" : 3,
+        "Rangen" : [
+            10,
+            80
+        ]
     },
     {
-        "zaal" : 4,
-        "rangen" : {
-            "1": 40
-        }
+        "ZaalNummer" : 4,
+        "Rangen" : [
+            40
+        ]
     }
 ]

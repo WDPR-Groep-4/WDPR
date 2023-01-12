@@ -5,7 +5,7 @@ import config from "../../../config.json";
 import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { nanoid } from "nanoid";
 import { useState } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 //https://reactjs.org/docs/lists-and-keys.html
 
@@ -122,6 +122,8 @@ export default function Winkelwagen(props) {
                                 boxSizing: "border-box",
                             }}
                             disableElevation
+                            component={Link}
+                            to="/betaling"
                         >
                             Betalen
                         </Button>
