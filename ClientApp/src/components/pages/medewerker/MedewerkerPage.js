@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 import VoorstellingenGegevens from "./VoorstellingGegevens";
 import config from "../../../config.json";
+import { Link } from "react-router-dom";
 
 
 
@@ -34,10 +35,10 @@ export default function MedewerkerPage() {
                             variant="scrollable"
                             scrollButtons
                         >
-                            <Tab label="Voorstellingen" />
-                            <Tab label="Programmering" />
-                            <Tab label="Artiesten" />
-                            <Tab label="Accounts beheren" />
+                <Tab label={<Link to='/medewerker/voorstellingen'>Voorstellingen</Link>} />
+                        <Tab label={<Link to="/medewerker/programmering">Programmering</Link>} />
+                        <Tab label={<Link to="/medewerker/artiesten">Artiesten</Link>} />
+                        <Tab label={<Link to="/medewerker/accounts">Accounts beheren</Link>} />
                         </Tabs>
                     </Box>
                     <Card
