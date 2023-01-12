@@ -10,15 +10,8 @@ import axios from "axios";
 //https://reactjs.org/docs/lists-and-keys.html
 
 export default function Winkelwagen(props) {
-    const { state } = useWinkelWagen();
-    const [totaal, setTotaal] = useState(
-        state.winkelwagen.reduce((acc, item) => {
-            const prijs = item.voorstelling.prijzenPerRang.find(
-                (prijs) => prijs.rang === item.rang
-            );
-            return acc + prijs.prijs * item.hoeveelheid;
-        }, 0)
-    );
+    const { state, totaalWinkelwagen } = useWinkelWagen();
+    const [totaal, setTotaal] = useState(totaalWinkelwagen());
 
     document.title = "Winkelwagen" + config.title;
 

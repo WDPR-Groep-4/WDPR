@@ -24,13 +24,13 @@ public class BetaalController : ControllerBase
         await _context.AddAsync(betaling);
         await _context.SaveChangesAsync();
 
-        return betaling.BetaalId;
+        return betaling.Id;
     }
 
     [HttpGet("api/check")]
     public async Task<ActionResult<bool?>> CheckBetalingSucces(int id)
     {
-        Betaling? betaling = await _context.Betalingen.Where(b => b.BetaalId == id).FirstOrDefaultAsync();
+        Betaling? betaling = await _context.Betalingen.Where(b => b.Id == id).FirstOrDefaultAsync();
         if (betaling == null)
         {
             return NotFound();
@@ -71,7 +71,7 @@ public class BetaalController : ControllerBase
         }
 
         //Get betaling
-        Betaling? betaling = await _context.Betalingen.Where(b => b.BetaalId == id).FirstOrDefaultAsync();
+        Betaling? betaling = await _context.Betalingen.Where(b => b.Id == id).FirstOrDefaultAsync();
 
         if (betaling == null)
         {

@@ -61,6 +61,15 @@ export function WikelwagenProvider({ children }) {
         }));
     }
 
+    function totaalWinkelwagen() {
+        return state.winkelwagen.reduce((acc, item) => {
+            const prijs = item.voorstelling.prijzenPerRang.find(
+                (prijs) => prijs.rang === item.rang
+            );
+            return acc + prijs.prijs * item.hoeveelheid;
+        }, 0);
+    }
+
     return (
         <WinkelwagenContext.Provider
             value={{
@@ -68,6 +77,8 @@ export function WikelwagenProvider({ children }) {
                 addToWinkelwagen,
                 removeFromWinkelwagen,
                 setCurrentVoorstelling,
+                clearWinkelwagen,
+                totaalWinkelwagen,
             }}
         >
             {children}
