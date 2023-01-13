@@ -32,6 +32,7 @@ public class BetaalController : ControllerBase
         betaling.Email = betalingDto.Email;
         betaling.Pending = true;
         betaling.Succes = null;
+        betaling.WinkelwagenItems = betalingDto.WinkelwagenItems;
 
         await _context.AddAsync(betaling);
         await _context.SaveChangesAsync();
