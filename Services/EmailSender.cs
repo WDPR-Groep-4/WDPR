@@ -11,17 +11,20 @@ using System.Drawing.Imaging;
 public class EmailSender : IEmailSender
 {
     private readonly ILogger _logger;
+    private readonly IConfiguration _configuration;
 
-    public EmailSender(ILogger<EmailSender> logger)
+    public EmailSender(ILogger<EmailSender> logger, IConfiguration configuration)
     {
         _logger = logger;
+        _configuration = configuration;
     }
 
     public AuthMessageSenderOptions Options { get; }
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)
     {
-        string? ApiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+        string? ApiKey = _configuration["SendGridKey"];
+
         if (string.IsNullOrEmpty(ApiKey))
         {
             throw new Exception("Null SendGridKey");
@@ -30,10 +33,10 @@ public class EmailSender : IEmailSender
         await Execute(ApiKey, subject, message, toEmail);
     }
 
-    public async Task SendEmailWithImageAsync(string toEmail, string subject, string message, Bitmap image)
-    {
+    // public async Task SendEmailWithImageAsync(string toEmail, string subject, string message, Bitmap image)
+    // {
 
-    }
+    // }
 
     public async Task Execute(string apiKey, string subject, string message, string toEmail)
     {
