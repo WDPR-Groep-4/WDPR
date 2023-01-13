@@ -128,6 +128,8 @@ public class BetaalController : ControllerBase
         else
         {
             betaling.Succes = false;
+            await _context.SaveChangesAsync();
+            return BadRequest("Payment failed");
         }
 
         betaling.Pending = false;
