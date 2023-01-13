@@ -72,7 +72,7 @@ public class BetaalController : ControllerBase
         //Check origin
         var origin = Request.Headers["Origin"];
         _logger.LogWarning("Origin: " + origin);
-        if (origin != "https://localhost:44419")
+        if (origin != "https://localhost:44419" || origin != "https://hettheaterlaak.nl")
         {
             return BadRequest("Invalid origin");
         }
