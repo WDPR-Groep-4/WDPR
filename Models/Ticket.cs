@@ -1,11 +1,11 @@
+namespace Backend;
 public class Ticket
 {
-    public int Id { get; set; }
-    public Gast Gast { get; set; }
-    public Voorstelling Voorstelling { get; set; }
-    public DatumBereik DatumBereik { get; set; }
-    public string RangRijStoel { get; set; }
+    public Guid TicketId { get; set; }
+    public string Email { get; set; }
+    public VoorstellingEvent VoorstellingEvent { get; set; }
+    public string RangStoel { get; set; }
 }
 
-// Rang-Rij-Stoel
-// 2-5-23
+// Rang-Stoel
+// 2-23

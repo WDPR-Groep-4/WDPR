@@ -17,10 +17,101 @@ namespace Backend.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
 
-            modelBuilder.Entity("DatumBereik", b =>
+            modelBuilder.Entity("Backend.Betaling", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Pending")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool?>("Succes")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Betalingen");
+                });
+
+            modelBuilder.Entity("Backend.PlanningEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Zaal")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Events");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("PlanningEvent");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Backend.Ticket", b =>
+                {
+                    b.Property<Guid>("TicketId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RangStoel")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VoorstellingEventId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TicketId");
+
+                    b.HasIndex("VoorstellingEventId");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("Backend.WinkelwagenItem", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Aantal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("BetalingId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Rang")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VoorstellingEventId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("BetalingId");
+
+                    b.ToTable("WinkelwagenItem");
+                });
+
+            modelBuilder.Entity("DatumBereik", b =>
+                {
+                    b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Tot")
@@ -29,12 +120,10 @@ namespace Backend.Migrations
                     b.Property<DateTime>("Van")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("VoorstellingId")
+                    b.Property<int>("VoorstellingId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("VoorstellingId");
 
                     b.ToTable("DatumBereik");
                 });
@@ -301,7 +390,7 @@ namespace Backend.Migrations
                     b.Property<int>("Rang")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("VoorstellingId")
+                    b.Property<int>("VoorstellingId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -309,37 +398,6 @@ namespace Backend.Migrations
                     b.HasIndex("VoorstellingId");
 
                     b.ToTable("RangPrijs");
-                });
-
-            modelBuilder.Entity("Ticket", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DatumBereikId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("GastId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RangRijStoel")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("VoorstellingId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DatumBereikId");
-
-                    b.HasIndex("GastId");
-
-                    b.HasIndex("VoorstellingId");
-
-                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("Voorstelling", b =>
@@ -360,9 +418,6 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Duur")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Genre")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -382,6 +437,29 @@ namespace Backend.Migrations
                     b.ToTable("Voorstellingen");
                 });
 
+            modelBuilder.Entity("Backend.VerhuurEvent", b =>
+                {
+                    b.HasBaseType("Backend.PlanningEvent");
+
+                    b.Property<string>("Eigenaar")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("VerhuurEvent");
+                });
+
+            modelBuilder.Entity("Backend.VoorstellingEvent", b =>
+                {
+                    b.HasBaseType("Backend.PlanningEvent");
+
+                    b.Property<int>("VoorstellingId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("VoorstellingId");
+
+                    b.HasDiscriminator().HasValue("VoorstellingEvent");
+                });
+
             modelBuilder.Entity("Gast", b =>
                 {
                     b.HasBaseType("Gebruiker");
@@ -396,11 +474,31 @@ namespace Backend.Migrations
                     b.HasDiscriminator().HasValue("Medewerker");
                 });
 
+            modelBuilder.Entity("Backend.Ticket", b =>
+                {
+                    b.HasOne("Backend.VoorstellingEvent", "VoorstellingEvent")
+                        .WithMany()
+                        .HasForeignKey("VoorstellingEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VoorstellingEvent");
+                });
+
+            modelBuilder.Entity("Backend.WinkelwagenItem", b =>
+                {
+                    b.HasOne("Backend.Betaling", null)
+                        .WithMany("WinkelwagenItems")
+                        .HasForeignKey("BetalingId");
+                });
+
             modelBuilder.Entity("DatumBereik", b =>
                 {
-                    b.HasOne("Voorstelling", null)
-                        .WithMany("DatumBereiken")
-                        .HasForeignKey("VoorstellingId");
+                    b.HasOne("Backend.PlanningEvent", null)
+                        .WithOne("DatumBereik")
+                        .HasForeignKey("DatumBereik", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Donatie", b =>
@@ -473,42 +571,37 @@ namespace Backend.Migrations
             modelBuilder.Entity("RangPrijs", b =>
                 {
                     b.HasOne("Voorstelling", null)
-                        .WithMany("Prijs")
-                        .HasForeignKey("VoorstellingId");
+                        .WithMany("PrijzenPerRang")
+                        .HasForeignKey("VoorstellingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Ticket", b =>
+            modelBuilder.Entity("Backend.VoorstellingEvent", b =>
                 {
-                    b.HasOne("DatumBereik", "DatumBereik")
-                        .WithMany()
-                        .HasForeignKey("DatumBereikId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gast", "Gast")
-                        .WithMany()
-                        .HasForeignKey("GastId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Voorstelling", "Voorstelling")
                         .WithMany()
                         .HasForeignKey("VoorstellingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DatumBereik");
-
-                    b.Navigation("Gast");
-
                     b.Navigation("Voorstelling");
+                });
+
+            modelBuilder.Entity("Backend.Betaling", b =>
+                {
+                    b.Navigation("WinkelwagenItems");
+                });
+
+            modelBuilder.Entity("Backend.PlanningEvent", b =>
+                {
+                    b.Navigation("DatumBereik")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Voorstelling", b =>
                 {
-                    b.Navigation("DatumBereiken");
-
-                    b.Navigation("Prijs");
+                    b.Navigation("PrijzenPerRang");
                 });
 
             modelBuilder.Entity("Gast", b =>

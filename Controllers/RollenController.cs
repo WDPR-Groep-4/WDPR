@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PretparkApi.Controllers;
+namespace Backend;
 
 [ApiController]
 [Route("api/[controller]")]

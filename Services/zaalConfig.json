@@ -1,0 +1,30 @@
+[
+    {
+        "ZaalNummer" : 1,
+        "Rangen" : [
+            20,
+            100,
+            120
+        ]
+    },
+    {
+        "ZaalNummer" : 2,
+        "Rangen" : [
+            20,
+            160
+        ]
+    },
+    {
+        "ZaalNummer" : 3,
+        "Rangen" : [
+            10,
+            80
+        ]
+    },
+    {
+        "ZaalNummer" : 4,
+        "Rangen" : [
+            40
+        ]
+    }
+]

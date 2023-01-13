@@ -10,11 +10,17 @@ const target = env.ASPNETCORE_HTTPS_PORT
 const context = [
     "/weatherforecast",
     "/api/auth/verifieer",
-    "/api/email/bevestig",
+    "/api/auth/bevestig",
     "/api/auth/login",
     "/api/auth/registreer",
+    "/api/auth/wachtwoordvergeten",
+    "/api/auth/resetwachtwoord",
     "/api/account",
     "/api/rollen/start",
+    "/api/voorstelling",
+    "/api/planning",
+    "/api/betaal/setup",
+    "/api/betaal/verify",
 ];
 
 module.exports = function (app) {

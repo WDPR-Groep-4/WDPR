@@ -9,7 +9,14 @@ import KaartBestelPagina from "./components/pages/kaartBestel/KaartBestelPagina"
 import { RequireAuth } from "react-auth-kit";
 import BevestigEmailPage from "./components/pages/authenticatie/BevestigEmailPage";
 import EmailVerzondenPage from "./components/pages/authenticatie/EmailVerzondenPage";
+import WachtwoordVergetenPage from "./components/pages/authenticatie/wachtwoordvergeten/WachtwoordVergetenPage";
+import ResetWachtwoordPagina from "./components/pages/authenticatie/wachtwoordvergeten/WachtwoordResetPagina";
+import SuccesResetWachtwoord from "./components/pages/authenticatie/wachtwoordvergeten/SuccesResetWachtwoord";
 import SteunOnsPage from "./components/pages/SteunOns/SteunOnsPage";
+import Medewerker from "./components/pages/medewerker/MedewerkerPage";
+import Agenda from "./components/pages/agenda/AgendaPage";
+import BetaalPagina from "./components/pages/winkelwagen/BetaalPagina";
+import VerifyPagina from "./components/pages/winkelwagen/VerifyPagina";
 
 const AppRoutes = [
     {
@@ -28,7 +35,14 @@ const AppRoutes = [
         path: "/registreer",
         element: <Registreer />,
     },
-
+    {
+        path: "/agenda",
+        element: <Agenda />,
+    },
+    {
+        path: "/medewerker",
+        element: <Medewerker />,
+    },
     {
         path: "/account",
         element: (
@@ -50,6 +64,10 @@ const AppRoutes = [
         element: <VoorstellingPage />,
     },
     {
+        path: "/voorstelling/:id/bestel",
+        element: <KaartBestelPagina />,
+    },
+    {
         path: "/bevestig/ConfirmEmail",
         element: <BevestigEmailPage />,
     },
@@ -58,13 +76,29 @@ const AppRoutes = [
         element: <EmailVerzondenPage />,
     },
     {
-        path: "/voorstelling/1/bestel",
-        element: <KaartBestelPagina />,
+        path: "/wachtwoordvergeten",
+        element: <WachtwoordVergetenPage />,
     },
-{
-    path: "/steun-ons",
-    element: <SteunOnsPage/>,
-},
+    {
+        path: "/reset/resetwachtwoord",
+        element: <ResetWachtwoordPagina />,
+    },
+    {
+        path: "/resetwachtwoordsucces",
+        element: <SuccesResetWachtwoord />,
+    },
+    {
+        path: "/steun-ons",
+        element: <SteunOnsPage />,
+    },
+    {
+        path: "/betaling",
+        element: <BetaalPagina />,
+    },
+    {
+        path: "/api/betaal/verify",
+        element: <VerifyPagina />,
+    },
 ];
 
 export default AppRoutes;
