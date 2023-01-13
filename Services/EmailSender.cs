@@ -12,10 +12,8 @@ public class EmailSender : IEmailSender
 {
     private readonly ILogger _logger;
 
-    public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor,
-                       ILogger<EmailSender> logger)
+    public EmailSender(ILogger<EmailSender> logger)
     {
-        Options = optionsAccessor.Value;
         _logger = logger;
     }
 
@@ -23,11 +21,13 @@ public class EmailSender : IEmailSender
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)
     {
-        if (string.IsNullOrEmpty(Options.SendGridKey))
+        string? ApiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+        if (string.IsNullOrEmpty(ApiKey))
         {
             throw new Exception("Null SendGridKey");
         }
-        await Execute(Options.SendGridKey, subject, message, toEmail);
+
+        await Execute(ApiKey, subject, message, toEmail);
     }
 
     public async Task SendEmailWithImageAsync(string toEmail, string subject, string message, Bitmap image)
