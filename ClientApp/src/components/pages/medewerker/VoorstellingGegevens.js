@@ -14,6 +14,7 @@ import Voorstelling3 from './Voorstelling3.json';
 
 
 
+
 export default function VoorstellingGegevens() {
     var voorstellingen = [Voorstelling1, Voorstelling2, Voorstelling3];
 
@@ -23,15 +24,15 @@ export default function VoorstellingGegevens() {
 
     return (
         <>
-            {unique.map((voorstelling) => (
-                <Bruh key={voorstelling.id} voorstelling={voorstelling} voorstellingen={voorstellingen}/>
-            ))}
+          {unique.map((voorstelling) => (
+              <Voorstelling key={voorstelling.id} voorstelling={voorstelling} voorstellingen={voorstellingen}/>
+          ))}
         </>
     )
 }
 
 
-function Bruh(props){
+function Voorstelling(props){
     var filtered = props.voorstellingen.filter(voorstelling => voorstelling.voorstellingId === props.voorstelling.voorstellingId);
 
     return(
