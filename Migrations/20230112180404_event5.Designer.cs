@@ -3,6 +3,7 @@ using System;
 using Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,33 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230112180404_event5")]
+    partial class event5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
-
-            modelBuilder.Entity("Backend.Betaling", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("Pending")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool?>("Succes")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Betalingen");
-                });
 
             modelBuilder.Entity("Backend.PlanningEvent", b =>
                 {
@@ -70,7 +52,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RangStoel")
+                    b.Property<string>("RangRijStoel")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -84,29 +66,25 @@ namespace Backend.Migrations
                     b.ToTable("Tickets");
                 });
 
-            modelBuilder.Entity("Backend.WinkelwagenItem", b =>
+            modelBuilder.Entity("Betaling", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Aantal")
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Pending")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("BetalingId")
+                    b.Property<bool?>("Succes")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Rang")
-                        .HasColumnType("INTEGER");
+                    b.HasKey("Id");
 
-                    b.Property<int>("VoorstellingEventId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("BetalingId");
-
-                    b.ToTable("WinkelwagenItem");
+                    b.ToTable("Betalingen");
                 });
 
             modelBuilder.Entity("DatumBereik", b =>
@@ -485,13 +463,6 @@ namespace Backend.Migrations
                     b.Navigation("VoorstellingEvent");
                 });
 
-            modelBuilder.Entity("Backend.WinkelwagenItem", b =>
-                {
-                    b.HasOne("Backend.Betaling", null)
-                        .WithMany("WinkelwagenItems")
-                        .HasForeignKey("BetalingId");
-                });
-
             modelBuilder.Entity("DatumBereik", b =>
                 {
                     b.HasOne("Backend.PlanningEvent", null)
@@ -586,11 +557,6 @@ namespace Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Voorstelling");
-                });
-
-            modelBuilder.Entity("Backend.Betaling", b =>
-                {
-                    b.Navigation("WinkelwagenItems");
                 });
 
             modelBuilder.Entity("Backend.PlanningEvent", b =>

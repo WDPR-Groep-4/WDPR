@@ -5,19 +5,13 @@ import config from "../../../config.json";
 import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { nanoid } from "nanoid";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 //https://reactjs.org/docs/lists-and-keys.html
 
 export default function Winkelwagen(props) {
-    const { state } = useWinkelWagen();
-    const [totaal, setTotaal] = useState(
-        state.winkelwagen.reduce((acc, item) => {
-            const prijs = item.voorstelling.prijzenPerRang.find(
-                (prijs) => prijs.rang === item.rang
-            );
-            return acc + prijs.prijs * item.hoeveelheid;
-        }, 0)
-    );
+    const { state, totaalWinkelwagen } = useWinkelWagen();
+    const [totaal, setTotaal] = useState(totaalWinkelwagen());
 
     document.title = "Winkelwagen" + config.title;
 
@@ -128,6 +122,8 @@ export default function Winkelwagen(props) {
                                 boxSizing: "border-box",
                             }}
                             disableElevation
+                            component={Link}
+                            to="/betaling"
                         >
                             Betalen
                         </Button>

@@ -3,7 +3,6 @@ public class Voorstelling
     public int VoorstellingId { get; set; }
     public string Titel { get; set; }
     public string Beschrijving { get; set; }
-    public List<DatumBereik> DatumBereiken { get; set; }
     public int Leeftijd { get; set; }
     public string Genre { get; set; }
     public string Afbeelding { get; set; }

@@ -21,7 +21,7 @@ public class VoorstellingController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Voorstelling>> GetVoorstelling(int id)
     {
-        var voorstelling = await _context.Voorstellingen.Where(v => v.VoorstellingId == id).Include(v => v.DatumBereiken).Include(v => v.PrijzenPerRang).FirstOrDefaultAsync();
+        var voorstelling = await _context.Voorstellingen.Where(v => v.VoorstellingId == id).Include(v => v.PrijzenPerRang).FirstOrDefaultAsync();
 
         if (voorstelling == null)
         {
@@ -33,7 +33,7 @@ public class VoorstellingController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Voorstelling>>> GetVoorstellingen()
     {
-        var voorstellingen = await _context.Voorstellingen.Include(v => v.DatumBereiken).Include(v => v.PrijzenPerRang).ToListAsync();
+        var voorstellingen = await _context.Voorstellingen.Include(v => v.PrijzenPerRang).ToListAsync();
         if (voorstellingen == null)
         {
             return NotFound();

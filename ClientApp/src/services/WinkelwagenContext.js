@@ -1,4 +1,3 @@
-import { useBadge } from "@mui/base";
 import { nanoid } from "nanoid";
 import { useContext, useEffect } from "react";
 import { createContext, useState } from "react";
@@ -61,6 +60,15 @@ export function WikelwagenProvider({ children }) {
         }));
     }
 
+    function totaalWinkelwagen() {
+        return state.winkelwagen.reduce((acc, item) => {
+            const prijs = item.voorstelling.prijzenPerRang.find(
+                (prijs) => prijs.rang === item.rang
+            );
+            return acc + prijs.prijs * item.hoeveelheid;
+        }, 0);
+    }
+
     return (
         <WinkelwagenContext.Provider
             value={{
@@ -68,6 +76,8 @@ export function WikelwagenProvider({ children }) {
                 addToWinkelwagen,
                 removeFromWinkelwagen,
                 setCurrentVoorstelling,
+                clearWinkelwagen,
+                totaalWinkelwagen,
             }}
         >
             {children}

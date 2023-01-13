@@ -14,6 +14,8 @@ export default function VoorstellingPage(props) {
     const [error, setError] = useState(false);
     const { setCurrentVoorstelling } = useWinkelWagen();
 
+    // document.title = voorstelling.titel + config.title;
+
     useEffect(() => {
         fetchVoorstelling(setIsLoading, setError, setVoorstelling, id);
     }, []);
@@ -22,29 +24,29 @@ export default function VoorstellingPage(props) {
         setCurrentVoorstelling(voorstelling);
     }
 
-    function Datum() {
-        const datums = voorstelling.datumBereiken;
-        if (datums.length === 1) {
-            return (
-                <>
-                    <Typography variant="h6" component={"h4"}>
-                        datum:
-                    </Typography>
-                    <p>{datums[0].van}</p>
-                </>
-            );
-        }
-        return (
-            <>
-                <Typography variant="h6" component={"h4"}>
-                    Datums:
-                </Typography>
-                {datums.map((datum) => {
-                    <p>{datum.van}</p>;
-                })}
-            </>
-        );
-    }
+    // function Datum() {
+    //     const datums = voorstelling.datumBereiken;
+    //     if (datums.length === 1) {
+    //         return (
+    //             <>
+    //                 <Typography variant="h6" component={"h4"}>
+    //                     datum:
+    //                 </Typography>
+    //                 <p>{datums[0].van}</p>
+    //             </>
+    //         );
+    //     }
+    //     return (
+    //         <>
+    //             <Typography variant="h6" component={"h4"}>
+    //                 Datums:
+    //             </Typography>
+    //             {datums.map((datum) => {
+    //                 <p>{datum.van}</p>;
+    //             })}
+    //         </>
+    //     );
+    // }
 
     function Error() {
         return (
@@ -139,7 +141,7 @@ export default function VoorstellingPage(props) {
                             Zaal:
                         </Typography>
                         <p>{voorstelling.zaalId}</p>
-                        <Datum />
+                        {/* <Datum /> */}
                     </Box>
                 </Container>
                 <Box sx={{ width: "100%", backgroundColor: "#f5f5f5" }}>
