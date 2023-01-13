@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import axios from "axios";
 import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { useAuthUser } from "react-auth-kit";
+import config from "../../../config.json";
 
 export default function BetaalPopup(props) {
     const [html, setHtml] = useState("");
@@ -13,6 +14,8 @@ export default function BetaalPopup(props) {
     const account = useAuthUser();
     const [error, setError] = useState("");
     const form = useRef(null);
+
+    document.title = "Betalen" + config.title;
 
     async function handleBetaal(email) {
         try {
@@ -24,7 +27,7 @@ export default function BetaalPopup(props) {
                 };
             });
             const betaalIdResponse = await axios
-                .post("https://localhost:44419/api/betaal/setup", {
+                .post(config.url_backend + "/api/betaal/setup", {
                     winkelwagenItems: winkelWagenItems,
                     email: email,
                 })
@@ -45,7 +48,7 @@ export default function BetaalPopup(props) {
                     new URLSearchParams({
                         amount: totaal,
                         reference: await betaalIdResponse.data,
-                        url: "https://localhost:44419/winkelwagen/betaald",
+                        url: config.url_backend + "/winkelwagen/betaald",
                     })
                 )
                 .catch((error) => {

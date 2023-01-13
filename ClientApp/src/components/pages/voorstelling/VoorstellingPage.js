@@ -14,6 +14,8 @@ export default function VoorstellingPage(props) {
     const [error, setError] = useState(false);
     const { setCurrentVoorstelling } = useWinkelWagen();
 
+    document.title = voorstelling.titel + config.title;
+
     useEffect(() => {
         fetchVoorstelling(setIsLoading, setError, setVoorstelling, id);
     }, []);
