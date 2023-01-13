@@ -21,6 +21,7 @@ const context = [
     "/api/planning",
     "/api/betaal/setup",
     "/api/betaal/verify",
+    "/api/init",
 ];
 
 module.exports = function (app) {
