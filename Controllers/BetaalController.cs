@@ -74,7 +74,8 @@ public class BetaalController : ControllerBase
         _logger.LogWarning("Origin: " + origin);
         if (origin != "https://localhost:44419" || origin != "https://hettheaterlaak.nl")
         {
-            return BadRequest("Invalid origin");
+            // return BadRequest("Invalid origin");
+            _logger.LogWarning("Invalid origin");
         }
 
         //Extract data
