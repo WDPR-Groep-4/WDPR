@@ -23,7 +23,7 @@ public class EmailSender : IEmailSender
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)
     {
-        string? ApiKey = _configuration["SendGridKey"];
+        string? ApiKey = _configuration["SENDGRID_API_KEY"];
 
         if (string.IsNullOrEmpty(ApiKey))
         {
