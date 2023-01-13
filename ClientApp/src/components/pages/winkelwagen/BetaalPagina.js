@@ -1,6 +1,6 @@
 import { Box } from "@mui/system";
 import { Card, Typography, Alert, TextField, Button } from "@mui/material";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { useAuthUser } from "react-auth-kit";
@@ -16,6 +16,8 @@ export default function BetaalPopup(props) {
     const form = useRef(null);
 
     document.title = "Betalen" + config.title;
+
+    console.log(html);
 
     async function handleBetaal(email) {
         try {
@@ -48,7 +50,7 @@ export default function BetaalPopup(props) {
                     new URLSearchParams({
                         amount: totaal,
                         reference: await betaalIdResponse.data,
-                        url: config.url_backend + "/winkelwagen/betaald",
+                        url: config.url_backend + "/api/betaal/verify",
                     })
                 )
                 .catch((error) => {
@@ -56,6 +58,7 @@ export default function BetaalPopup(props) {
                 });
 
             if (betaalResponse.status === 200) {
+                console.log("check");
                 setBetaal(true);
                 setHtml(betaalResponse.data);
             }
@@ -64,31 +67,13 @@ export default function BetaalPopup(props) {
         }
     }
 
-    if (account()) {
-        handleBetaal(account().email);
+    useEffect(() => {
+        if (account()) {
+            handleBetaal(account().email);
+        }
+    }, []);
 
-        return (
-            <Box>
-                {betaal ? (
-                    <div dangerouslySetInnerHTML={{ __html: html }}></div>
-                ) : (
-                    <Typography variant="h4" component="h3">
-                        loading..
-                    </Typography>
-                )}
-            </Box>
-        );
-    } else {
-        return (
-            <Box>
-                {betaal ? (
-                    <div dangerouslySetInnerHTML={{ __html: html }}></div>
-                ) : (
-                    <Body />
-                )}
-            </Box>
-        );
-    }
+    return betaal ? <div dangerouslySetInnerHTML={{ __html: html }} /> : <Body />;
 
     function Body() {
         return (

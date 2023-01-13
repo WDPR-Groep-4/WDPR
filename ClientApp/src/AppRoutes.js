@@ -16,6 +16,7 @@ import SteunOnsPage from "./components/pages/SteunOns/SteunOnsPage";
 import Medewerker from "./components/pages/medewerker/MedewerkerPage";
 import Agenda from "./components/pages/agenda/AgendaPage";
 import BetaalPagina from "./components/pages/winkelwagen/BetaalPagina";
+import VerifyPagina from "./components/pages/winkelwagen/VerifyPagina";
 
 const AppRoutes = [
     {
@@ -93,6 +94,10 @@ const AppRoutes = [
     {
         path: "/betaling",
         element: <BetaalPagina />,
+    },
+    {
+        path: "/api/betaal/verify",
+        element: <VerifyPagina />,
     },
 ];
 
