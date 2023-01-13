@@ -36,14 +36,16 @@ public class InitController : ControllerBase
             for (int i = 0; i < 5; i++)
             {
                 int zaal = _random.Next(1, 4);
+                DateTime datum = RandomDay();
+
                 VoorstellingEvent voorstellingEvent = new VoorstellingEvent
                 {
                     Voorstelling = voorstelling,
                     Zaal = zaal,
                     DatumBereik = new DatumBereik
                     {
-                        Van = RandomDay(),
-                        Tot = RandomDay()
+                        Van = datum,
+                        Tot = datum.AddHours(2)
                     }
                 };
                 var result = _context.Events.Add(voorstellingEvent);
@@ -56,6 +58,14 @@ public class InitController : ControllerBase
             }
         }
 
+        return Task.CompletedTask;
+    }
+
+    [HttpGet("clear")]
+    public Task ClearEventDatabase()
+    {
+        _context.Events.RemoveRange(_context.Events);
+        _context.SaveChanges();
         return Task.CompletedTask;
     }
 
