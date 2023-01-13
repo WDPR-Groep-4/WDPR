@@ -9,4 +9,5 @@ public class Voorstelling
     public string Banner { get; set; }
     public List<RangPrijs> PrijzenPerRang { get; set; }
     public int ZaalId { get; set; }
+    public bool BegunstigerOnly { get; set; }
 }
