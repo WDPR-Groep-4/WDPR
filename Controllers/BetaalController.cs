@@ -130,7 +130,7 @@ public class BetaalController : ControllerBase
         {
             betaling.Succes = false;
             await _context.SaveChangesAsync();
-            return BadRequest("Payment failed");
+            return BadRequest("Payment failed (mogelijk niet genoeg saldo)");
         }
 
         betaling.Pending = false;
