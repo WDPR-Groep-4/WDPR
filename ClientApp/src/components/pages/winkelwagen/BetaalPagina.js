@@ -29,7 +29,7 @@ export default function BetaalPopup(props) {
                 };
             });
             const betaalIdResponse = await axios
-                .post(config.url_backend + "/api/betaal/setup", {
+                .post("/api/betaal/setup", {
                     winkelwagenItems: winkelWagenItems,
                     email: email,
                 })
@@ -50,7 +50,7 @@ export default function BetaalPopup(props) {
                     new URLSearchParams({
                         amount: totaal,
                         reference: await betaalIdResponse.data,
-                        url: config.url_backend + "/api/betaal/verify",
+                        url: "/api/betaal/verify",
                     })
                 )
                 .catch((error) => {
