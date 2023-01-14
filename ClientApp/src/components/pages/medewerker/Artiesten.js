@@ -4,6 +4,11 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
 
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -19,7 +24,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, Card } from '@mui/material';
+import { Button, Card, Checkbox } from '@mui/material';
 
 import Popper from '@mui/material/Popper';
 import TextField from '@mui/material/TextField';
@@ -32,8 +37,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 
-function createData(id, voornaam, achternaam, email, telefoonnummer, rol) {
-    return { id, voornaam, achternaam, email, telefoonnummer, rol};
+function createData(groep, voornaam, achternaam, type, rol) {
+    return {groep, voornaam, achternaam, type, rol};
   }
   
 const Search = styled('div')(({ theme }) => ({
@@ -77,14 +82,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const rows = [
-    createData(1, 'Jan', 'Janssen', 'jan@gmail.com', '0612345678', 'Beheerder'),
-    createData(2, 'Piet', 'Pietersen', 'piet@yahoo.com', '061234567', 'Gast')
+    createData('New Productions', 'Henk', 'Vries', 'Acteur'),
+    createData('Newer Productions', 'Jelle', 'Born', 'Komiek'),
+    createData('Newer Productions', 'Jason', 'Born', 'Komiek'),
   ];
+  var key = 'groep';
+
+var unique = [...new Map(rows.map(groep =>
+    [groep[key], groep])).values()];
+
+function Filtered(props){
+  var filtered = props.groep.filter(groep => groep.groep === props.groep.groep);
+  return{
+    filtered
+  };
+}
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [age, setAge] = React.useState('');
+
+  
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -93,6 +113,7 @@ export default function PrimarySearchAppBar() {
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
+
 
 
   const handleMobileMenuOpen = (event) => {
@@ -138,7 +159,7 @@ export default function PrimarySearchAppBar() {
                   <TextField
                       required
                       id="outlined-required"
-                      label="Voornaam"
+                      label="Groep"
                       defaultValue=""
                     />
                   <TextField
@@ -179,10 +200,6 @@ export default function PrimarySearchAppBar() {
                 <Box display={"flex"}>
                   <Button variant="" fullWidth="true">Voeg toe</Button>
                 </Box>
-                
-                
-
-
               </Card>
             </Popper>
             <IconButton
@@ -207,32 +224,95 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       <TableContainer component={Paper}>
       <Table  aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Groep</TableCell>
-            <TableCell align="left">Type</TableCell>
-            <TableCell align="left">Achternaam</TableCell>
-            <TableCell align="left">Emailadres</TableCell>
-            <TableCell align="left">Telefoon</TableCell>
-            <TableCell width="1000" align="left">Rol</TableCell>
-
-          </TableRow>
-        </TableHead>
+        
         <TableBody>
-          {rows.map((row) => (
+          {unique.map((row) => (
+            <>
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">{row.id}
-              </TableCell>
-              <TableCell align="left">{row.voornaam}</TableCell>
-              <TableCell align="left">{row.achternaam}</TableCell>
-              <TableCell align="left">{row.email}</TableCell>
-              <TableCell align="left">{row.telefoonnummer}</TableCell>
-              <TableCell align="left">{row.rol}</TableCell>
+              
+              <Accordion >
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                >
+                  
+
+
+                  <Box>
+                    <Typography>{row.groep}</Typography>
+                  </Box>
+                  
+
+                
+                  
+                </AccordionSummary>
+                <AccordionDetails>
+                <Box>
+                  <Button sx={{mx:3}} variant="contained" onClick={handleClick}>
+                    Voeg Artiest toe
+                  </Button>
+                  <Popper id={id} open={open} anchorEl={anchorEl}>
+                  <Card variant="outlined" component="form" asignItems="center" display="flex"
+                    sx={{
+                      '& .MuiTextField-root': { m: 1, },
+                    }}
+                    noValidate
+                    autoComplete="off">
+                    <Box sx={{display:'flex'}}>
+                      
+                      
+                      
+                      <Box padding={1} >
+                        <FormControl sx={{width:100}}>
+                          <InputLabel id="demo-simple-select-label" >Rol</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={age}
+                            label="Rol"
+                            onChange={handleChange}
+                          >
+                            <MenuItem value={3}>Gebruiker</MenuItem>
+                            <MenuItem value={2}>Artiest</MenuItem>
+                            <MenuItem value={1}>Medewerker</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </Box>
+                    <Box display={"flex"}>
+                      <Button variant="" fullWidth="true">Voeg toe</Button>
+                    </Box>
+                  </Card>
+                </Popper>
+
+                  
+                  
+                  <Button variant="contained">
+                    Verwijder Groep
+                  </Button>
+                </Box>
+                  {rows.filter(groep => groep.groep === row.groep).map((roww) => (
+                    <TableRow>
+                      <TableCell padding="checkbox">    
+                        <Checkbox/>
+                      </TableCell>
+                      <TableCell align="left">{roww.voornaam}</TableCell>
+                      <TableCell align="left">{roww.achternaam}</TableCell>
+                      <TableCell width="1300" component="th" scope="row">{roww.type}</TableCell>
+
+                    </TableRow>
+                  ))}
+
+                  
+                </AccordionDetails>
+              </Accordion>
             </TableRow>
-          ))}
+            </>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
