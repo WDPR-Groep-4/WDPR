@@ -22,7 +22,7 @@ import WinkelwagenModal from "./WinkelwagenModal";
 
 export default function KaartBestelPagina(props) {
     const { state, addToWinkelwagen, setCurrentVoorstelling } = useWinkelWagen();
-    const voorstelling = state.currentVoorstelling;
+    const voorstellingEvent = state.currentVoorstelling;
     const navigate = useNavigate();
     const [aantal, setAantal] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +34,7 @@ export default function KaartBestelPagina(props) {
     document.title = "Bestel" + config.title;
 
     useEffect(() => {
-        if (!voorstelling) {
+        if (!voorstellingEvent) {
             fetchVoorstelling(setIsLoading, setError, setCurrentVoorstelling, id);
             return;
         }
@@ -42,12 +42,12 @@ export default function KaartBestelPagina(props) {
     }, []);
 
     function handleBestel() {
-        addToWinkelwagen(voorstelling, aantal, rang);
+        addToWinkelwagen(voorstellingEvent, aantal, rang);
         setModal(true);
     }
 
     function PrijsCards() {
-        const prijzenPerRang = voorstelling.prijzenPerRang;
+        const prijzenPerRang = voorstellingEvent.voorstelling.prijzenPerRang;
         const elements = [];
 
         for (let i = 0; i < prijzenPerRang.length; i++) {
@@ -87,11 +87,11 @@ export default function KaartBestelPagina(props) {
 
                     <Typography variant="body1" component="p">
                         <span style={{ fontWeight: 500 }}>Titel:</span>{" "}
-                        {voorstelling.titel}
+                        {voorstellingEvent.voorstelling.titel}
                     </Typography>
                     <Typography variant="body1" component="p">
                         <span style={{ fontWeight: 500 }}>Datum:</span>{" "}
-                        {voorstelling.datum}
+                        {voorstellingEvent.voorstelling.datum}
                     </Typography>
                     <Divider sx={{ my: 2 }} />
 
@@ -110,7 +110,7 @@ export default function KaartBestelPagina(props) {
 
                         <Typography variant="body1" component="p">
                             <span style={{ fontWeight: 500 }}>Totaal:</span> €
-                            {aantal * voorstelling.prijzenPerRang[rang - 1].prijs}
+                            {aantal * voorstellingEvent.voorstelling.prijzenPerRang[rang - 1].prijs}
                         </Typography>
                     </Box>
 

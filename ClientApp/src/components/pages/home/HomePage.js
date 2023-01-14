@@ -16,7 +16,7 @@ function HomePage(props) {
             description: "Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "/voorstelling/1",
+            link: "/voorstelling/41",
         },
         {
             id: 2,
@@ -24,7 +24,7 @@ function HomePage(props) {
             description: "Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "/voorstelling/1",
+            link: "/voorstelling/42",
         },
         {
             id: 3,
@@ -32,7 +32,7 @@ function HomePage(props) {
             description: "Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "/voorstelling/1",
+            link: "/voorstelling/43",
         },
         {
             id: 4,
@@ -40,7 +40,7 @@ function HomePage(props) {
             description: "Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "/voorstelling/1",
+            link: "/voorstelling/44",
         },
     ];
     return (

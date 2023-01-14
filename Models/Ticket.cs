@@ -4,7 +4,8 @@ public class Ticket
     public Guid TicketId { get; set; }
     public string Email { get; set; }
     public VoorstellingEvent VoorstellingEvent { get; set; }
-    public string RangStoel { get; set; }
+    public int Rang { get; set; }
+    public int Stoel { get; set; }
 }
 
 // Rang-Stoel
