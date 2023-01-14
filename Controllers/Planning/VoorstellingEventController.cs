@@ -27,7 +27,7 @@ public class VoorstellingEventController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<VoorstellingEvent>>> GetVoorstellingEvents(VoorstellingEventParameters VoorstellingEventParameters)
+    public async Task<ActionResult<List<VoorstellingEvent>>> GetVoorstellingEvents([FromQuery] VoorstellingEventParameters VoorstellingEventParameters)
     {
         var voorstellingEvents = GetPagedVoorstellingEvents(VoorstellingEventParameters);
         if (voorstellingEvents == null)
@@ -51,7 +51,7 @@ public class VoorstellingEventController : ControllerBase
     }
 
     [HttpPost("voorstellingen")]
-    public async Task<ActionResult<VoorstellingEvent>> PostVoorstellingEvent(VoorstellingEventDto voorstellingEventDto)
+    public async Task<ActionResult<VoorstellingEvent>> PostVoorstellingEvent([FromQuery] VoorstellingEventDto? voorstellingEventDto)
     {
         var voorstelling = await _context.Voorstellingen.FindAsync(voorstellingEventDto.VoorstellingId);
         if (voorstelling == null)
