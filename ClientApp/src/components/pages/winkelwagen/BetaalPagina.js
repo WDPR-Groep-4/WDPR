@@ -17,17 +17,16 @@ export default function BetaalPopup(props) {
 
     document.title = "Betalen" + config.title;
 
-    console.log(html);
-
     async function handleBetaal(email) {
         try {
             const winkelWagenItems = state.winkelwagen.map((item) => {
                 return {
-                    VoorstellingId: item.voorstelling.voorstellingId,
+                    VoorstellingEventId: item.voorstellingEvent.id,
                     Aantal: item.aantal,
                     Rang: item.rang,
                 };
             });
+
             const betaalIdResponse = await axios
                 .post("/api/betaal/setup", {
                     winkelwagenItems: winkelWagenItems,

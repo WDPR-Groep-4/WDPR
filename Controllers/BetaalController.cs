@@ -28,6 +28,8 @@ public class BetaalController : ControllerBase
             return BadRequest("No items in cart");
         }
 
+        _logger.LogInformation("1e product aantal: " + betalingDto.WinkelwagenItems[0].Aantal);
+
         Betaling betaling = new Betaling();
         betaling.Email = betalingDto.Email;
         betaling.Pending = true;
@@ -36,8 +38,6 @@ public class BetaalController : ControllerBase
 
         await _context.AddAsync(betaling);
         await _context.SaveChangesAsync();
-
-        _logger.LogWarning("Betaling id: " + betaling.Id);
 
         return betaling.Id;
     }
@@ -72,16 +72,13 @@ public class BetaalController : ControllerBase
     {
         //Check origin
         var origin = Request.Headers["Origin"];
-        _logger.LogWarning("Origin: " + origin);
         if (!(origin.Equals("https://localhost:44419") || origin.Equals("https://hettheaterlaak.nl")))
         {
             return BadRequest("Invalid origin");
-            _logger.LogWarning("Invalid origin");
         }
 
         //Extract data
         var formData = Request.Form;
-        _logger.LogInformation("Form data: " + formData);
         var succes = formData["succes"];
         var reference = Int32.Parse(formData["reference"]);
 
@@ -90,8 +87,6 @@ public class BetaalController : ControllerBase
         {
             return BadRequest("Invalid succes");
         }
-
-        _logger.LogWarning("Reference: " + reference);
 
         //Get betaling  
         Betaling? betaling = await _context.Betalingen.Where(b => b.Id == reference).FirstOrDefaultAsync();
@@ -112,6 +107,7 @@ public class BetaalController : ControllerBase
         {
             betaling.Succes = true;
 
+            _logger.LogInformation("Reference: " + reference);
             var winkelwagenItems = await _context.Betalingen.Where(w => w.Id == reference).SelectMany(w => w.WinkelwagenItems).ToListAsync();
             if (winkelwagenItems == null || winkelwagenItems.Count == 0)
             {
@@ -119,12 +115,13 @@ public class BetaalController : ControllerBase
             }
             foreach (WinkelwagenItem wItem in winkelwagenItems)
             {
+                _logger.LogWarning("ItemEventId: " + wItem.VoorstellingEventId);
                 var voorstellingEvent = await _context.VoorstellingEvents.Where(v => v.Id == wItem.VoorstellingEventId).FirstOrDefaultAsync();
                 if (voorstellingEvent == null)
                 {
                     return BadRequest("VoorstellingEvent not found");
                 }
-                TicketController.GenerateTickets(voorstellingEvent, betaling.Email, wItem.Rang, wItem.Aantal, _context);
+                TicketController.GenerateTickets(voorstellingEvent, betaling.Email, wItem.Rang, wItem.Aantal, _context, _logger);
             }
         }
         else
