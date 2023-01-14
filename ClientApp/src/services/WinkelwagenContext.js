@@ -26,10 +26,10 @@ export function WikelwagenProvider({ children }) {
         localStorage.setItem("winkelwagen", JSON.stringify(state));
     }, [state]);
 
-    function addToWinkelwagen(voorstelling, aantal, rang) {
+    function addToWinkelwagen(voorstellingEvent, aantal, rang) {
         const winkelwagenItem = {
             id: nanoid(),
-            voorstelling: voorstelling,
+            voorstellingEvent: voorstellingEvent,
             aantal: aantal,
             rang: rang,
         };
@@ -62,7 +62,7 @@ export function WikelwagenProvider({ children }) {
 
     function totaalWinkelwagen() {
         return state.winkelwagen.reduce((acc, item) => {
-            const prijs = item.voorstelling.voorstelling.prijzenPerRang.find(
+            const prijs = item.voorstellingEvent.voorstelling.prijzenPerRang.find(
                 (prijs) => prijs.rang === item.rang
             );
             return acc + prijs.prijs * item.hoeveelheid;
