@@ -67,9 +67,9 @@ export default function AccountPopper(props) {
                                     <MenuItem
                                         onClick={props.handleCloseAccount}
                                         component={Link}
-                                        to="/mijn-kaarten"
+                                        to="/account/mijntickets"
                                     >
-                                        Mijn kaarten
+                                        Mijn tickets
                                     </MenuItem>
                                     <Divider />
                                     <MenuItem onClick={handleLogout}>
