@@ -65,7 +65,7 @@ export function WikelwagenProvider({ children }) {
             const prijs = item.voorstellingEvent.voorstelling.prijzenPerRang.find(
                 (prijs) => prijs.rang === item.rang
             );
-            return acc + prijs.prijs * item.hoeveelheid;
+            return acc + prijs.prijs * item.aantal;
         }, 0);
     }
 
