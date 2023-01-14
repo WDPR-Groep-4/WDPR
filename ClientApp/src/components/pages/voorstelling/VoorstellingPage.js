@@ -140,7 +140,7 @@ export default function VoorstellingPage(props) {
                         <Typography variant="h6" component={"h4"}>
                             Zaal:
                         </Typography>
-                        <p>{voorstellingEvent.voorstelling.zaalId}</p>
+                        <p>{voorstellingEvent.zaal}</p>
                         {/* <Datum /> */}
                     </Box>
                 </Container>

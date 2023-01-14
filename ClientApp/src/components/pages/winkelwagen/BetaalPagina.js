@@ -21,7 +21,7 @@ export default function BetaalPopup(props) {
         try {
             const winkelWagenItems = state.winkelwagen.map((item) => {
                 return {
-                    VoorstellingEventId: item.voorstellingEvent.voorstelling.Id,
+                    VoorstellingEventId: item.voorstellingEvent.id,
                     Aantal: item.aantal,
                     Rang: item.rang,
                 };

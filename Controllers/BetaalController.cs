@@ -39,8 +39,6 @@ public class BetaalController : ControllerBase
         await _context.AddAsync(betaling);
         await _context.SaveChangesAsync();
 
-        _logger.LogWarning("Betaling id: " + betaling.Id);
-
         return betaling.Id;
     }
 
@@ -109,6 +107,7 @@ public class BetaalController : ControllerBase
         {
             betaling.Succes = true;
 
+            _logger.LogInformation("Reference: " + reference);
             var winkelwagenItems = await _context.Betalingen.Where(w => w.Id == reference).SelectMany(w => w.WinkelwagenItems).ToListAsync();
             if (winkelwagenItems == null || winkelwagenItems.Count == 0)
             {
@@ -116,6 +115,7 @@ public class BetaalController : ControllerBase
             }
             foreach (WinkelwagenItem wItem in winkelwagenItems)
             {
+                _logger.LogWarning("ItemEventId: " + wItem.VoorstellingEventId);
                 var voorstellingEvent = await _context.VoorstellingEvents.Where(v => v.Id == wItem.VoorstellingEventId).FirstOrDefaultAsync();
                 if (voorstellingEvent == null)
                 {
