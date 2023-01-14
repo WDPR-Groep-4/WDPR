@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using QRCoder;
 using Newtonsoft.Json;
+using System.Drawing.Imaging;
 
 namespace Backend;
 
@@ -22,7 +23,7 @@ public class TicketController : ControllerBase
     [HttpGet("all_from_single_email")]
     public async Task<ActionResult<List<Ticket>>> GetAllTicketsFromEmail(string email)
     {
-        var tickets = await _context.Tickets.Where(t => t.Email == email).ToListAsync();
+        var tickets = await _context.Tickets.Where(t => t.Email == email).Include(t => t.VoorstellingEvent).Include(t => t.VoorstellingEvent.Voorstelling).Include(t => t.VoorstellingEvent.DatumBereik).ToListAsync();
         if (tickets == null)
         {
             return NotFound();
@@ -31,7 +32,7 @@ public class TicketController : ControllerBase
     }
 
     [HttpGet("all_from_single_email_and_event")]
-    public async Task<ActionResult<Ticket>> GetTicketsOneVoorstellingEventFromEmail(int voorstellingId, string email)
+    public async Task<ActionResult<Ticket>> GetTicketsOneVoorstellingEventFromEmail([FromBody] int voorstellingId, string email)
     {
         var ticket = await _context.Tickets.Where(t => t.VoorstellingEvent.Id == voorstellingId && t.Email == email).FirstOrDefaultAsync();
         if (ticket == null)
@@ -42,7 +43,7 @@ public class TicketController : ControllerBase
     }
 
     [HttpGet("all_from_single_event")]
-    public async Task<ActionResult<List<Ticket>>> GetAllTicketsFromVoorstellingEvent(int eventId)
+    public async Task<ActionResult<List<Ticket>>> GetAllTicketsFromVoorstellingEvent([FromBody] int eventId)
     {
         var tickets = await _context.Tickets.Where(t => t.VoorstellingEvent.Id == eventId).ToListAsync();
         if (tickets == null)
@@ -52,8 +53,24 @@ public class TicketController : ControllerBase
         return tickets;
     }
 
+    [HttpGet("qrcode/{guid}")]
+    public async Task<IActionResult> GetQRCode(Guid guid)
+    {
+        var ticket = _context.Tickets.Where(t => t.TicketId == guid).FirstOrDefault();
+        if (ticket == null)
+        {
+            return NotFound();
+        }
+        Bitmap qrCodeImage = await GenerateQRCode(guid, _logger);
+        using (var stream = new MemoryStream())
+        {
+            qrCodeImage.Save(stream, ImageFormat.Png);
+            // return the image saved in the stream and make it auto download
+            return File(stream.ToArray(), "image/png", "qrcode.png");
+        }
 
 
+    }
 
 
     public static List<Ticket> GenerateTickets(VoorstellingEvent voorstelling, string email, int rang, int aantal, DatabaseContext context, ILogger logger)
@@ -65,7 +82,6 @@ public class TicketController : ControllerBase
             items = JsonConvert.DeserializeObject<List<Zaal>>(json);
         }
 
-        //check existing tickets for free seats
         int aantalGereserveerdeStoelen = context.Tickets.Where(t => t.VoorstellingEvent.Id == voorstelling.Id).Where(t => t.Rang == rang).Count();
         var aantalRangStoelen = items.Where(z => z.ZaalNummer == voorstelling.Zaal).Select(z => z.Rangen[rang - 1]).FirstOrDefault();
 
@@ -97,8 +113,9 @@ public class TicketController : ControllerBase
         return tickets;
     }
 
-    public static Bitmap GenerateQRCode(Guid guid)
+    public static async Task<Bitmap> GenerateQRCode(Guid guid, ILogger _logger)
     {
+        _logger.LogInformation("Generating QRCode for ticket: " + guid);
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
         QRCode qrCode = new QRCode(qrCodeData);

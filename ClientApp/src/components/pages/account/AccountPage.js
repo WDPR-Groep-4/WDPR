@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 import PersoonlijkeGegevens from "./PersoonlijkeGegevens";
 import config from "../../../config.json";
-import MijnTickets from "./MijnTickets";
+import MijnTickets from "./mijntickets/TicketPage";
 
 export default function AccountPage(props) {
     const [value, setValue] = useState(0);
