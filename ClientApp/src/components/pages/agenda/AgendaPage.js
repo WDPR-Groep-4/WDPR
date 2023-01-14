@@ -1,14 +1,10 @@
-import { Container } from "@mui/system";
-import { Button, Pagination, Typography } from "@mui/material";
-import Card from "@mui/material/Card";
-import Box from "@mui/material/Box";
+import { Box, Container } from "@mui/system";
+import { Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import config from "../../../config.json";
-import Voorstelling1 from "../medewerker/Voorstelling1.json";
-import Voorstelling2 from "../medewerker/Voorstelling2.json";
-import Voorstelling3 from "../medewerker/Voorstelling3.json";
 import AgendaItem from "./AgendaItem";
 import axios from "axios";
+import Footer from "../../footer/Footer";
 
 export default function AgendaPage() {
     document.title = "Agenda" + config.title;
@@ -55,36 +51,40 @@ export default function AgendaPage() {
     }
 
     return (
-        <>
-            <div style={{ position: "relative", width: "90%", height: "90%" }}>
-                <Container
-                    sx={{ py: 2, position: "relative", width: "90%", height: "90%" }}
-                >
+        <div>
+            <Container maxWidth="xl">
+                <div>
                     <Typography sx={{ fontSize: 42, fontWeight: "medium" }}>
                         Agenda
                     </Typography>
-                </Container>
-            </div>
-            <Container display="flex">
+                </div>
                 <div
                     style={{
-                        alignContent: "top",
                         height: "300px",
-                        position: "relative",
                         justifyContent: "center",
                         display: "block",
                         pt: 10,
                     }}
                 >
                     {voorstellingEventElements()}
-                    <Pagination
-                        count={TotalPages}
-                        variant="outlined"
-                        shape="rounded"
-                        onChange={handleChange}
-                    />
+                    <Box
+                        sx={{
+                            width: "100%",
+                            my: 4,
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Pagination
+                            count={TotalPages}
+                            variant="outlined"
+                            shape="rounded"
+                            onChange={handleChange}
+                        />
+                    </Box>
                 </div>
             </Container>
-        </>
+            {/* <Footer /> */}
+        </div>
     );
 }

@@ -77,7 +77,7 @@ export default function AgendaItem(props) {
                                         m: 1,
                                         fontSize: 40,
                                         height: 75,
-                                        width: 130,
+                                        width: 150,
                                     }}
                                 >
                                     {GetDatumString(datum)}
