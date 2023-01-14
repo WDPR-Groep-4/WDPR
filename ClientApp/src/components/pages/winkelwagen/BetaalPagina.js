@@ -23,11 +23,12 @@ export default function BetaalPopup(props) {
         try {
             const winkelWagenItems = state.winkelwagen.map((item) => {
                 return {
-                    VoorstellingEventId: item.voorstelling.id,
-                    Aantal: item.aantal,
+                    VoorstellingEventId: item.voorstelling.voorstellingId,
+                    Aantal: item.hoeveelheid,
                     Rang: item.rang,
                 };
             });
+
             const betaalIdResponse = await axios
                 .post("/api/betaal/setup", {
                     winkelwagenItems: winkelWagenItems,
