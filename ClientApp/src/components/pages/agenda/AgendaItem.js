@@ -1,4 +1,5 @@
 import { Box, Button, Card, Container, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function AgendaItem(props) {
     const voorstelling = props.voorstellingEvent.voorstelling;
@@ -31,6 +32,12 @@ export default function AgendaItem(props) {
             "Dec",
         ];
         return maanden[maand - 1];
+    }
+
+    function getTijd(datum) {
+        const uur = datum.split("T")[1].split(":")[0];
+        const minuten = datum.split("T")[1].split(":")[1];
+        return uur + ":" + minuten;
     }
 
     return (
@@ -90,20 +97,27 @@ export default function AgendaItem(props) {
                                         color="black"
                                         gutterBottom
                                     >
-                                        {/* {props.voorstelling.tijd + " "}
-                                        {"zaal: " + props.voorstelling.zaal} */}
+                                        {getTijd(datum) + " "}
+                                        {"zaal: " + voorstellingEvent.zaal}
                                     </Typography>
                                 </Box>
                             </Box>
                         </Box>
                         <Box>
-                            <Box sx={{ py: 2, px: 2 }}>
+                            <Box
+                                sx={{
+                                    py: 2,
+                                    px: 2,
+                                    maxHeight: "12rem",
+                                    overflow: "hidden",
+                                }}
+                            >
                                 <Typography
                                     sx={{ fontSize: "2vh", fontWeight: "medium" }}
                                     color="black"
                                     gutterBottom
                                 >
-                                    {/* {props.voorstelling.titel} */}
+                                    {voorstelling.titel}
                                 </Typography>
                                 <Typography
                                     sx={{ fontSize: "1.5vh" }}
@@ -112,7 +126,7 @@ export default function AgendaItem(props) {
                                     color="black"
                                     gutterBottom
                                 >
-                                    {/* {props.voorstelling.beschrijving} */}
+                                    {voorstelling.beschrijving}
                                 </Typography>
                             </Box>
                         </Box>
@@ -123,6 +137,8 @@ export default function AgendaItem(props) {
                         color="primary"
                         fullWidth={true}
                         variant="contained"
+                        component={Link}
+                        to={"/voorstelling/" + voorstellingEvent.id}
                     >
                         Tickets
                     </Button>
