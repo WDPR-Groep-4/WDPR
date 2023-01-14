@@ -8,7 +8,7 @@ import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { fetchVoorstelling } from "./FetchVoorstelling";
 
 export default function VoorstellingPage(props) {
-    const [voorstelling, setVoorstelling] = useState();
+    const [voorstellingEvent, setVoorstellingEvent] = useState();
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -17,11 +17,11 @@ export default function VoorstellingPage(props) {
     // document.title = voorstelling.titel + config.title;
 
     useEffect(() => {
-        fetchVoorstelling(setIsLoading, setError, setVoorstelling, id);
+        fetchVoorstelling(setIsLoading, setError, setVoorstellingEvent, id);
     }, []);
 
     function handleClick() {
-        setCurrentVoorstelling(voorstelling);
+        setCurrentVoorstelling(voorstellingEvent);
     }
 
     // function Datum() {
@@ -84,7 +84,7 @@ export default function VoorstellingPage(props) {
                             }}
                         >
                             <Typography variant="h4" component={"h2"} color="white">
-                                {voorstelling.titel}
+                                {voorstellingEvent.voorstelling.titel}
                             </Typography>
                             <Typography
                                 variant="body1"
@@ -93,8 +93,8 @@ export default function VoorstellingPage(props) {
                                 sx={{ p: 3 }}
                             >
                                 {"vanaf: €" +
-                                    voorstelling.prijzenPerRang[
-                                        voorstelling.prijzenPerRang.length - 1
+                                    voorstellingEvent.voorstelling.prijzenPerRang[
+                                        voorstellingEvent.voorstelling.prijzenPerRang.length - 1
                                     ].prijs}
                             </Typography>
                             <Button
@@ -118,7 +118,7 @@ export default function VoorstellingPage(props) {
                         }}
                     ></div>
                     <img
-                        src={voorstelling.banner}
+                        src={voorstellingEvent.voorstelling.banner}
                         alt=""
                         style={{ height: 400, objectFit: "cover", width: "100%" }}
                     />
@@ -126,10 +126,10 @@ export default function VoorstellingPage(props) {
                 <Container maxWidth="xl">
                     <Box sx={{ m: "auto", maxWidth: 700, py: 3 }}>
                         <Typography variant="h5" component={"h2"} sx={{ pb: 3 }}>
-                            {voorstelling.titel}
+                            {voorstellingEvent.voorstelling.titel}
                         </Typography>
                         <Typography variant="body1" component={"p"}>
-                            {voorstelling.beschrijving}
+                            {voorstellingEvent.voorstelling.beschrijving}
                         </Typography>
                     </Box>
                     <Box sx={{ m: "auto", maxWidth: 700 }}>
@@ -140,7 +140,7 @@ export default function VoorstellingPage(props) {
                         <Typography variant="h6" component={"h4"}>
                             Zaal:
                         </Typography>
-                        <p>{voorstelling.zaalId}</p>
+                        <p>{voorstellingEvent.voorstelling.zaalId}</p>
                         {/* <Datum /> */}
                     </Box>
                 </Container>
@@ -151,7 +151,7 @@ export default function VoorstellingPage(props) {
                         </Typography>
                         <Button
                             component={Link}
-                            to={`/voorstelling/${voorstelling.voorstellingId}/bestel`}
+                            to={`/voorstelling/${voorstellingEvent.id}/bestel`}
                             variant="contained"
                             sx={{ mt: 3 }}
                             onClick={handleClick}

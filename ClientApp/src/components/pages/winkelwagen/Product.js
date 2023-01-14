@@ -6,10 +6,10 @@ import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 
 export default function Product(props) {
   const { item, setTotaal } = props;
-  const voorstelling = item.voorstelling;
+  const voorstellingEvent = item.voorstelling;
   const rang = item.rang;
   const hoeveelheid = item.hoeveelheid;
-  const prijs = voorstelling.prijzenPerRang.find((item) => item.rang === rang);
+  const prijs = voorstellingEvent.voorstelling.prijzenPerRang.find((item) => item.rang === rang);
   const { removeFromWinkelwagen } = useWinkelWagen();
 
   function onDelete() {
@@ -28,7 +28,7 @@ export default function Product(props) {
       }}
     >
       <img
-        src={voorstelling.afbeelding}
+        src={voorstellingEvent.voorstelling.afbeelding}
         alt="product"
         style={{
           maxWidth: "12rem",
@@ -59,7 +59,7 @@ export default function Product(props) {
           component="h2"
           sx={{ fontWeight: 500, fontSize: 24, marginTop: -1.5 }}
         >
-          {voorstelling.titel}
+          {voorstellingEvent.voorstelling.titel}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column", pr: 3 }}>

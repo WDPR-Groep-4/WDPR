@@ -30,6 +30,18 @@ public class VoorstellingController : ControllerBase
         return voorstelling;
     }
 
+    [HttpGet("event/{eventId}")]
+    public async Task<ActionResult<VoorstellingEvent>> GetVoorstellingEvent(int eventId)
+    {
+        var voorstellingEvent = await _context.VoorstellingEvents.Where(v => v.Id == eventId).Include(v => v.Voorstelling).Include(v => v.Voorstelling.PrijzenPerRang).Include(v => v.DatumBereik).FirstOrDefaultAsync();
+        
+        if (voorstellingEvent == null)
+        {
+            return NotFound("VoorstellingEvent not found");
+        }
+        return voorstellingEvent;
+    }
+
     [HttpGet]
     public async Task<ActionResult<List<Voorstelling>>> GetVoorstellingen()
     {
