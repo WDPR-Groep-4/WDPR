@@ -89,6 +89,23 @@ const AppRoutes = [
     path: "/steun-ons",
     element: <SteunOnsPage/>,
 },
+{
+    path: "/medewerker/programmering",
+    element: <Medewerker/>,
+},
+{
+    path: "/medewerker/artiesten",
+    element: <Medewerker/>,
+},
+{
+    path: "/medewerker/accounts",
+    element: <Medewerker/>,
+}
+,
+{
+    path: "/medewerker/voorstellingen",
+    element: <Medewerker/>,
+}
 ];
 
 export default AppRoutes;

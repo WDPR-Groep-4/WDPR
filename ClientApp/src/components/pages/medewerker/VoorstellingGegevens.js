@@ -13,6 +13,48 @@ import Voorstelling2 from './Voorstelling2.json';
 import Voorstelling3 from './Voorstelling3.json';
 
 
+import { styled, alpha } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
+
+
 
 export default function VoorstellingGegevens() {
     var voorstellingen = [Voorstelling1, Voorstelling2, Voorstelling3];
@@ -21,20 +63,60 @@ export default function VoorstellingGegevens() {
     var unique = [...new Map(voorstellingen.map(voorstelling =>
     [voorstelling[key], voorstelling])).values()];
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+
+
     return (
         <>
+          <AppBar position="static" minWidth="1300"sx={{ width: "1300", mx: "auto" }}>
+          <Toolbar sx={{ width: "100%", mx: "auto" }}>
+            <Search>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+            <IconButton color="inherit">
+              <SearchIcon />
+            </IconButton>
+            <Box>
+              <IconButton color="inherit" aria-describedby={id} type="button" onClick={handleClick}>
+                  <AddIcon />
+              </IconButton >
+              <IconButton color="inherit"
+              >
+                  <DeleteIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        <Box>
             {unique.map((voorstelling) => (
-                <Bruh key={voorstelling.id} voorstelling={voorstelling} voorstellingen={voorstellingen}/>
-            ))}
+                <Voorstelling key={voorstelling.id} voorstelling={voorstelling} voorstellingen={voorstellingen}/>
+            ))}</Box>
         </>
     )
 }
 
 
-function Bruh(props){
+function Voorstelling(props){
     var filtered = props.voorstellingen.filter(voorstelling => voorstelling.voorstellingId === props.voorstelling.voorstellingId);
-
+    
     return(
+      <>
+        
+        
+
         <Box sx={{py:2, px:4 }}>
             <Accordion >
                 <AccordionSummary
@@ -72,11 +154,16 @@ function Bruh(props){
                 </AccordionDetails>
             </Accordion>
         </Box>
+        </>
     );
 }
 
 function Voorstellingen(props) {
+
+  
     return (
+    <>
+    
           <Card variant="outlined" sx={{width:700, display:'container'}}>
               <Card variant="outlined" sx={{width:150, padding:3}}>
                 <Typography sx={{fontSize: 30, fontWeight:"bold", textAlign:"center"}}>
@@ -131,6 +218,7 @@ function Voorstellingen(props) {
                 </Typography>
               </Box>
           </Card>
+          </>
     )
   }
   
