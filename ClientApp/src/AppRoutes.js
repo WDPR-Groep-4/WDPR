@@ -17,6 +17,7 @@ import Medewerker from "./components/pages/medewerker/MedewerkerPage";
 import Agenda from "./components/pages/agenda/AgendaPage";
 import BetaalPagina from "./components/pages/winkelwagen/BetaalPagina";
 import VerifyPagina from "./components/pages/winkelwagen/VerifyPagina";
+import MijnTickets from "./components/pages/account/MijnTickets";
 
 const AppRoutes = [
     {
@@ -98,6 +99,10 @@ const AppRoutes = [
     {
         path: "/api/betaal/verify",
         element: <VerifyPagina />,
+    },
+    {
+        path: "/account/mijntickets",
+        element: <MijnTickets />,
     },
 ];
 

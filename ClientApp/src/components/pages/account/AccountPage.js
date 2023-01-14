@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 import PersoonlijkeGegevens from "./PersoonlijkeGegevens";
 import config from "../../../config.json";
+import MijnTickets from "./MijnTickets";
 
 export default function AccountPage(props) {
     const [value, setValue] = useState(0);
@@ -34,6 +35,7 @@ export default function AccountPage(props) {
                             scrollButtons
                         >
                             <Tab label="Persoonlijke gegevens" />
+                            <Tab label="Mijn tickets" />
                             <Tab label="Interesses" />
                             <Tab label="Donaties" />
                         </Tabs>
@@ -53,9 +55,12 @@ export default function AccountPage(props) {
                             <PersoonlijkeGegevens />
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            Interesses
+                            <MijnTickets />
                         </TabPanel>
                         <TabPanel value={value} index={2}>
+                            Interesses
+                        </TabPanel>
+                        <TabPanel value={value} index={3}>
                             Donaties
                         </TabPanel>
                     </Card>
