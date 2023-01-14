@@ -65,7 +65,6 @@ public class TicketController : ControllerBase
         using (var stream = new MemoryStream())
         {
             qrCodeImage.Save(stream, ImageFormat.Png);
-            // return the image saved in the stream and make it auto download
             return File(stream.ToArray(), "image/png", "qrcode.png");
         }
 
@@ -101,8 +100,6 @@ public class TicketController : ControllerBase
             ticket.Stoel = aantalGereserveerdeStoelen + i + 1;
             ticket.Rang = rang;
 
-            logger.LogInformation("Ticket generated: " + ticket.TicketId);
-
             context.AddAsync(ticket);
             context.SaveChangesAsync();
 
@@ -115,7 +112,6 @@ public class TicketController : ControllerBase
 
     public static async Task<Bitmap> GenerateQRCode(Guid guid, ILogger _logger)
     {
-        _logger.LogInformation("Generating QRCode for ticket: " + guid);
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
         QRCode qrCode = new QRCode(qrCodeData);
