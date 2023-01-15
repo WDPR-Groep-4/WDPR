@@ -1,4 +1,12 @@
-import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import {
+    AppBar,
+    Box,
+    Button,
+    IconButton,
+    ListItem,
+    Toolbar,
+    Typography,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import { Link } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
@@ -24,26 +32,37 @@ export default function Navbar(props) {
                 >
                     <Link to="/">Theater Laak</Link>
                 </Typography>
-                <Stack
-                    direction={"row"}
-                    spacing={1.5}
-                    sx={{ display: { xs: "none", sm: "block" } }}
-                >
+
+                <Stack direction={"row"}>
                     {navLinks.map((link) => (
-                        <Button key={link.path} color="inherit" sx={{ fontWeight: 600 }}>
-                            <Link to={link.path}>{link.name}</Link>
-                        </Button>
+                        <ListItem
+                            key={link.name}
+                            component={Link}
+                            to={link.path}
+                            sx={{ width: "max-content" }}
+                        >
+                            <Button
+                                color="inherit"
+                                sx={{
+                                    fontWeight: 600,
+                                }}
+                                variant="text"
+                            >
+                                {link.name}
+                            </Button>
+                        </ListItem>
                     ))}
                 </Stack>
+
                 <Stack direction={"row"}>
                     <AccountButton account={account}>
                         <PersonIcon />
                     </AccountButton>
-                    <IconButton color="inherit" sx={{ fontWeight: 600 }}>
-                        <Link to="/winkelwagen" style={{ fontSize: 0 }}>
+                    <ListItem component={Link} to="/winkelwagen">
+                        <IconButton color="inherit" sx={{ fontWeight: 600 }}>
                             <ShoppingCartIcon />
-                        </Link>
-                    </IconButton>
+                        </IconButton>
+                    </ListItem>
                     <MobileMenuButton navLinks={navLinks} />
                 </Stack>
             </Toolbar>
