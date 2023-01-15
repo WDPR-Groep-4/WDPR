@@ -71,7 +71,7 @@ export default function LoginPage() {
         const wachtwoord = formData["wachtwoord"].value;
 
         if (await login(setError, email, wachtwoord, signIn)) {
-            navigate("/ass");
+            navigate("/");
         }
     };
 

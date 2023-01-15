@@ -169,6 +169,7 @@ export default function TicketItem(props) {
             fullWidth={true}
             variant="contained"
             component={Link}
+            target="_blank"
             to={"/api/ticket/qrcode/" + ticket.ticketId}
           >
             Toon QR-code

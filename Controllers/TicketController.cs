@@ -56,12 +56,12 @@ public class TicketController : ControllerBase
     [HttpGet("qrcode/{guid}")]
     public async Task<IActionResult> GetQRCode(Guid guid)
     {
-        var ticket = _context.Tickets.Where(t => t.TicketId == guid).FirstOrDefault();
+        var ticket = _context.Tickets.Where(t => t.TicketId == guid).Include(t => t.VoorstellingEvent).Include(t => t.VoorstellingEvent.Voorstelling).Include(t => t.VoorstellingEvent.DatumBereik).FirstOrDefault();
         if (ticket == null)
         {
             return NotFound();
         }
-        Bitmap qrCodeImage = await GenerateQRCode(guid, _logger);
+        Bitmap qrCodeImage = await GenerateTicketImage(ticket);
         using (var stream = new MemoryStream())
         {
             qrCodeImage.Save(stream, ImageFormat.Png);
@@ -109,13 +109,32 @@ public class TicketController : ControllerBase
 
         return tickets;
     }
+    public static async Task<Bitmap> GenerateTicketImage(Ticket ticket)
+    {
+        Bitmap qrCodeImage = await GenerateQRCode(ticket.TicketId);
+        Bitmap ticketImage = new Bitmap(820, 1100);
+        using (Graphics graphics = Graphics.FromImage(ticketImage))
+        {
+            using (Font font = new Font("Ebrima Bold", 20))
+            {
+                graphics.Clear(Color.PowderBlue);
+                graphics.DrawString("Voorstelling: " + ticket.VoorstellingEvent.Voorstelling.Titel, font, Brushes.Black, new Point(90, 830));
+                graphics.DrawString("Datum: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("dd/MM/yyyy"), font, Brushes.Black, new Point(90, 900));
+                graphics.DrawString("Tijd: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("HH:mm" + "-" + ticket.VoorstellingEvent.DatumBereik.Tot.ToString("HH:mm")), font, Brushes.Black, new Point(90, 970));
+                graphics.DrawString("Rang: " + ticket.Rang, font, Brushes.Black, new Point(600, 830));
+                graphics.DrawString("Stoel: " + ticket.Stoel, font, Brushes.Black, new Point(600, 900));
+                graphics.DrawImage(qrCodeImage, new Point(0, 0));
+            }
+        }
+        return ticketImage;
+    }
 
-    public static async Task<Bitmap> GenerateQRCode(Guid guid, ILogger _logger)
+    public static async Task<Bitmap> GenerateQRCode(Guid guid)
     {
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
         QRCode qrCode = new QRCode(qrCodeData);
-        Bitmap qrCodeImage = qrCode.GetGraphic(20);
+        Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.PowderBlue, true);
         return qrCodeImage;
     }
 }
