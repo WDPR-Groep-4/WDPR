@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using QRCoder;
 using Newtonsoft.Json;
+using System.Drawing.Imaging;
 
 namespace Backend;
 
@@ -22,7 +23,7 @@ public class TicketController : ControllerBase
     [HttpGet("all_from_single_email")]
     public async Task<ActionResult<List<Ticket>>> GetAllTicketsFromEmail(string email)
     {
-        var tickets = await _context.Tickets.Where(t => t.Email == email).ToListAsync();
+        var tickets = await _context.Tickets.Where(t => t.Email == email).Include(t => t.VoorstellingEvent).Include(t => t.VoorstellingEvent.Voorstelling).Include(t => t.VoorstellingEvent.DatumBereik).ToListAsync();
         if (tickets == null)
         {
             return NotFound();
@@ -31,7 +32,7 @@ public class TicketController : ControllerBase
     }
 
     [HttpGet("all_from_single_email_and_event")]
-    public async Task<ActionResult<Ticket>> GetTicketsOneVoorstellingEventFromEmail(int voorstellingId, string email)
+    public async Task<ActionResult<Ticket>> GetTicketsOneVoorstellingEventFromEmail([FromBody] int voorstellingId, string email)
     {
         var ticket = await _context.Tickets.Where(t => t.VoorstellingEvent.Id == voorstellingId && t.Email == email).FirstOrDefaultAsync();
         if (ticket == null)
@@ -42,7 +43,7 @@ public class TicketController : ControllerBase
     }
 
     [HttpGet("all_from_single_event")]
-    public async Task<ActionResult<List<Ticket>>> GetAllTicketsFromVoorstellingEvent(int eventId)
+    public async Task<ActionResult<List<Ticket>>> GetAllTicketsFromVoorstellingEvent([FromBody] int eventId)
     {
         var tickets = await _context.Tickets.Where(t => t.VoorstellingEvent.Id == eventId).ToListAsync();
         if (tickets == null)
@@ -52,8 +53,23 @@ public class TicketController : ControllerBase
         return tickets;
     }
 
+    [HttpGet("qrcode/{guid}")]
+    public async Task<IActionResult> GetQRCode(Guid guid)
+    {
+        var ticket = _context.Tickets.Where(t => t.TicketId == guid).Include(t => t.VoorstellingEvent).Include(t => t.VoorstellingEvent.Voorstelling).Include(t => t.VoorstellingEvent.DatumBereik).FirstOrDefault();
+        if (ticket == null)
+        {
+            return NotFound();
+        }
+        Bitmap qrCodeImage = await GenerateTicketImage(ticket);
+        using (var stream = new MemoryStream())
+        {
+            qrCodeImage.Save(stream, ImageFormat.Png);
+            return File(stream.ToArray(), "image/png", "qrcode.png");
+        }
 
 
+    }
 
 
     public static List<Ticket> GenerateTickets(VoorstellingEvent voorstelling, string email, int rang, int aantal, DatabaseContext context, ILogger logger)
@@ -65,7 +81,6 @@ public class TicketController : ControllerBase
             items = JsonConvert.DeserializeObject<List<Zaal>>(json);
         }
 
-        //check existing tickets for free seats
         int aantalGereserveerdeStoelen = context.Tickets.Where(t => t.VoorstellingEvent.Id == voorstelling.Id).Where(t => t.Rang == rang).Count();
         var aantalRangStoelen = items.Where(z => z.ZaalNummer == voorstelling.Zaal).Select(z => z.Rangen[rang - 1]).FirstOrDefault();
 
@@ -85,8 +100,6 @@ public class TicketController : ControllerBase
             ticket.Stoel = aantalGereserveerdeStoelen + i + 1;
             ticket.Rang = rang;
 
-            logger.LogInformation("Ticket generated: " + ticket.TicketId);
-
             context.AddAsync(ticket);
             context.SaveChangesAsync();
 
@@ -96,13 +109,32 @@ public class TicketController : ControllerBase
 
         return tickets;
     }
+    public static async Task<Bitmap> GenerateTicketImage(Ticket ticket)
+    {
+        Bitmap qrCodeImage = await GenerateQRCode(ticket.TicketId);
+        Bitmap ticketImage = new Bitmap(820, 1100);
+        using (Graphics graphics = Graphics.FromImage(ticketImage))
+        {
+            using (Font font = new Font("Ebrima Bold", 24))
+            {
+                graphics.Clear(Color.SteelBlue);
+                graphics.DrawString("Voorstelling: " + ticket.VoorstellingEvent.Voorstelling.Titel, font, Brushes.White, new Point(90, 830));
+                graphics.DrawString("Datum: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("dd/MM/yyyy"), font, Brushes.White, new Point(90, 900));
+                graphics.DrawString("Tijd: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("HH:mm" + "-" + ticket.VoorstellingEvent.DatumBereik.Tot.ToString("HH:mm")), font, Brushes.White, new Point(90, 970));
+                graphics.DrawString("Rang: " + ticket.Rang, font, Brushes.White, new Point(600, 900));
+                graphics.DrawString("Stoel: " + ticket.Stoel, font, Brushes.White, new Point(600, 970));
+                graphics.DrawImage(qrCodeImage, new Point(0, 0));
+            }
+        }
+        return ticketImage;
+    }
 
-    public static Bitmap GenerateQRCode(Guid guid)
+    public static async Task<Bitmap> GenerateQRCode(Guid guid)
     {
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
         QRCode qrCode = new QRCode(qrCodeData);
-        Bitmap qrCodeImage = qrCode.GetGraphic(20);
+        Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.White, Color.SteelBlue, true);
         return qrCodeImage;
     }
 }

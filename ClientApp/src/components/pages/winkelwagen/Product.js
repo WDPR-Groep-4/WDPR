@@ -54,7 +54,7 @@ export default function Product(props) {
                     component="h3"
                     sx={{ fontWeight: 300, fontSize: 15, paddingTop: 2 }}
                 >
-                    Musical
+                    {voorstellingEvent.voorstelling.genre}
                 </Typography>
                 <Typography
                     variant="h4"

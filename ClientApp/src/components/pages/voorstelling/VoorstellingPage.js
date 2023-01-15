@@ -14,7 +14,7 @@ export default function VoorstellingPage(props) {
     const [error, setError] = useState(false);
     const { setCurrentVoorstelling } = useWinkelWagen();
 
-    // document.title = voorstelling.titel + config.title;
+    
 
     useEffect(() => {
         fetchVoorstelling(setIsLoading, setError, setVoorstellingEvent, id);
@@ -22,6 +22,10 @@ export default function VoorstellingPage(props) {
 
     function handleClick() {
         setCurrentVoorstelling(voorstellingEvent);
+    }
+
+    function setTitle() {
+        document.title = voorstellingEvent.voorstelling.titel + config.title;
     }
 
     // function Datum() {
@@ -64,6 +68,7 @@ export default function VoorstellingPage(props) {
     function MainBody() {
         return (
             <div>
+                {setTitle()}
                 <Box sx={{ maxHeight: 400, width: "100%" }}>
                     <div
                         style={{
