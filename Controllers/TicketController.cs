@@ -115,14 +115,14 @@ public class TicketController : ControllerBase
         Bitmap ticketImage = new Bitmap(820, 1100);
         using (Graphics graphics = Graphics.FromImage(ticketImage))
         {
-            using (Font font = new Font("Ebrima Bold", 20))
+            using (Font font = new Font("Ebrima Bold", 24))
             {
-                graphics.Clear(Color.PowderBlue);
-                graphics.DrawString("Voorstelling: " + ticket.VoorstellingEvent.Voorstelling.Titel, font, Brushes.Black, new Point(90, 830));
-                graphics.DrawString("Datum: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("dd/MM/yyyy"), font, Brushes.Black, new Point(90, 900));
-                graphics.DrawString("Tijd: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("HH:mm" + "-" + ticket.VoorstellingEvent.DatumBereik.Tot.ToString("HH:mm")), font, Brushes.Black, new Point(90, 970));
-                graphics.DrawString("Rang: " + ticket.Rang, font, Brushes.Black, new Point(600, 830));
-                graphics.DrawString("Stoel: " + ticket.Stoel, font, Brushes.Black, new Point(600, 900));
+                graphics.Clear(Color.SteelBlue);
+                graphics.DrawString("Voorstelling: " + ticket.VoorstellingEvent.Voorstelling.Titel, font, Brushes.White, new Point(90, 830));
+                graphics.DrawString("Datum: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("dd/MM/yyyy"), font, Brushes.White, new Point(90, 900));
+                graphics.DrawString("Tijd: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("HH:mm" + "-" + ticket.VoorstellingEvent.DatumBereik.Tot.ToString("HH:mm")), font, Brushes.White, new Point(90, 970));
+                graphics.DrawString("Rang: " + ticket.Rang, font, Brushes.White, new Point(600, 900));
+                graphics.DrawString("Stoel: " + ticket.Stoel, font, Brushes.White, new Point(600, 970));
                 graphics.DrawImage(qrCodeImage, new Point(0, 0));
             }
         }
@@ -134,7 +134,7 @@ public class TicketController : ControllerBase
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
         QRCode qrCode = new QRCode(qrCodeData);
-        Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.PowderBlue, true);
+        Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.White, Color.SteelBlue, true);
         return qrCodeImage;
     }
 }
