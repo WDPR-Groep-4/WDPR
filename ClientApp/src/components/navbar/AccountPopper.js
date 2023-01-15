@@ -23,6 +23,7 @@ export default function AccountPopper(props) {
     const handleLogout = (e) => {
         signOut();
         props.handleCloseAccount(e);
+        window.location.href = "/";
     };
 
     return (

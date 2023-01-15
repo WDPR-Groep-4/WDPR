@@ -132,7 +132,7 @@ export default function AgendaItem(props) {
                         </Box>
                     </Box>
                     <Button
-                        sx={{ height: 50, fontSize: 20 }}
+                        sx={{ height: 50, fontSize: 20, borderRadius: 0 }}
                         size="large"
                         color="primary"
                         fullWidth={true}

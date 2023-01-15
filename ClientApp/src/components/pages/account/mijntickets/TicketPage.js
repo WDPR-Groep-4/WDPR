@@ -5,6 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useAuthHeader } from "react-auth-kit";
 import TicketItem from "./TicketItem";
+import config from "../../../../config.json";
 
 export default function TicketPage(props) {
   const [error, setError] = useState();
@@ -14,6 +15,8 @@ export default function TicketPage(props) {
   const authHeader = useAuthHeader();
   const [tickets, setTickets] = useState([]);
   const [header, setHeader] = useState();
+
+  document.title = "Mijn Tickets" + config.title;
 
   const yourConfig = {
     headers: {
