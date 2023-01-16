@@ -2,7 +2,12 @@ import { Container, Tabs, Tab, Card, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import VoorstellingenGegevens from "./VoorstellingGegevens";
+import Artiesten from "./Artiesten";
+import AccountsBeheren from "./AccountsBeheren";
 import config from "../../../config.json";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
 
 
 
@@ -13,6 +18,8 @@ export default function MedewerkerPage() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+   
 
     return (
         <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
@@ -34,10 +41,10 @@ export default function MedewerkerPage() {
                             variant="scrollable"
                             scrollButtons
                         >
-                            <Tab label="Voorstellingen" />
-                            <Tab label="Programmering" />
-                            <Tab label="Artiesten" />
-                            <Tab label="Accounts beheren" />
+                <Tab label={<Link to='/medewerker/voorstellingen'>Voorstellingen</Link>} />
+                        <Tab label={<Link to="/medewerker/programmering">Programmering</Link>} />
+                        <Tab label={<Link to="/medewerker/artiesten">Artiesten</Link>} />
+                        <Tab label={<Link to="/medewerker/accounts">Accounts beheren</Link>} />
                         </Tabs>
                     </Box>
                     <Card
@@ -60,10 +67,19 @@ export default function MedewerkerPage() {
                             Programmering
                         </TabPanel>
                         <TabPanel value={value} index={2}>
-                            Artiesten
+                            <Box>
+                                <Artiesten/>
+                            </Box>
+                            
                         </TabPanel>
                         <TabPanel value={value} index={3}>
-                            Accounts beheren
+                        <AccountsBeheren sx={{ 
+                                backgroundColor: "white",
+                                width: "100%",
+                                minHeight: "100vh",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: { sm: "flex-start", xs: "center" },}}/>
                         </TabPanel>
                     </Card>
                 </Box>
@@ -87,3 +103,4 @@ function TabPanel(props) {
         </div>
     );
 }
+
