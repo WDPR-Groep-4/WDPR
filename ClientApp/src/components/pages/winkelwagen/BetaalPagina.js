@@ -8,8 +8,8 @@ import config from "../../../config.json";
 import FakePayPagina from "./Betaling/FakePayPage";
 
 export default function BetaalPopup(props) {
-    const [html, setHtml] = useState("");
     const [betaal, setBetaal] = useState(false);
+    const [betaalId, setBetaalId] = useState("");
     const { state, totaalWinkelwagen } = useWinkelWagen();
     const totaal = totaalWinkelwagen();
     const account = useAuthUser();
@@ -60,6 +60,7 @@ export default function BetaalPopup(props) {
 
             if (betaalIdResponse.status === 200) {
                 setBetaal(true);
+                setBetaalId(betaalIdResponse.data);
             }
         } catch (error) {
             console.log(error);
@@ -72,7 +73,11 @@ export default function BetaalPopup(props) {
         }
     }, []);
 
-    return betaal ? <FakePayPagina /> : <Body />;
+    return betaal && betaalId ? (
+        <FakePayPagina bedrag={totaal} betaalId={betaalId} />
+    ) : (
+        <Body />
+    );
 
     function Body() {
         return (
