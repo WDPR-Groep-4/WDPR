@@ -86,6 +86,7 @@ const [rol, setRol] = React.useState('');
 const [selected, setSelected] = React.useState([]);
 const [rows, setRows] = React.useState([]);
 const [currentPage, setCurrentPage] = useState(1);
+const [searchTerm, setSearchTerm] = React.useState(null);
 
 const handleChange = (event) => {
   setRol(event.target.value);
@@ -132,9 +133,6 @@ const handleSelectAllClick = (event) => {
 const isSelected = (name) => selected.indexOf(name) !== -1;
 
 
-function changeTable(id, voornaam, achternaam, email, telefoonnummer, rol){
-  setRows([createData(id, voornaam, achternaam, email, telefoonnummer, rol)]);
-}
 
   
 const handleSearchClick = async () => {
@@ -142,22 +140,29 @@ const handleSearchClick = async () => {
 };
 
 async function search(){
-  const searchTerm = document.getElementById('searchbox').value;
-  const result = await zoekGebruiker(searchTerm);
-  console.log(result.Id);
-  changeTable(result.Id, result.Voornaam, result.Achternaam, result.emailadres, result.Telefoon, result.rol);
+  setSearchTerm(document.getElementById("searchbox").value);
+  getGebruikersSearch();
 }
 
 async function zoekGebruiker(searchTerm){
-  try{
-      const response = await axios.get(`/api/medewerker/accounts/${searchTerm}`).catch((err) => {
-          console.log(err);
-      });
-      return response.data;
-  } catch {
-      console.log("error");
-      return {Id: 0, Voornaam: "error", Achternaam: "error", emailadres: "error", Telefoon: "error", rol: "error"}
+    const response = await axios.get(`/api/medewerker/accounts/get/${searchTerm}`).catch((err) => {
+        console.log(err);
+    });
+    if (response && response.data) {
+      setRows(response.data);
   }
+
+}
+
+async function zoekGebruikerr(searchTerm){
+  axios.get(`/api/medewerker/accounts/${searchTerm}`
+)
+.then(response => {
+    console.log(response.data);
+})
+.catch(error => {
+    console.log(error);
+});
 }
 
 async function getGebruikers() {
@@ -167,12 +172,20 @@ async function getGebruikers() {
   if (response && response.data) {
       setRows(response.data);
   }
-  return response.data;
+}
+
+async function getGebruikersSearch() {
+  if(searchTerm ==null){
+    getGebruikers();
+  }
+  else{
+    zoekGebruiker(searchTerm);
+  }
+  
 }
 
 function rowElement() {
-  getGebruikers();
-  
+  getGebruikersSearch();
   return rows.map((account) => (
     <TableRow
       hover
@@ -197,7 +210,6 @@ function rowElement() {
   ));
 }
 
-
 async function addGebruiker(){
   const name = document.getElementById("voornaam").value;
   const email = document.getElementById("achternaam").value;
@@ -218,14 +230,13 @@ return (
     <AppBar position="static" minWidth="1200"sx={{ width: "1200", mx: "auto" }}>
       <Toolbar sx={{ width: "100%", mx: "auto" }}>
         <Search>
-          
           <StyledInputBase
             placeholder="Search…"
             inputProps={{ 'aria-label': 'search' }}
             id="searchbox"
           />
         </Search>
-        <IconButton color="inherit" type="button" onClick= {getGebruikers}>
+        <IconButton color="inherit" type="button" onClick= {search}>
           <SearchIcon />
         </IconButton>
         

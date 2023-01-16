@@ -12,6 +12,7 @@ namespace Backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Produces("application/json")]
 public class MedewerkerController : ControllerBase
 {
     private readonly DatabaseContext _context;
@@ -23,7 +24,7 @@ public class MedewerkerController : ControllerBase
     }
 
 [HttpGet]
-[Route("medewerker/voorstelling/")]
+[Route("voorstelling/")]
 public async Task<ActionResult<Voorstelling>> GetShows()
 {
     var shows = await _context.Voorstellingen.ToListAsync();
@@ -35,19 +36,18 @@ public async Task<ActionResult<Voorstelling>> GetShows()
 }
 
 [HttpGet]
-[Route("accounts/{id}")]
-public async Task<ActionResult<Gebruiker>> SearchUser([FromBody] string id)
+[Route("accounts/get/{userId}")]
+public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string userId)
 {
-    var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == id);
+    var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == userId);
 
     if (user == null)
     {
         Console.WriteLine("User not found");
         return NotFound();
     }
-    return user;
+    return Ok(user);
 }
-
 
 [HttpGet]
 public async Task<ActionResult<List<Gebruiker>>> GetUsers()
@@ -63,7 +63,7 @@ public async Task<ActionResult<List<Gebruiker>>> GetUsers()
 }
 
 [HttpPost]
-[Route("medewerker/accounts/add/")]
+[Route("accounts/add/")]
 public async Task<ActionResult<Gebruiker>> AddUser(Gebruiker gebruiker)
 {
     await _context.Gebruikers.AddAsync(gebruiker);
@@ -73,7 +73,7 @@ public async Task<ActionResult<Gebruiker>> AddUser(Gebruiker gebruiker)
 
 
 [HttpDelete]
-[Route("medewerker/accounts/{id}")]
+[Route("accounts/{id}")]
 public async Task<ActionResult<Gebruiker>> DeleteUser(String id)
 {
     var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == id);
@@ -90,7 +90,7 @@ public async Task<ActionResult<Gebruiker>> DeleteUser(String id)
 }
 
 [HttpPut]
-[Route("medewerker/accounts/{id}")]
+[Route("accounts/{id}")]
 public async Task<ActionResult<Gebruiker>> UpdateUser(string id, Gebruiker gebruiker)
 {
     if (id != gebruiker.Id)
