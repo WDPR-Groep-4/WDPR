@@ -33,9 +33,13 @@ export default function Navbar(props) {
                     <Link to="/">Theater Laak</Link>
                 </Typography>
 
-                <Stack direction={"row"}>
+                <Stack
+                    direction={"row"}
+                    spacing={1.5}
+                    sx={{ display: { xs: "none", sm: "block" } }}
+                >
                     {navLinks.map((link) => (
-                        <ListItem
+                        <Box
                             key={link.name}
                             component={Link}
                             to={link.path}
@@ -50,7 +54,7 @@ export default function Navbar(props) {
                             >
                                 {link.name}
                             </Button>
-                        </ListItem>
+                        </Box>
                     ))}
                 </Stack>
 
