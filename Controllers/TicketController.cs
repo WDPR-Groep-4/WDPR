@@ -119,7 +119,11 @@ public class TicketController : ControllerBase
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(ticket.TicketId.ToString(), QRCodeGenerator.ECCLevel.Q);
         QRCode qrCode = new QRCode(qrCodeData);
 
-        Font font = SystemFonts.CreateFont("Ebrima", 24, FontStyle.Bold);
+        FontCollection fonts = new FontCollection();
+        FontFamily family = fonts.Add("./Alexandria-Medium.ttf");
+
+        Font font = family.CreateFont(26, FontStyle.Regular);
+
 
         Image qrCodeImage = new QRCoder.QRCode(qrCodeData).GetGraphic(20, "#ffffff", "#4682B4");
         Image<Rgba32> ticketImage = new Image<Rgba32>(820, 1100);
