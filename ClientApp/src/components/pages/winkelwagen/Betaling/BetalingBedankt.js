@@ -1,6 +1,9 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
+import config from "../../../../config.json";
+
+document.title = "Bedankt!" + config.title;
 
 export default function BetalingBedankt() {
     const navigate = useNavigate();

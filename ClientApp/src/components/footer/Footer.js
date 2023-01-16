@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer(props) {
     return (
-        <Box bgcolor={blue[700]} sx={{ width: "100vw", color: "white" }}>
+        <Box bgcolor={blue[700]} sx={{ width: "100%", color: "white" }}>
             <Container
                 maxWidth="xl"
                 sx={{ display: "flex", justifyContent: "space-around", p: 3 }}

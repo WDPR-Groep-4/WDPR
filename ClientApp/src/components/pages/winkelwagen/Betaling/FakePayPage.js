@@ -3,12 +3,16 @@ import axios from "axios";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWinkelWagen } from "../../../../services/WinkelwagenContext";
+import Footer from "../../../footer/Footer";
+import config from "../../../../config.json";
 
 export default function FakePayPagina(props) {
     const form = useRef(null);
     const [error, setError] = useState();
     const navigate = useNavigate();
     const { clearWinkelwagen } = useWinkelWagen();
+
+    document.title = "Betalen" + config.title;
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -64,7 +68,7 @@ export default function FakePayPagina(props) {
         <div
             style={{
                 height: "100vh",
-                width: "100vw",
+                width: "100%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
