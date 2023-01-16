@@ -8,6 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp.Formats.Png;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Backend;
 
@@ -17,11 +18,13 @@ public class TicketController : ControllerBase
 {
     private readonly DatabaseContext _context;
     private readonly ILogger _logger;
+    private readonly IEmailSender _emailSender;
 
-    public TicketController(DatabaseContext context, ILogger<BetaalController> logger)
+    public TicketController(DatabaseContext context, ILogger<BetaalController> logger, IEmailSender emailSender)
     {
         _context = context;
         _logger = logger;
+        _emailSender = emailSender;
     }
 
     [HttpGet("all_from_single_email")]
@@ -76,7 +79,7 @@ public class TicketController : ControllerBase
     }
 
 
-    public static List<Ticket> GenerateTickets(VoorstellingEvent voorstelling, string email, int rang, int aantal, DatabaseContext context, ILogger logger)
+    public List<Ticket> GenerateTickets(VoorstellingEvent voorstelling, string email, int rang, int aantal, DatabaseContext context, ILogger logger)
     {
         List<Zaal> items = new List<Zaal>();
         using (StreamReader r = new StreamReader("./Services/zaalConfig.json"))
@@ -95,6 +98,7 @@ public class TicketController : ControllerBase
         logger.LogInformation(aantal.ToString());
 
         List<Ticket> tickets = new List<Ticket>();
+        Dictionary<Image, string> ticketImages = new Dictionary<Image, string>();
 
         for (int i = 0; i < aantal; i++)
         {
@@ -107,13 +111,14 @@ public class TicketController : ControllerBase
             context.AddAsync(ticket);
             context.SaveChangesAsync();
 
-            // email qr
+            ticketImages.Add(GenerateTicketImage(ticket).Result, ticket.TicketId.ToString());
         }
 
+        _emailSender.SendEmailAsync(email, "Tickets voor " + voorstelling.Voorstelling.Titel, "Uw tickets zijn aangemaakt. U kan ze hieronder downloaden.", ticketImages).Wait();
 
         return tickets;
     }
-    public static async Task<Image<Rgba32>> GenerateTicketImage(Ticket ticket)
+    public async Task<Image<Rgba32>> GenerateTicketImage(Ticket ticket)
     {
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(ticket.TicketId.ToString(), QRCodeGenerator.ECCLevel.Q);
@@ -138,12 +143,3 @@ public class TicketController : ControllerBase
         return ticketImage;
     }
 }
-
-    // public static async Task<Bitmap> GenerateQRCode(Guid guid)
-    // {
-    //     QRCodeGenerator qrGenerator = new QRCodeGenerator();
-    //     QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
-    //     QRCode qrCode = new QRCode(qrCodeData);
-    //     Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.White, Color.SteelBlue, true);
-    //     return qrCodeImage;
-    // }

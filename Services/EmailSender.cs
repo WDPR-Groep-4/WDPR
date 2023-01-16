@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Drawing;
-using System.Drawing.Imaging;
-
+using SixLabors.ImageSharp;
 
 public class EmailSender : IEmailSender
 {
@@ -33,10 +31,17 @@ public class EmailSender : IEmailSender
         await Execute(ApiKey, subject, message, toEmail);
     }
 
-    // public async Task SendEmailWithImageAsync(string toEmail, string subject, string message, Bitmap image)
-    // {
+    public async Task SendEmailAsync(string toEmail, string subject, string message, Dictionary<Image, string> images)
+    {
+        string? ApiKey = _configuration["SENDGRID_API_KEY"];
 
-    // }
+        if (string.IsNullOrEmpty(ApiKey))
+        {
+            throw new Exception("Null SendGridKey");
+        }
+
+        await Execute(ApiKey, subject, message, toEmail, images);
+    }
 
     public async Task Execute(string apiKey, string subject, string message, string toEmail)
     {
@@ -59,7 +64,7 @@ public class EmailSender : IEmailSender
                                : $"Failure Email to {toEmail}");
     }
 
-    public async Task Execute(string apiKey, string subject, string message, string toEmail, Bitmap image)
+    public async Task Execute(string apiKey, string subject, string message, string toEmail, Dictionary<Image, string> images)
     {
         var client = new SendGridClient(apiKey);
         var msg = new SendGridMessage()
@@ -70,10 +75,15 @@ public class EmailSender : IEmailSender
             HtmlContent = message
         };
         msg.AddTo(new EmailAddress(toEmail));
-        using (var stream = new System.IO.MemoryStream())
+        foreach (var image in images)
         {
-            image.Save(stream, ImageFormat.Png);
-            msg.AddAttachment("ticket.png", Convert.ToBase64String(stream.ToArray()));
+            using (var ms = new MemoryStream())
+            {
+                image.Key.SaveAsPng(ms);
+                var bytes = ms.ToArray();
+                var file = Convert.ToBase64String(bytes);
+                msg.AddAttachment(image.Value, file);
+            }
         }
 
 
