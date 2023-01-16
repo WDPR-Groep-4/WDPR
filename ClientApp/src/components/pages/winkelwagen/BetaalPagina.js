@@ -18,7 +18,9 @@ export default function BetaalPopup(props) {
 
     document.title = "Betalen" + config.title;
 
-    const handleBetaal = async (email) => {
+
+    async function handleBetaal(email, event) {
+        event.preventDefault();
         try {
             setError(null);
 
@@ -112,6 +114,7 @@ export default function BetaalPopup(props) {
                         </div>
                         {error && <Alert severity="error">{error}</Alert>}
                         <form
+                            onSubmit={(e) => handleBetaal(form.current.email.value, e)}
                             ref={form}
                             style={{
                                 width: "100%",
@@ -130,7 +133,7 @@ export default function BetaalPopup(props) {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => handleBetaal(form.current.email.value)}
+                            onClick={(e) => handleBetaal(form.current.email.value, e)}
                         >
                             Verstuur
                         </Button>
