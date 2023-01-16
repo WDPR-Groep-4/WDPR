@@ -29,7 +29,7 @@ export const login = async (setError, email, wachtwoord, signIn) => {
             if (
                 await signIn({
                     token: response.data.token,
-                    expiresIn: 3600,
+                    expiresIn: 60,
                     tokenType: "Bearer",
                     authState: { email: email },
                 })
