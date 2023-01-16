@@ -67,26 +67,17 @@ public class BetaalController : ControllerBase
     }
 
     [HttpPost("verify")]
-    [Consumes("application/x-www-form-urlencoded")]
-    public async Task<IActionResult> Verify()
+    public async Task<IActionResult> Verify(VerifyDto verifyDto)
     {
-        //Check origin
-        var origin = Request.Headers["Origin"];
-        if (!(origin.Equals("https://localhost:44419") || origin.Equals("https://hettheaterlaak.nl")))
-        {
-            return BadRequest("Invalid origin");
-        }
 
-        //Extract data
-        var formData = Request.Form;
-        var succes = formData["succes"];
-        var reference = Int32.Parse(formData["reference"]);
+        // var origin = Request.Headers["Origin"];
+        // if (!(origin.Equals("https://localhost:44419") || origin.Equals("https://hettheaterlaak.nl")))
+        // {
+        //     return BadRequest("Invalid origin");
+        // }
 
-        //Check of data klopt
-        if (succes != "true" && succes != "false")
-        {
-            return BadRequest("Invalid succes");
-        }
+        bool succes = verifyDto.succes;
+        int reference = verifyDto.reference;
 
         //Get betaling  
         Betaling? betaling = await _context.Betalingen.Where(b => b.Id == reference).FirstOrDefaultAsync();
@@ -103,7 +94,7 @@ public class BetaalController : ControllerBase
 
         _logger.LogWarning("Succes: " + succes);
 
-        if (succes == "true")
+        if (succes == true)
         {
             betaling.Succes = true;
 
@@ -142,4 +133,10 @@ public class BetalingDto
 {
     public string Email { get; set; }
     public List<WinkelwagenItem> WinkelwagenItems { get; set; }
+}
+
+public class VerifyDto
+{
+    public bool succes { get; set; }
+    public int reference { get; set; }
 }

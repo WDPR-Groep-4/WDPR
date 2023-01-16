@@ -18,6 +18,7 @@ import Agenda from "./components/pages/agenda/AgendaPage";
 import BetaalPagina from "./components/pages/winkelwagen/BetaalPagina";
 import VerifyPagina from "./components/pages/winkelwagen/VerifyPagina";
 import TicketPage from "./components/pages/account/mijntickets/TicketPage";
+import BetalingBedankt from "./components/pages/winkelwagen/Betaling/BetalingBedankt";
 
 const AppRoutes = [
     {
@@ -103,6 +104,10 @@ const AppRoutes = [
     {
         path: "/account/mijntickets",
         element: <TicketPage />,
+    },
+    {
+        path: "/winkelwagen/bedankt",
+        element: <BetalingBedankt />,
     },
 ];
 

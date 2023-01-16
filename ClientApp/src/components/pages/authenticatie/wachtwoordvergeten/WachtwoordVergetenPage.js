@@ -3,12 +3,10 @@ import { useRef } from "react";
 import { useState } from "react";
 import Footer from "../../../footer/Footer";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 export default function WachtwoordVergetenPage() {
     const form = useRef(null);
     const [error, setError] = useState();
-    const navigate = useNavigate();
     const [succes, setSuccess] = useState(false);
 
     const onSubmit = async (e) => {

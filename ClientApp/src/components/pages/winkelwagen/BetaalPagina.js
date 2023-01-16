@@ -1,14 +1,15 @@
 import { Box } from "@mui/system";
 import { Card, Typography, Alert, TextField, Button } from "@mui/material";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { useAuthUser } from "react-auth-kit";
 import config from "../../../config.json";
+import FakePayPagina from "./Betaling/FakePayPage";
 
 export default function BetaalPopup(props) {
-    const [html, setHtml] = useState("");
     const [betaal, setBetaal] = useState(false);
+    const [betaalId, setBetaalId] = useState("");
     const { state, totaalWinkelwagen } = useWinkelWagen();
     const totaal = totaalWinkelwagen();
     const account = useAuthUser();
@@ -17,9 +18,24 @@ export default function BetaalPopup(props) {
 
     document.title = "Betalen" + config.title;
 
+
     async function handleBetaal(email, event) {
         event.preventDefault();
         try {
+            setError(null);
+
+            if (email === "") {
+                setError("Vul een emailadres in");
+                return;
+            }
+
+            const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
+            if (!email.match(regex)) {
+                setError("Geen geldig e-mailadres");
+                return;
+            }
+
             const winkelWagenItems = state.winkelwagen.map((item) => {
                 return {
                     VoorstellingEventId: item.voorstellingEvent.id,
@@ -44,28 +60,14 @@ export default function BetaalPopup(props) {
                 return;
             }
 
-            const betaalResponse = await axios
-                .post(
-                    "https://fakepay.azurewebsites.net/",
-                    new URLSearchParams({
-                        amount: totaal,
-                        reference: await betaalIdResponse.data,
-                        url: "/api/betaal/verify",
-                    })
-                )
-                .catch((error) => {
-                    console.log(error);
-                });
-
-            if (betaalResponse.status === 200) {
-                console.log("check");
+            if (betaalIdResponse.status === 200) {
                 setBetaal(true);
-                setHtml(betaalResponse.data);
+                setBetaalId(betaalIdResponse.data);
             }
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     useEffect(() => {
         if (account()) {
@@ -73,14 +75,18 @@ export default function BetaalPopup(props) {
         }
     }, []);
 
-    return betaal ? <div dangerouslySetInnerHTML={{ __html: html }} /> : <Body />;
+    return betaal && betaalId ? (
+        <FakePayPagina bedrag={totaal} betaalId={betaalId} />
+    ) : (
+        <Body />
+    );
 
     function Body() {
         return (
             <div
                 style={{
                     height: "100vh",
-                    width: "100vw",
+                    width: "100%",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
