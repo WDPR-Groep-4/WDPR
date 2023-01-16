@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 using QRCoder;
 using Newtonsoft.Json;
-using System.Drawing.Imaging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp.Formats.Png;
 
 namespace Backend;
 
@@ -61,10 +65,10 @@ public class TicketController : ControllerBase
         {
             return NotFound();
         }
-        Bitmap qrCodeImage = await GenerateTicketImage(ticket);
+        Image qrCodeImage = await GenerateTicketImage(ticket);
         using (var stream = new MemoryStream())
         {
-            qrCodeImage.Save(stream, ImageFormat.Png);
+            qrCodeImage.Save(stream, new PngEncoder());
             return File(stream.ToArray(), "image/png", "qrcode.png");
         }
 
@@ -109,32 +113,37 @@ public class TicketController : ControllerBase
 
         return tickets;
     }
-    public static async Task<Bitmap> GenerateTicketImage(Ticket ticket)
-    {
-        Bitmap qrCodeImage = await GenerateQRCode(ticket.TicketId);
-        Bitmap ticketImage = new Bitmap(820, 1100);
-        using (Graphics graphics = Graphics.FromImage(ticketImage))
-        {
-            using (Font font = new Font("Ebrima Bold", 24))
-            {
-                graphics.Clear(Color.SteelBlue);
-                graphics.DrawString("Voorstelling: " + ticket.VoorstellingEvent.Voorstelling.Titel, font, Brushes.White, new Point(90, 830));
-                graphics.DrawString("Datum: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("dd/MM/yyyy"), font, Brushes.White, new Point(90, 900));
-                graphics.DrawString("Tijd: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("HH:mm" + "-" + ticket.VoorstellingEvent.DatumBereik.Tot.ToString("HH:mm")), font, Brushes.White, new Point(90, 970));
-                graphics.DrawString("Rang: " + ticket.Rang, font, Brushes.White, new Point(600, 900));
-                graphics.DrawString("Stoel: " + ticket.Stoel, font, Brushes.White, new Point(600, 970));
-                graphics.DrawImage(qrCodeImage, new Point(0, 0));
-            }
-        }
-        return ticketImage;
-    }
-
-    public static async Task<Bitmap> GenerateQRCode(Guid guid)
+    public static async Task<Image<Rgba32>> GenerateTicketImage(Ticket ticket)
     {
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
-        QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
+        QRCodeData qrCodeData = qrGenerator.CreateQrCode(ticket.TicketId.ToString(), QRCodeGenerator.ECCLevel.Q);
         QRCode qrCode = new QRCode(qrCodeData);
-        Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.White, Color.SteelBlue, true);
-        return qrCodeImage;
+
+        FontCollection fonts = new FontCollection();
+        FontFamily family = fonts.Add("./Alexandria-Medium.ttf");
+
+        Font font = family.CreateFont(26, FontStyle.Regular);
+
+
+        Image qrCodeImage = new QRCoder.QRCode(qrCodeData).GetGraphic(20, "#ffffff", "#4682B4");
+        Image<Rgba32> ticketImage = new Image<Rgba32>(820, 1100);
+        ticketImage.Mutate(x => x.BackgroundColor(Rgba32.ParseHex("#4682B4")));
+        ticketImage.Mutate(x => x.DrawText("Voorstelling: " + ticket.VoorstellingEvent.Voorstelling.Titel, font, Rgba32.ParseHex("#ffffff"), new PointF(90, 830)));
+        ticketImage.Mutate(x => x.DrawText("Datum: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("dd/MM/yyyy"), font, Rgba32.ParseHex("#ffffff"), new PointF(90, 900)));
+        ticketImage.Mutate(x => x.DrawText("Tijd: " + ticket.VoorstellingEvent.DatumBereik.Van.ToString("HH:mm" + "-" + ticket.VoorstellingEvent.DatumBereik.Tot.ToString("HH:mm")), font, Rgba32.ParseHex("#ffffff"), new PointF(90, 970)));
+        ticketImage.Mutate(x => x.DrawText("Rang: " + ticket.Rang, font, Rgba32.ParseHex("#ffffff"), new PointF(600, 900)));
+        ticketImage.Mutate(x => x.DrawText("Stoel: " + ticket.Stoel, font, Rgba32.ParseHex("#ffffff"), new PointF(600, 970)));
+        ticketImage.Mutate(x => x.DrawImage(qrCodeImage, new Point(0, 0), 1));
+
+        return ticketImage;
     }
 }
+
+    // public static async Task<Bitmap> GenerateQRCode(Guid guid)
+    // {
+    //     QRCodeGenerator qrGenerator = new QRCodeGenerator();
+    //     QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
+    //     QRCode qrCode = new QRCode(qrCodeData);
+    //     Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.White, Color.SteelBlue, true);
+    //     return qrCodeImage;
+    // }
