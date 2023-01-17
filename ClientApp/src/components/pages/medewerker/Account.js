@@ -4,6 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import { TableRow } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
 
 
 export default function Account(props) {
@@ -11,7 +12,7 @@ export default function Account(props) {
     const voornaam = props.account.voornaam;
     const achternaam = props.account.achternaam;
     const email = props.account.email;
-    const telefoonnummer = props.account.telefoonnummer;
+    const telefoonnummer = props.account.phoneNumber;
     const rol = props.account.rol;
 
     return(
@@ -23,6 +24,7 @@ export default function Account(props) {
             <TableCell align="left">{email}</TableCell>
             <TableCell align="left">{telefoonnummer}</TableCell>
             <TableCell align="left">{rol}</TableCell>
+            
         </>
     )
 }

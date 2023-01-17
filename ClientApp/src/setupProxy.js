@@ -26,7 +26,9 @@ const context = [
     "/api/ticket/qrcode",
     "/api/medewerker",
     "/api/medewerker/accounts",
+    "/api/medewerker/accounts/add",
     "/api/medewerker/accounts/get",
+    "/api/medewerker/accounts/delete",
     "/api/medewerker/voorstellingen",
     "/api/medewerker/planning",
     

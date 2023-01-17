@@ -49,6 +49,60 @@ public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string u
     return Ok(user);
 }
 
+
+
+[HttpPost]
+[Route("accounts/add/")]
+public async Task<ActionResult> AddUser([FromBody] createUser created)
+{
+    Gebruiker gebruiker = new Gebruiker();
+    gebruiker.Voornaam = created.Voornaam;
+    gebruiker.Achternaam = created.Achternaam;
+    gebruiker.Email = created.Email;
+    gebruiker.PhoneNumber = created.Telefoon;
+    await _context.Gebruikers.AddAsync(gebruiker);
+    await _context.SaveChangesAsync();
+    return Ok();
+}
+
+[HttpDelete]
+[Route("accounts/delete/")]
+public async Task<ActionResult> DeleteUsers([FromQuery] string[] ids)
+{   
+    foreach (string id in ids) 
+    {
+        var gebruiker = await _context.Gebruikers.FindAsync(id);
+        if (gebruiker != null)
+        {
+            return NotFound();
+        }
+         _context.Gebruikers.Remove(gebruiker);
+         await _context.SaveChangesAsync();
+
+        
+    }
+    await _context.SaveChangesAsync();
+    return Ok();
+}
+
+
+[HttpPut]
+[Route("accounts/update/")]
+public async Task<ActionResult> UpdateUser([FromQuery] string id, [FromBody] String voornaam, String achternaam, String email, String telefoon)
+{
+    var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == id);
+    if (user == null)
+    {
+        return NotFound();
+    }
+    user.Voornaam = voornaam;
+    user.Achternaam = achternaam;
+    user.Email = email;
+    user.PhoneNumber = telefoon;
+    await _context.SaveChangesAsync();
+    return Ok();
+}
+
 [HttpGet]
 public async Task<ActionResult<List<Gebruiker>>> GetUsers()
 {
@@ -189,4 +243,9 @@ public async Task<ActionResult<IEnumerable<Gebruiker>>> Search(string id, string
     */
 }
 
-
+public class createUser{
+    public string Voornaam { get; set; }
+    public string Achternaam { get; set; }
+    public string Email { get; set; }
+    public string Telefoon { get; set; }
+}
