@@ -41,7 +41,7 @@ export default function AgendaPage() {
             <AgendaItem
                 voorstellingEvent={voorstellingEvent}
                 key={voorstellingEvent.id}
-            />
+            />          
         ));
     }
 

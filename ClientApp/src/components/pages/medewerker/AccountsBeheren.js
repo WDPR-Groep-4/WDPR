@@ -88,10 +88,18 @@ const [rows, setRows] = React.useState([]);
 const [currentPage, setCurrentPage] = useState(1);
 const [searchTerm, setSearchTerm] = React.useState(null);
 
+useEffect(() => {
+        getGebruikers();
+    }, [currentPage]);
+
 const handleChange = (event) => {
   setRol(event.target.value);
 };
 
+function pageChange(event, value) {
+  setCurrentPage(value);
+  window.scrollTo(0, 0);
+}
 
 
 const handleClick = (event) => {
@@ -139,9 +147,11 @@ const handleSearchClick = async () => {
   await search();
 };
 
-async function search(){
+
+function search(){
   setSearchTerm(document.getElementById("searchbox").value);
-  getGebruikersSearch();
+  zoekGebruiker(searchTerm);
+  
 }
 
 async function zoekGebruiker(searchTerm){
@@ -151,8 +161,9 @@ async function zoekGebruiker(searchTerm){
     if (response && response.data) {
       setRows(response.data);
   }
-
 }
+
+
 
 async function zoekGebruikerr(searchTerm){
   axios.get(`/api/medewerker/accounts/${searchTerm}`
@@ -175,7 +186,7 @@ async function getGebruikers() {
 }
 
 async function getGebruikersSearch() {
-  if(searchTerm ==null){
+  if(searchTerm ==null || searchTerm == ""){
     getGebruikers();
   }
   else{
@@ -185,29 +196,56 @@ async function getGebruikersSearch() {
 }
 
 function rowElement() {
-  getGebruikersSearch();
-  return rows.map((account) => (
-    <TableRow
-      hover
-      key={account.id}
-      role="checkbox"
-      aria-checked={isSelected(account.id)}
-      tabIndex={-1}
-      onClick={(event) => selectClick(event, account.id)}
-      selected={isSelected(account.id)}
-    >
-      <TableCell padding="checkbox">
-        <Checkbox
-          checked={isSelected(account.id)}
+  if (searchTerm==null || searchTerm=="") {
+    getGebruikers();
+  }
+  
+  if (rows.length > 1) {
+    return rows.map((account) => (
+      <TableRow
+        hover
+        key={account.id}
+        role="checkbox"
+        aria-checked={isSelected(account.id)}
+        tabIndex={-1}
+        onClick={(event) => selectClick(event, account.id)}
+        selected={isSelected(account.id)}
+      >
+        <TableCell padding="checkbox">
+          <Checkbox
+            checked={isSelected(account.id)}
+          />
+        </TableCell>
+        <Account
+            account={account}
+            key={account.id}
         />
-      </TableCell>
-      <Account
-          account={account}
-          key={account.id}
-      />
-    </TableRow>
-      
-  ));
+      </TableRow>
+    ));
+  }
+  else {
+    return(
+      <TableRow
+        hover
+        key={rows.id}
+        role="checkbox"
+        aria-checked={isSelected(rows.id)}
+        tabIndex={-1}
+        onClick={(event) => selectClick(event, rows.id)}
+        selected={isSelected(rows.id)}
+      >
+        <TableCell padding="checkbox">
+          <Checkbox
+            checked={isSelected(rows.id)}
+          />
+        </TableCell>
+        <Account
+            account={rows}
+            key={rows.id}
+        />
+      </TableRow>
+    );
+  }
 }
 
 async function addGebruiker(){
@@ -245,61 +283,7 @@ return (
               <AddIcon />
           </IconButton >
           <Popper id={id} open={open} anchorEl={anchorEl}>
-            <Card variant="outlined" component="form" asignItems="center" display="flex"
-              sx={{
-                '& .MuiTextField-root': { m: 3, },
-              }}
-              noValidate
-              autoComplete="off">
-              <form id = "addUserForm">
-                <Box sx={{display:'flex'}}>
-                  <TextField
-                    required
-                    id="voornaam"
-                    label="Voornaam"
-                    defaultValue=""
-                  />
-                  <TextField
-                    required
-                    id="achternaam"
-                    label="Achternaam"
-                    defaultValue=""
-                  />
-                  <TextField
-                    required
-                    id="email"
-                    label="Email"
-                    defaultValue=""
-                  />
-                  <TextField
-                    required
-                    id="telefoon"
-                    label="Telefoonnummer"
-                    defaultValue=""
-                  />
-                  <Box padding={3} >
-                    <FormControl sx={{width:100}}>
-                      <InputLabel id="demo-simple-select-label" >Rol</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="rol"
-                        value={rol}
-                        label="Rol"
-                        onChange={handleChange}
-                      >
-                        <MenuItem value={3}>Gebruiker</MenuItem>
-                        <MenuItem value={2}>Artiest</MenuItem>
-                        <MenuItem value={1}>Medewerker</MenuItem>
-                       </Select>
-                    </FormControl>
-                  </Box>
-                </Box>
-              </form>
-              <Box display={"flex"}>
-                <Button onClick={addGebruiker} variant="" fullWidth="true">Voeg toe</Button>
-              </Box>
-
-            </Card>
+            <AccountForm/>
           </Popper>
           <IconButton color="inherit">
               <DeleteIcon />
@@ -335,4 +319,68 @@ return (
   </TableContainer>
   </>
 );
+
+function AccountForm() {
+  return (
+    <Card variant="outlined" component="form" asignItems="center" display="flex"
+              sx={{
+                '& .MuiTextField-root': { m: 3, },
+              }}
+              noValidate
+              autoComplete="off">
+        <form id = "addUserForm">
+        <Box sx={{display:'flex'}}>
+            <TextField
+            required
+            id="voornaam"
+            label="Voornaam"
+            defaultValue=""
+            />
+            <TextField
+            required
+            id="achternaam"
+            label="Achternaam"
+            defaultValue=""
+            />
+            <TextField
+            required
+            id="email"
+            label="Email"
+            defaultValue=""
+            />
+            <TextField
+            required
+            id="telefoon"
+            label="Telefoonnummer"
+            defaultValue=""
+            />
+            <Box padding={3} >
+            <FormControl sx={{width:100}}>
+                <InputLabel id="demo-simple-select-label" >Rol</InputLabel>
+                <Select
+                labelId="demo-simple-select-label"
+                id="rol"
+                value={rol}
+                label="Rol"
+                onChange={handleChange}
+                >
+                <MenuItem value={3}>Gebruiker</MenuItem>
+                <MenuItem value={2}>Artiest</MenuItem>
+                <MenuItem value={1}>Medewerker</MenuItem>
+                </Select>
+            </FormControl>
+            </Box>
+        </Box>
+        </form>
+        <Box display={"flex"}>
+        <Button onClick={addGebruiker} variant="" fullWidth="true">Voeg toe</Button>
+        </Box>
+
+    </Card>
+    
+              
+  )
+
+}
+
 }

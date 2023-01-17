@@ -36,7 +36,7 @@ public async Task<ActionResult<Voorstelling>> GetShows()
 }
 
 [HttpGet]
-[Route("accounts/get/{userId}")]
+[Route("accounts/{userId}")]
 public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string userId)
 {
     var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == userId);
@@ -62,6 +62,7 @@ public async Task<ActionResult<List<Gebruiker>>> GetUsers()
     return Ok(users);
 }
 
+/*
 [HttpPost]
 [Route("accounts/add/")]
 public async Task<ActionResult<Gebruiker>> AddUser(Gebruiker gebruiker)
@@ -106,7 +107,7 @@ public async Task<ActionResult<Gebruiker>> UpdateUser(string id, Gebruiker gebru
 
 
 
-/*
+
 {
     var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == userId);
 
