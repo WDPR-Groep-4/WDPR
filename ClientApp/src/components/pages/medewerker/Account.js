@@ -11,13 +11,12 @@ export default function Account(props) {
     const voornaam = props.account.voornaam;
     const achternaam = props.account.achternaam;
     const email = props.account.email;
-    const telefoonnummer = props.account.telefoonnummer;
-    const rol = props.account.rol;
+    const telefoonnummer = props.account.phoneNumber;
+    const rol = props.account.Rol;
 
     return(
         <>
-            <TableCell component="th" scope="row">{id}
-            </TableCell>
+            <TableCell component="th" scope="row">{id}</TableCell>
             <TableCell align="left">{voornaam}</TableCell>
             <TableCell align="left">{achternaam}</TableCell>
             <TableCell align="left">{email}</TableCell>

@@ -49,6 +49,49 @@ public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string u
     return Ok(user);
 }
 
+[HttpPost]
+[Route("accounts/add/")]
+public async Task<ActionResult<Gebruiker>> AddUser([FromBody] string voornaam, string achternaam, 
+string email, string telefoon, int rol)
+{   
+    if (rol==1){
+        Medewerker medewerker = new Medewerker();
+        medewerker.Voornaam = voornaam;
+        medewerker.Achternaam = achternaam;
+        medewerker.Email = email;
+        medewerker.PhoneNumber = telefoon;
+        medewerker.Rol = "Medewerker";
+        await _context.Gebruikers.AddAsync(medewerker);
+        await _context.SaveChangesAsync();
+    return CreatedAtAction(nameof(SearchUser), new { id = medewerker.Id }, medewerker);
+    }
+    else if (rol==2){
+        Gebruiker gebruiker = new Gebruiker();
+        gebruiker.Voornaam = voornaam;
+        gebruiker.Achternaam = achternaam;
+        gebruiker.Email = email;
+        gebruiker.PhoneNumber = telefoon;
+        gebruiker.Rol = "Gast";
+        await _context.Gebruikers.AddAsync(gebruiker);
+        await _context.SaveChangesAsync();
+    return CreatedAtAction(nameof(SearchUser), new { id = gebruiker.Id }, gebruiker);
+    }
+    else if (rol==3){
+        Artiest artiest = new Artiest();
+        artiest.Voornaam = voornaam;
+        artiest.Achternaam = achternaam;
+        artiest.Email = email;
+        artiest.PhoneNumber = telefoon;
+        artiest.Rol = "Artiest";
+        await _context.Gebruikers.AddAsync(artiest);
+        await _context.SaveChangesAsync();
+    return CreatedAtAction(nameof(SearchUser), new { id = artiest.Id }, artiest);
+    }
+    else{
+        return BadRequest();
+    }
+}
+
 [HttpGet]
 public async Task<ActionResult<List<Gebruiker>>> GetUsers()
 {

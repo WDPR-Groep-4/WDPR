@@ -20,6 +20,9 @@ namespace Backend
         public DbSet<VoorstellingEvent> VoorstellingEvents { get; set; }
         public DbSet<Betaling> Betalingen { get; set; }
 
+        public DbSet<Artiest> Artiesten { get; set; }
+        public DbSet<Groep> Groepen { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,6 +35,14 @@ namespace Backend
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey<DatumBereik>(e => e.Id);
+                modelBuilder.Entity<Groep>()
+                .HasMany(g => g.Artiesten)
+                .WithMany(a => a.Groepen)
+                .UsingEntity(j => j.ToTable("GroepArtiest"));
+                modelBuilder.Entity<Artiest>()
+                .HasMany(a => a.Groepen)
+                .WithMany(g => g.Artiesten)
+                .UsingEntity(j => j.ToTable("GroepArtiest"));
         }
     }
 
