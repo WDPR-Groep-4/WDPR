@@ -35,6 +35,13 @@ import Checkbox from '@mui/material/Checkbox';
 
 import axios from 'axios';
 import { useEffect, useState } from "react";
+import { zoekGebruiker } from './ZoekGebruiker';
+import { changeTable } from './ZoekGebruiker';
+
+
+function createData(id, voornaam, achternaam, email, telefoonnummer, rol) {
+  return { id, voornaam, achternaam, email, telefoonnummer, rol};
+}
 
 const Search = styled('div')(({ theme }) => ({
 position: 'relative',
@@ -81,6 +88,9 @@ const [rows, setRows] = React.useState([]);
 const [currentPage, setCurrentPage] = useState(1);
 const [searchTerm, setSearchTerm] = React.useState(null);
 
+useEffect(() => {
+        getGebruikers();
+    }, [currentPage]);
 
 const handleChange = (event) => {
   setRol(event.target.value);
@@ -94,7 +104,6 @@ function pageChange(event, value) {
 
 const handleClick = (event) => {
   setAnchorEl(anchorEl ? null : event.currentTarget);
-  search();
 };
 
 const selectClick = (event, name) => {
@@ -135,7 +144,7 @@ const isSelected = (name) => selected.indexOf(name) !== -1;
 
   
 const handleSearchClick = async () => {
-  search();
+  await search();
 };
 
 
@@ -151,8 +160,6 @@ async function zoekGebruiker(searchTerm){
     });
     if (response && response.data) {
       setRows(response.data);
-      console.log(response.data);
-
   }
 }
 
@@ -189,11 +196,10 @@ async function getGebruikersSearch() {
 }
 
 function rowElement() {
-          
-  if (rows.length == 0) {
+  if (searchTerm==null || searchTerm=="") {
     getGebruikers();
   }
-
+  
   if (rows.length > 1) {
     return rows.map((account) => (
       <TableRow
@@ -217,7 +223,7 @@ function rowElement() {
       </TableRow>
     ));
   }
-  if (rows.length = 1) {
+  else {
     return(
       <TableRow
         hover
@@ -241,26 +247,14 @@ function rowElement() {
     );
   }
 }
-async function deleteGebruiker(){
-  const id = document.getElementById("id").value;
-  try {
-    const response = await axios.delete("/api/medewerker/accounts/", { id});
-    console.log(response.data);
-    // handle the response data here
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 
 async function addGebruiker(){
-  const voornaam = document.getElementById("voornaam").value;
-  const achternaam = document.getElementById("achternaam").value;
-  const email = document.getElementById("email").value;
+  const name = document.getElementById("voornaam").value;
+  const email = document.getElementById("achternaam").value;
+  const password = document.getElementById("email").value;
   const telefoon = document.getElementById("telefoon").value;
-  console.log(rol);
   try {
-    const response = await axios.post("/api/medewerker/accounts/add", { voornaam, achternaam, email, telefoon, rol});
+    const response = await axios.post("/api/medewerker/accounts/add/", { name, email, password, telefoon});
     console.log(response.data);
     // handle the response data here
   } catch (error) {
@@ -364,15 +358,15 @@ function AccountForm() {
             <FormControl sx={{width:100}}>
                 <InputLabel id="demo-simple-select-label" >Rol</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="rol"
-                  value={rol}
-                  label="Rol"
-                  onChange={handleChange}
-                  >
-                  <MenuItem value={3}>Gebruiker</MenuItem>
-                  <MenuItem value={2}>Artiest</MenuItem>
-                  <MenuItem value={1}>Medewerker</MenuItem>
+                labelId="demo-simple-select-label"
+                id="rol"
+                value={rol}
+                label="Rol"
+                onChange={handleChange}
+                >
+                <MenuItem value={3}>Gebruiker</MenuItem>
+                <MenuItem value={2}>Artiest</MenuItem>
+                <MenuItem value={1}>Medewerker</MenuItem>
                 </Select>
             </FormControl>
             </Box>
@@ -382,7 +376,11 @@ function AccountForm() {
         <Button onClick={addGebruiker} variant="" fullWidth="true">Voeg toe</Button>
         </Box>
 
-    </Card>     
+    </Card>
+    
+              
   )
+
 }
+
 }
