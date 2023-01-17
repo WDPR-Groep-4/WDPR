@@ -3,6 +3,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
 import DrawerCompleet from "./DrawerCompleet";
+import FilterSorteer from "./FilterSorteer";
 
 export default function FilterSortButton() {
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -19,7 +20,9 @@ export default function FilterSortButton() {
                 handleClose={handleClose}
                 anchorRef={anchorRef}
                 title="Filteren en sorteren"
-            ></DrawerCompleet>
+            >
+                <FilterSorteer />
+            </DrawerCompleet>
             <IconButton sx={{ p: 2 }} onClick={() => setOpenDrawer(!openDrawer)}>
                 <FilterListIcon />
             </IconButton>

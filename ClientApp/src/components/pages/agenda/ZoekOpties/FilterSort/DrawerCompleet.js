@@ -32,7 +32,7 @@ export default function DrawerCompleet(props) {
                 </IconButton>
             </Box>
             <Divider />
-            <Box></Box>
+            <Box>{props.children}</Box>
         </Drawer>
     );
 }
