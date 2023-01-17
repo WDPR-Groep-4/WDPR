@@ -5,6 +5,7 @@ import config from "../../../config.json";
 import AgendaItem from "./AgendaItem";
 import axios from "axios";
 import Footer from "../../footer/Footer";
+import AgendaOptiesBar from "./ZoekOpties/AgendaOptiesBar";
 
 export default function AgendaPage() {
     document.title = "Agenda" + config.title;
@@ -52,39 +53,43 @@ export default function AgendaPage() {
 
     return (
         <div>
-            <Container maxWidth="xl">
+            <Container maxWidth="xl" sx={{ mb: 2 }}>
                 <div>
                     <Typography sx={{ fontSize: 42, fontWeight: "medium" }}>
                         Agenda
                     </Typography>
+                    <AgendaOptiesBar />
                 </div>
+            </Container>
+            <Container maxWidth="xl" sx={{ backgroundColor: "#f5f5f5" }}>
                 <div
                     style={{
-                        height: "300px",
-                        justifyContent: "center",
-                        display: "block",
-                        pt: 10,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "1rem",
+                        padding: "1rem 0",
                     }}
                 >
                     {voorstellingEventElements()}
-                    <Box
-                        sx={{
-                            width: "100%",
-                            my: 4,
-                            display: "flex",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <Pagination
-                            count={TotalPages}
-                            variant="outlined"
-                            shape="rounded"
-                            onChange={handleChange}
-                        />
-                    </Box>
                 </div>
+                <Box
+                    sx={{
+                        width: "100%",
+                        py: 4,
+
+                        display: "flex",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Pagination
+                        count={TotalPages}
+                        variant="outlined"
+                        shape="rounded"
+                        onChange={handleChange}
+                    />
+                </Box>
             </Container>
-            {/* <Footer /> */}
+            <Footer />
         </div>
     );
 }

@@ -41,109 +41,105 @@ export default function AgendaItem(props) {
     }
 
     return (
-        <>
-            <Container sx={{ py: 2 }}>
-                <Card>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            gap: 2,
-                            flexDirection: {
-                                sm: "column-reverse",
-                                md: "row",
-                                xs: "column",
-                            },
-                            alignItems: "flex-start",
+        <Card>
+            <Box
+                sx={{
+                    display: "flex",
+                    gap: 2,
+                    flexDirection: {
+                        sm: "column-reverse",
+                        md: "row",
+                        xs: "column",
+                    },
+                    alignItems: "flex-start",
+                }}
+            >
+                <Box sx={{ display: "flex" }}>
+                    <img
+                        src={voorstelling.afbeelding}
+                        alt={voorstelling.titel}
+                        style={{
+                            maxWidth: "12rem",
+                            maxHeight: "12rem",
+                            height: "20vh",
+                            width: "20vh",
                         }}
-                    >
-                        <Box sx={{ display: "flex" }}>
-                            <img
-                                src={voorstelling.afbeelding}
-                                alt={voorstelling.titel}
-                                style={{
-                                    maxWidth: "12rem",
-                                    maxHeight: "12rem",
-                                    height: "20vh",
-                                    width: "20vh",
-                                }}
-                            />
-                            <Box>
-                                <Box
-                                    sx={{
-                                        py: 3,
-                                        alignContent: "center",
-                                        textAlign: "center",
-                                        fontWeight: "bold",
-                                        m: 1,
-                                        fontSize: 40,
-                                        height: 75,
-                                        width: 150,
-                                    }}
-                                >
-                                    {GetDatumString(datum)}
-                                </Box>
-                                <Box
-                                    sx={{
-                                        py: 2,
-                                        textAlign: "center",
-                                        fontWeight: "medium",
-                                        m: 1,
-                                        fontSize: 20,
-                                        height: 50,
-                                    }}
-                                >
-                                    <Typography
-                                        sx={{ fontSize: 20, fontWeight: "regular" }}
-                                        color="black"
-                                        gutterBottom
-                                    >
-                                        {getTijd(datum) + " "}
-                                        {"zaal: " + voorstellingEvent.zaal}
-                                    </Typography>
-                                </Box>
-                            </Box>
+                    />
+                    <Box>
+                        <Box
+                            sx={{
+                                py: 3,
+                                alignContent: "center",
+                                textAlign: "center",
+                                fontWeight: "bold",
+                                m: 1,
+                                fontSize: 40,
+                                height: 75,
+                                width: 150,
+                            }}
+                        >
+                            {GetDatumString(datum)}
                         </Box>
-                        <Box>
-                            <Box
-                                sx={{
-                                    py: 2,
-                                    px: 2,
-                                    maxHeight: "12rem",
-                                    overflow: "hidden",
-                                }}
+                        <Box
+                            sx={{
+                                py: 2,
+                                textAlign: "center",
+                                fontWeight: "medium",
+                                m: 1,
+                                fontSize: 20,
+                                height: 50,
+                            }}
+                        >
+                            <Typography
+                                sx={{ fontSize: 20, fontWeight: "regular" }}
+                                color="black"
+                                gutterBottom
                             >
-                                <Typography
-                                    sx={{ fontSize: "2vh", fontWeight: "medium" }}
-                                    color="black"
-                                    gutterBottom
-                                >
-                                    {voorstelling.titel}
-                                </Typography>
-                                <Typography
-                                    sx={{ fontSize: "1.5vh" }}
-                                    maxWidth="500"
-                                    maxHeight="100"
-                                    color="black"
-                                    gutterBottom
-                                >
-                                    {voorstelling.beschrijving}
-                                </Typography>
-                            </Box>
+                                {getTijd(datum) + " "}
+                                {"zaal: " + voorstellingEvent.zaal}
+                            </Typography>
                         </Box>
                     </Box>
-                    <Button
-                        sx={{ height: 50, fontSize: 20, borderRadius: 0 }}
-                        size="large"
-                        color="primary"
-                        fullWidth={true}
-                        variant="contained"
-                        component={Link}
-                        to={"/voorstelling/" + voorstellingEvent.id}
+                </Box>
+                <Box>
+                    <Box
+                        sx={{
+                            py: 2,
+                            px: 2,
+                            maxHeight: "12rem",
+                            overflow: "hidden",
+                        }}
                     >
-                        Tickets
-                    </Button>
-                </Card>
-            </Container>
-        </>
+                        <Typography
+                            sx={{ fontSize: "2vh", fontWeight: "medium" }}
+                            color="black"
+                            gutterBottom
+                        >
+                            {voorstelling.titel}
+                        </Typography>
+                        <Typography
+                            sx={{ fontSize: "1.5vh" }}
+                            maxWidth="500"
+                            maxHeight="100"
+                            color="black"
+                            gutterBottom
+                        >
+                            {voorstelling.beschrijving}
+                        </Typography>
+                    </Box>
+                </Box>
+            </Box>
+            <Button
+                sx={{ height: 50, fontSize: 20, borderRadius: 0 }}
+                size="large"
+                color="primary"
+                fullWidth={true}
+                variant="contained"
+                component={Link}
+                to={"/voorstelling/" + voorstellingEvent.id}
+            >
+                Tickets
+            </Button>
+        </Card>
     );
 }
