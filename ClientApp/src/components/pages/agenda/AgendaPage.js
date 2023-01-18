@@ -16,9 +16,11 @@ export default function AgendaPage() {
     const TotalPages = header ? JSON.parse(header).TotalPages : 0;
     const [zoekInput, setZoekInput] = useState("");
     const [filters, setFilters] = useState({
-        genre: "",
+        genre: "Alle",
     });
-    const [sorteren, setSorteren] = useState("datum");
+    const [sorteren, setSorteren] = useState("Datum");
+
+    console.log("filters", filters);
 
     useEffect(() => {
         async function getVoorstellingEvents() {
@@ -27,8 +29,9 @@ export default function AgendaPage() {
                     params: {
                         PageSize: pageSize,
                         PageNumber: currentPage,
-                        sortBy: sorteren,
+                        OrderBy: sorteren,
                         SearchQuery: zoekInput,
+                        Genre: filters.genre,
                     },
                 })
                 .catch((err) => {
@@ -41,7 +44,7 @@ export default function AgendaPage() {
             return response.data;
         }
         getVoorstellingEvents();
-    }, [currentPage, zoekInput, sorteren]);
+    }, [currentPage, zoekInput, sorteren, filters.genre]);
 
     function voorstellingEventElements() {
         return voorstellingEvents.map((voorstellingEvent) => (

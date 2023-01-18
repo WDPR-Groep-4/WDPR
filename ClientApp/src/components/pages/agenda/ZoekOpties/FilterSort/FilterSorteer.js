@@ -10,8 +10,7 @@ import {
 } from "@mui/material";
 
 export default function FilterSorteer(props) {
-    const { filters, setFilters, sorteren, setSorteren, openDrawer, setOpenDrawer } =
-        props;
+    const { filters, setFilters, sorteren, setSorteren, setOpenDrawer } = props;
 
     function handleSubmit() {
         setOpenDrawer(false);
@@ -32,10 +31,10 @@ export default function FilterSorteer(props) {
                         label="Sorteren"
                         onChange={(e) => setSorteren(e.target.value)}
                     >
-                        <MenuItem value={"datum"}>Datum</MenuItem>
-                        <MenuItem value={"naam"}>Populariteit</MenuItem>
-                        <MenuItem value="prijslaaghoog">Prijs laag - hoog</MenuItem>
-                        <MenuItem value="prijshooglaag">Prijs hoog - laag</MenuItem>
+                        <MenuItem value={"Datum"}>Datum</MenuItem>
+                        <MenuItem value={"Titel"}>Titel</MenuItem>
+                        <MenuItem value="Prijs asc">Prijs laag - hoog</MenuItem>
+                        <MenuItem value="Prijs desc">Prijs hoog - laag</MenuItem>
                     </Select>
                 </FormControl>
             </>
@@ -59,10 +58,11 @@ export default function FilterSorteer(props) {
                             setFilters({ ...filters, genre: e.target.value })
                         }
                     >
+                        <MenuItem value={"Alle"}>Alle</MenuItem>
                         <MenuItem value={"comedy"}>Comedy</MenuItem>
                         <MenuItem value={"musical"}>Musical</MenuItem>
                         <MenuItem value={"drama"}>Drama</MenuItem>
-                        <MenuItem value={"kinder"}>Kinder</MenuItem>
+                        <MenuItem value={"kinderen"}>Kinderen</MenuItem>
                         <MenuItem value={"klassiek"}>Klassiek</MenuItem>
                         <MenuItem value={"pop"}>Pop</MenuItem>
                     </Select>
@@ -77,7 +77,7 @@ export default function FilterSorteer(props) {
             <Divider />
             <Filters />
             <Button variant="contained" sx={{ width: "100%" }} onClick={handleSubmit}>
-                Toepassen
+                Terug
             </Button>
         </Box>
     );
