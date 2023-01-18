@@ -7,13 +7,9 @@ import {
     Typography,
     Divider,
 } from "@mui/material";
-import { useState } from "react";
 
-export default function FilterSorteer() {
-    const [sorteren, setSorteren] = useState("datum");
-    const [filters, setFilters] = useState({
-        genre: "",
-    });
+export default function FilterSorteer(props) {
+    const { filters, setFilters, sorteren, setSorteren } = props;
 
     function SorteerSelect() {
         return (
@@ -57,11 +53,11 @@ export default function FilterSorteer() {
                         }
                     >
                         <MenuItem value={"comedy"}>Comedy</MenuItem>
-                        <MenuItem value={"drama"}>Musical</MenuItem>
+                        <MenuItem value={"musical"}>Musical</MenuItem>
                         <MenuItem value={"drama"}>Drama</MenuItem>
-                        <MenuItem value={"drama"}>Kinder</MenuItem>
-                        <MenuItem value={"drama"}>Klassiek</MenuItem>
-                        <MenuItem value={"drama"}>Pop</MenuItem>
+                        <MenuItem value={"kinder"}>Kinder</MenuItem>
+                        <MenuItem value={"klassiek"}>Klassiek</MenuItem>
+                        <MenuItem value={"pop"}>Pop</MenuItem>
                     </Select>
                 </FormControl>
             </>

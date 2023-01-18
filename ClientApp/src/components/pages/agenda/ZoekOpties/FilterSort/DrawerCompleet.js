@@ -1,23 +1,9 @@
-import {
-    Drawer,
-    Typography,
-    Divider,
-    Box,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    IconButton,
-} from "@mui/material";
+import { Drawer, Typography, Divider, Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function DrawerCompleet(props) {
     return (
-        <Drawer
-            open={props.openDrawer}
-            anchorEl={props.anchorRef.current}
-            onBackdropClick={props.handleClose}
-        >
+        <Drawer open={props.openDrawer} onBackdropClick={props.handleClose}>
             <Box
                 sx={{
                     display: "flex",

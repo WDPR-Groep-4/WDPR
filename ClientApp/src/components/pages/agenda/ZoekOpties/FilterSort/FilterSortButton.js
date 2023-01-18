@@ -1,13 +1,12 @@
 import { IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useState } from "react";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import DrawerCompleet from "./DrawerCompleet";
 import FilterSorteer from "./FilterSorteer";
 
-export default function FilterSortButton() {
+export default function FilterSortButton(props) {
     const [openDrawer, setOpenDrawer] = useState(false);
-    const anchorRef = useRef(null);
 
     function handleClose() {
         setOpenDrawer(false);
@@ -18,12 +17,11 @@ export default function FilterSortButton() {
             <DrawerCompleet
                 openDrawer={openDrawer}
                 handleClose={handleClose}
-                anchorRef={anchorRef}
                 title="Filteren en sorteren"
             >
-                <FilterSorteer />
+                {props.children}
             </DrawerCompleet>
-            <IconButton sx={{ p: 2 }} onClick={() => setOpenDrawer(!openDrawer)}>
+            <IconButton sx={{ p: 1 }} onClick={() => setOpenDrawer(!openDrawer)}>
                 <FilterListIcon />
             </IconButton>
         </>
