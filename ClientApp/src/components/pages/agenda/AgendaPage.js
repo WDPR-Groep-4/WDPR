@@ -14,6 +14,11 @@ export default function AgendaPage() {
     const [header, setHeader] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const TotalPages = header ? JSON.parse(header).TotalPages : 0;
+    const [zoekInput, setZoekInput] = useState("");
+    const [filters, setFilters] = useState({
+        genre: "",
+    });
+    const [sorteren, setSorteren] = useState("datum");
 
     useEffect(() => {
         async function getVoorstellingEvents() {
@@ -22,6 +27,8 @@ export default function AgendaPage() {
                     params: {
                         PageSize: pageSize,
                         PageNumber: currentPage,
+                        sortBy: sorteren,
+                        SearchQuery: zoekInput,
                     },
                 })
                 .catch((err) => {
@@ -34,7 +41,7 @@ export default function AgendaPage() {
             return response.data;
         }
         getVoorstellingEvents();
-    }, [currentPage]);
+    }, [currentPage, zoekInput, sorteren]);
 
     function voorstellingEventElements() {
         return voorstellingEvents.map((voorstellingEvent) => (
@@ -57,7 +64,14 @@ export default function AgendaPage() {
                     <Typography sx={{ fontSize: 42, fontWeight: "medium" }}>
                         Agenda
                     </Typography>
-                    <AgendaOptiesBar />
+                    <AgendaOptiesBar
+                        zoekInput={zoekInput}
+                        setZoekInput={setZoekInput}
+                        filters={filters}
+                        setFilters={setFilters}
+                        sorteren={sorteren}
+                        setSorteren={setSorteren}
+                    />
                 </div>
             </Container>
             <Container maxWidth="xl" sx={{ backgroundColor: "#f5f5f5" }}>

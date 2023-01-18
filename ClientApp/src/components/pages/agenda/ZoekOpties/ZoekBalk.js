@@ -1,22 +1,30 @@
 import { Box, Button, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useRef } from "react";
 
 export default function ZoekBalk(props) {
-    const { zoekInput, setZoekInput } = props;
+    const { setZoekInput } = props;
+    const form = useRef(null);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        const formData = form.current;
+        setZoekInput(formData.zoek.value);
+    }
 
     return (
         <Box sx={{ display: "flex", height: "max-content" }}>
-            <TextField
-                name="email"
-                type="email"
-                placeholder="Zoek voor voorstellingen"
-                label="Zoek"
-                sx={{ width: "100%" }}
-                size="small"
-                value={zoekInput}
-                onChange={(e) => setZoekInput(e.target.value)}
-            />
-            <Button variant="contained">
+            <form ref={form}>
+                <TextField
+                    name="zoek"
+                    type="zoek"
+                    placeholder="Zoek voor voorstellingen"
+                    label="Zoek"
+                    sx={{ width: "100%" }}
+                    size="small"
+                />
+            </form>
+            <Button variant="contained" onClick={handleSubmit}>
                 <SearchIcon />
             </Button>
         </Box>

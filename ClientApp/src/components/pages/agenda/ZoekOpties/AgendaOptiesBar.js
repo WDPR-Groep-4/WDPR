@@ -4,13 +4,8 @@ import ZoekBalk from "./ZoekBalk";
 import { useState } from "react";
 import FilterSorteer from "./FilterSort/FilterSorteer";
 
-export default function AgendaOptiesBar() {
-    const [zoekInput, setZoekInput] = useState("");
-    const [filters, setFilters] = useState({
-        genre: "",
-        tot: null,
-    });
-    const [sorteren, setSorteren] = useState("datum");
+export default function AgendaOptiesBar(props) {
+    const { zoekInput, setZoekInput, filters, setFilters, sorteren, setSorteren } = props;
     const [openDrawer, setOpenDrawer] = useState(false);
 
     return (

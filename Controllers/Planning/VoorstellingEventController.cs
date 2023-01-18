@@ -29,7 +29,6 @@ public class VoorstellingEventController : ControllerBase
         {
             voorstellingEvents = voorstellingEvents.Where(e => e.Voorstelling.Genre == voorstellingEventParameters.Genre);
         }
-
         if (!string.IsNullOrEmpty(voorstellingEventParameters.SearchQuery))
         {
             ZoekVoorstelling(ref voorstellingEvents, voorstellingEventParameters.SearchQuery);
@@ -173,7 +172,7 @@ public class VoorstellingEventParameters : QueryStringParameters
         "Comedy", "Musical", "Drama", "Kinderen", "Klassiek", "Pop", ""
     };
     public bool GenreCorrect => Genres.Contains(Genre);
-    public string SearchQuery { get; set; } = "";
+    public string? SearchQuery { get; set; } = "";
 }
 
 
