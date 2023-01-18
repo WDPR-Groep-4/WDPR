@@ -27,10 +27,23 @@ public class VoorstellingEventController : ControllerBase
             voorstellingEvents = voorstellingEvents.Where(e => e.Voorstelling.Genre == voorstellingEventParameters.Genre);
         }
 
+        if (!string.IsNullOrEmpty(voorstellingEventParameters.SearchQuery))
+        {
+            ZoekVoorstelling(ref voorstellingEvents, voorstellingEventParameters.SearchQuery);
+        }
+
         return PagedList<VoorstellingEvent>.ToPagedList(voorstellingEvents
             .Include(e => e.Voorstelling)
             .Include(e => e.DatumBereik)
             .OrderBy(e => e.DatumBereik.Van), voorstellingEventParameters.PageNumber, voorstellingEventParameters.PageSize);
+    }
+
+    public void ZoekVoorstelling(ref IQueryable<VoorstellingEvent> voorstellingEvents, string searchQuery)
+    {
+        //search titel en beschrijving and ignore case
+        voorstellingEvents = voorstellingEvents.Where(e => e.Voorstelling.Titel.ToLower()
+        .Contains(searchQuery.ToLower()) || e.Voorstelling.Beschrijving.ToLower()
+        .Contains(searchQuery.ToLower()));
     }
 
     [HttpGet]
@@ -104,6 +117,7 @@ public class VoorstellingEventParameters : QueryStringParameters
         "Comedy", "Musical", "Drama", "Kinderen", "Klassiek", "Pop", ""
     };
     public bool GenreCorrect => Genres.Contains(Genre);
+    public string SearchQuery { get; set; } = "";
 }
 
 
