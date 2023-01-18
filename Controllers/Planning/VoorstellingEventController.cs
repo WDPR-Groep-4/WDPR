@@ -1,6 +1,9 @@
+using System.Reflection;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Linq.Dynamic.Core;
 
 
 namespace Backend;
@@ -32,10 +35,12 @@ public class VoorstellingEventController : ControllerBase
             ZoekVoorstelling(ref voorstellingEvents, voorstellingEventParameters.SearchQuery);
         }
 
+        ApplySort(ref voorstellingEvents, voorstellingEventParameters.OrderBy);
+
         return PagedList<VoorstellingEvent>.ToPagedList(voorstellingEvents
             .Include(e => e.Voorstelling)
-            .Include(e => e.DatumBereik)
-            .OrderBy(e => e.DatumBereik.Van), voorstellingEventParameters.PageNumber, voorstellingEventParameters.PageSize);
+            .Include(e => e.DatumBereik),
+             voorstellingEventParameters.PageNumber, voorstellingEventParameters.PageSize);
     }
 
     public void ZoekVoorstelling(ref IQueryable<VoorstellingEvent> voorstellingEvents, string searchQuery)
@@ -44,6 +49,46 @@ public class VoorstellingEventController : ControllerBase
         voorstellingEvents = voorstellingEvents.Where(e => e.Voorstelling.Titel.ToLower()
         .Contains(searchQuery.ToLower()) || e.Voorstelling.Beschrijving.ToLower()
         .Contains(searchQuery.ToLower()));
+    }
+
+    private void ApplySort(ref IQueryable<VoorstellingEvent> voorstellingEvents, string orderByQueryString)
+    {
+        if (!voorstellingEvents.Any())
+            return;
+        if (string.IsNullOrWhiteSpace(orderByQueryString))
+        {
+            voorstellingEvents = voorstellingEvents.OrderBy(x => x.DatumBereik.Van);
+            return;
+        }
+        var orderParams = orderByQueryString.Trim().Split(',');
+        var propertyInfos = typeof(VoorstellingEvent).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var orderQueryBuilder = new StringBuilder();
+        foreach (var param in orderParams)
+        {
+            if (string.IsNullOrWhiteSpace(param))
+                continue;
+            var propertyFromQueryName = param.Split(" ")[0];
+
+            if (propertyFromQueryName == "prijs")
+            {
+                propertyFromQueryName = "Voorstelling.prijzenPerRang[0].prijs";
+            }
+
+            var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.InvariantCultureIgnoreCase));
+            if (objectProperty == null)
+                continue;
+            var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
+            orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder}, ");
+            _logger.LogInformation($"Ordering by {objectProperty.Name.ToString()} {sortingOrder}");
+        }
+        var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
+        if (string.IsNullOrWhiteSpace(orderQuery))
+        {
+            _logger.LogWarning($"Could not parse '{orderByQueryString}' into a valid order query");
+            voorstellingEvents = voorstellingEvents.OrderBy(x => x.DatumBereik.Van);
+            return;
+        }
+        voorstellingEvents = voorstellingEvents.OrderBy(orderQuery);
     }
 
     [HttpGet]
@@ -108,10 +153,16 @@ public class VoorstellingEventController : ControllerBase
             id = voorstellingEvent.Id
         }, voorstellingEvent);
     }
+
+
 }
 
 public class VoorstellingEventParameters : QueryStringParameters
 {
+    public VoorstellingEventParameters()
+    {
+        OrderBy = "DatumBereik.Van";
+    }
     public string Genre { get; set; } = "";
     public List<string> Genres { get; set; } = new List<string>(){
         "Comedy", "Musical", "Drama", "Kinderen", "Klassiek", "Pop", ""
