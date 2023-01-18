@@ -55,9 +55,19 @@ public class VoorstellingEventController : ControllerBase
     {
         if (!voorstellingEvents.Any())
             return;
-        if (string.IsNullOrWhiteSpace(orderByQueryString))
+        if (string.IsNullOrWhiteSpace(orderByQueryString) || orderByQueryString == "Datum")
         {
             voorstellingEvents = voorstellingEvents.OrderBy(x => x.DatumBereik.Van);
+            return;
+        }
+        if (orderByQueryString == "Prijs asc")
+        {
+            voorstellingEvents = voorstellingEvents.OrderBy(x => x.Voorstelling.PrijzenPerRang.First().Prijs);
+            return;
+        }
+        if (orderByQueryString == "Prijs desc")
+        {
+            voorstellingEvents = voorstellingEvents.OrderByDescending(x => x.Voorstelling.PrijzenPerRang.First().Prijs);
             return;
         }
         var orderParams = orderByQueryString.Trim().Split(',');
@@ -68,11 +78,6 @@ public class VoorstellingEventController : ControllerBase
             if (string.IsNullOrWhiteSpace(param))
                 continue;
             var propertyFromQueryName = param.Split(" ")[0];
-
-            if (propertyFromQueryName == "prijs")
-            {
-                propertyFromQueryName = "Voorstelling.prijzenPerRang[0].prijs";
-            }
 
             var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.InvariantCultureIgnoreCase));
             if (objectProperty == null)
@@ -161,7 +166,7 @@ public class VoorstellingEventParameters : QueryStringParameters
 {
     public VoorstellingEventParameters()
     {
-        OrderBy = "DatumBereik.Van";
+        OrderBy = "Datum";
     }
     public string Genre { get; set; } = "";
     public List<string> Genres { get; set; } = new List<string>(){
