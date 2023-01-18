@@ -1,4 +1,4 @@
-import { Box, Button, Card, Container, Typography } from "@mui/material";
+import { Box, Button, Card, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function AgendaItem(props) {
@@ -7,7 +7,6 @@ export default function AgendaItem(props) {
     const datum = voorstellingEvent.datumBereik.van;
 
     function GetDatumString(datum) {
-        const jaar = datum.split("-")[0];
         const maand = datum.split("-")[1];
         const dag = datum.split("-")[2].split("T")[0];
 

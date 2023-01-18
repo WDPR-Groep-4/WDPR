@@ -16,26 +16,25 @@ export default function AgendaPage() {
     const TotalPages = header ? JSON.parse(header).TotalPages : 0;
 
     useEffect(() => {
+        async function getVoorstellingEvents() {
+            const response = await axios
+                .get("api/voorstellingevent", {
+                    params: {
+                        PageSize: pageSize,
+                        PageNumber: currentPage,
+                    },
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            if (response && response.data) {
+                setVoorstellingEvents(response.data);
+                setHeader(response.headers["x-pagination"]);
+            }
+            return response.data;
+        }
         getVoorstellingEvents();
     }, [currentPage]);
-
-    async function getVoorstellingEvents() {
-        const response = await axios
-            .get("api/voorstellingevent", {
-                params: {
-                    PageSize: pageSize,
-                    PageNumber: currentPage,
-                },
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        if (response && response.data) {
-            setVoorstellingEvents(response.data);
-            setHeader(response.headers["x-pagination"]);
-        }
-        return response.data;
-    }
 
     function voorstellingEventElements() {
         return voorstellingEvents.map((voorstellingEvent) => (
