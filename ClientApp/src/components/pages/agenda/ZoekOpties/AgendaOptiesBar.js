@@ -8,6 +8,7 @@ export default function AgendaOptiesBar() {
     const [zoekInput, setZoekInput] = useState("");
     const [filters, setFilters] = useState({
         genre: "",
+        tot: null,
     });
     const [sorteren, setSorteren] = useState("datum");
     const [openDrawer, setOpenDrawer] = useState(false);

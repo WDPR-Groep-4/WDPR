@@ -20,7 +20,14 @@ public class VoorstellingEventController : ControllerBase
 
     public PagedList<VoorstellingEvent> GetPagedVoorstellingEvents(VoorstellingEventParameters voorstellingEventParameters)
     {
-        return PagedList<VoorstellingEvent>.ToPagedList(_context.Events.OfType<VoorstellingEvent>()
+        var voorstellingEvents = _context.Events.OfType<VoorstellingEvent>();
+
+        if (!string.IsNullOrEmpty(voorstellingEventParameters.Genre))
+        {
+            voorstellingEvents = voorstellingEvents.Where(e => e.Voorstelling.Genre == voorstellingEventParameters.Genre);
+        }
+
+        return PagedList<VoorstellingEvent>.ToPagedList(voorstellingEvents
             .Include(e => e.Voorstelling)
             .Include(e => e.DatumBereik)
             .OrderBy(e => e.DatumBereik.Van), voorstellingEventParameters.PageNumber, voorstellingEventParameters.PageSize);
@@ -29,6 +36,11 @@ public class VoorstellingEventController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<VoorstellingEvent>>> GetVoorstellingEvents([FromQuery] VoorstellingEventParameters VoorstellingEventParameters)
     {
+        if (!VoorstellingEventParameters.GenreCorrect)
+        {
+            return BadRequest("Genre is niet correct");
+        }
+
         var voorstellingEvents = GetPagedVoorstellingEvents(VoorstellingEventParameters);
         if (voorstellingEvents == null)
         {
@@ -85,16 +97,13 @@ public class VoorstellingEventController : ControllerBase
     }
 }
 
-public class VoorstellingEventParameters
+public class VoorstellingEventParameters : QueryStringParameters
 {
-    const int MaxPageSize = 20;
-    public int PageNumber { get; set; } = 1;
-
-    private int _pageSize = 5;
-    public int PageSize
-    {
-        get { return _pageSize; }
-        set { _pageSize = (value > MaxPageSize) ? MaxPageSize : value; }
-    }
+    public string Genre { get; set; } = "";
+    public List<string> Genres { get; set; } = new List<string>(){
+        "Comedy", "Musical", "Drama", "Kinderen", "Klassiek", "Pop", ""
+    };
+    public bool GenreCorrect => Genres.Contains(Genre);
 }
+
 
