@@ -25,15 +25,23 @@ public class VoorstellingEventController : ControllerBase
     {
         var voorstellingEvents = _context.Events.OfType<VoorstellingEvent>();
 
+        //filter op genre
+        if (voorstellingEventParameters.Genre == "Alle")
+        {
+            voorstellingEventParameters.Genre = "";
+        }
         if (!string.IsNullOrEmpty(voorstellingEventParameters.Genre))
         {
-            voorstellingEvents = voorstellingEvents.Where(e => e.Voorstelling.Genre == voorstellingEventParameters.Genre);
+            voorstellingEvents = voorstellingEvents.Where(e => e.Voorstelling.Genre.ToLower() == voorstellingEventParameters.Genre.ToLower());
         }
+
+        //Zoeken
         if (!string.IsNullOrEmpty(voorstellingEventParameters.SearchQuery))
         {
             ZoekVoorstelling(ref voorstellingEvents, voorstellingEventParameters.SearchQuery);
         }
 
+        //Sorteren
         ApplySort(ref voorstellingEvents, voorstellingEventParameters.OrderBy);
 
         return PagedList<VoorstellingEvent>.ToPagedList(voorstellingEvents
@@ -44,7 +52,7 @@ public class VoorstellingEventController : ControllerBase
 
     public void ZoekVoorstelling(ref IQueryable<VoorstellingEvent> voorstellingEvents, string searchQuery)
     {
-        //search titel en beschrijving and ignore case
+        //zoek op titel en beschrijving
         voorstellingEvents = voorstellingEvents.Where(e => e.Voorstelling.Titel.ToLower()
         .Contains(searchQuery.ToLower()) || e.Voorstelling.Beschrijving.ToLower()
         .Contains(searchQuery.ToLower()));
@@ -67,6 +75,11 @@ public class VoorstellingEventController : ControllerBase
         if (orderByQueryString == "Prijs desc")
         {
             voorstellingEvents = voorstellingEvents.OrderByDescending(x => x.Voorstelling.PrijzenPerRang.First().Prijs);
+            return;
+        }
+        if (orderByQueryString == "Titel")
+        {
+            voorstellingEvents = voorstellingEvents.OrderBy(x => x.Voorstelling.Titel);
             return;
         }
         var orderParams = orderByQueryString.Trim().Split(',');
@@ -169,9 +182,9 @@ public class VoorstellingEventParameters : QueryStringParameters
     }
     public string Genre { get; set; } = "";
     public List<string> Genres { get; set; } = new List<string>(){
-        "Comedy", "Musical", "Drama", "Kinderen", "Klassiek", "Pop", ""
+        "comedy", "musical", "drama", "kinderen", "klassiek", "pop", "alle"
     };
-    public bool GenreCorrect => Genres.Contains(Genre);
+    public bool GenreCorrect => Genres.Contains(Genre.ToLower());
     public string? SearchQuery { get; set; } = "";
 }
 
