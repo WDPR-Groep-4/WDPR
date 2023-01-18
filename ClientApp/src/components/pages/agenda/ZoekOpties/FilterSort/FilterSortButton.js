@@ -6,7 +6,7 @@ import DrawerCompleet from "./DrawerCompleet";
 import FilterSorteer from "./FilterSorteer";
 
 export default function FilterSortButton(props) {
-    const [openDrawer, setOpenDrawer] = useState(false);
+    const { openDrawer, setOpenDrawer } = props;
 
     function handleClose() {
         setOpenDrawer(false);

@@ -10,15 +10,18 @@ export default function AgendaOptiesBar() {
         genre: "",
     });
     const [sorteren, setSorteren] = useState("datum");
+    const [openDrawer, setOpenDrawer] = useState(false);
 
     return (
         <Box sx={{ display: "flex" }}>
-            <FilterSortButton>
+            <FilterSortButton openDrawer={openDrawer} setOpenDrawer={setOpenDrawer}>
                 <FilterSorteer
                     filters={filters}
                     setFilters={setFilters}
                     sorteren={sorteren}
                     setSorteren={setSorteren}
+                    openDrawer={openDrawer}
+                    setOpenDrawer={setOpenDrawer}
                 />
             </FilterSortButton>
             <ZoekBalk zoekInput={zoekInput} setZoekInput={setZoekInput} />

@@ -6,10 +6,16 @@ import {
     MenuItem,
     Typography,
     Divider,
+    Button,
 } from "@mui/material";
 
 export default function FilterSorteer(props) {
-    const { filters, setFilters, sorteren, setSorteren } = props;
+    const { filters, setFilters, sorteren, setSorteren, openDrawer, setOpenDrawer } =
+        props;
+
+    function handleSubmit() {
+        setOpenDrawer(false);
+    }
 
     function SorteerSelect() {
         return (
@@ -28,7 +34,8 @@ export default function FilterSorteer(props) {
                     >
                         <MenuItem value={"datum"}>Datum</MenuItem>
                         <MenuItem value={"naam"}>Populariteit</MenuItem>
-                        <MenuItem value={"prijs"}>Prijs</MenuItem>
+                        <MenuItem value="prijslaaghoog">Prijs laag - hoog</MenuItem>
+                        <MenuItem value="prijshooglaag">Prijs hoog - laag</MenuItem>
                     </Select>
                 </FormControl>
             </>
@@ -69,6 +76,9 @@ export default function FilterSorteer(props) {
             <SorteerSelect />
             <Divider />
             <Filters />
+            <Button variant="contained" sx={{ width: "100%" }} onClick={handleSubmit}>
+                Toepassen
+            </Button>
         </Box>
     );
 }
