@@ -2,6 +2,7 @@ import { Container, Tabs, Tab, Card, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import VoorstellingenGegevens from "./VoorstellingGegevens";
+import VoorstellingenGegevenss from "./VoorstellingGegevenss";
 import Artiesten from "./Artiesten";
 import AccountsBeheren from "./AccountsBeheren";
 import config from "../../../config.json";
@@ -60,7 +61,7 @@ export default function MedewerkerPage() {
                     >
                         <TabPanel value={value} index={0}>
                             <Box>
-                                <VoorstellingenGegevens />
+                                <VoorstellingenGegevenss />
                             </Box>
                         </TabPanel>
                         <TabPanel value={value} index={1}>

@@ -133,13 +133,9 @@ const handleSelectAllClick = (event) => {
 
 const isSelected = (id) => selected.indexOf(id) !== -1;
 
-
-
-  
 const handleSearchClick = async () => {
   search();
 };
-
 
 function search(){
   setSearchTerm(document.getElementById("searchbox").value);
@@ -157,8 +153,6 @@ async function zoekGebruiker(searchTerm){
 
   }
 }
-
-
 
 async function zoekGebruikerr(searchTerm){
   axios.get(`/api/medewerker/accounts/${searchTerm}`
@@ -195,6 +189,7 @@ function rowElement() {
   if (rows.length == 0) {
     getGebruikers();
   }
+  
 
   if (rows.length > 1) {
     return rows.map((account) => (
@@ -275,10 +270,9 @@ async function addGebruiker(){
   }
 }
 
-
 return (
   <>
-    <AppBar position="static" minWidth="1200"sx={{ width: "1200", mx: "auto" }}>
+    <AppBar position="static" sx={{ width: "1200", mx: "auto" }}>
       <Toolbar sx={{ width: "100%", mx: "auto" }}>
         <Search>
           <StyledInputBase

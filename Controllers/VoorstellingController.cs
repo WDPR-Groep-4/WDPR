@@ -54,11 +54,18 @@ public class VoorstellingController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Voorstelling>> PostVoorstelling(Voorstelling voorstelling)
+    public async Task<ActionResult> PostVoorstelling([FromBody] createVoorstelling created)
     {
+        
+        Voorstelling voorstelling = new Voorstelling();
+        voorstelling.Titel = created.Titel;
+        voorstelling.Beschrijving = created.Beschrijving;
+        voorstelling.Genre = created.Genre;
+        voorstelling.Afbeelding = created.Afbeelding;
+
         await _context.Voorstellingen.AddAsync(voorstelling);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetVoorstelling), new { id = voorstelling.VoorstellingId }, voorstelling);
+        return Ok();
     }
 
     [HttpPut("{id}")]
@@ -85,4 +92,12 @@ public class VoorstellingController : ControllerBase
         await _context.SaveChangesAsync();
         return voorstelling;
     }
+}
+
+public class createVoorstelling{
+    public string Titel { get; set; }
+    public string Beschrijving { get; set; }
+    public string Genre { get; set; }
+    public string Afbeelding { get; set; }
+
 }

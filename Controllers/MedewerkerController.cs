@@ -72,7 +72,7 @@ public async Task<ActionResult> DeleteUsers([FromQuery] string[] ids)
     foreach (string id in ids) 
     {
         var gebruiker = await _context.Gebruikers.FindAsync(id);
-        if (gebruiker != null)
+        if (gebruiker == null)
         {
             return NotFound();
         }
