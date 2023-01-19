@@ -88,6 +88,21 @@ public class DonatieController : ControllerBase
         var totaal = _context.Donaties.Where(d => d.Email == gebruiker.Email && d.Datum > DateTime.Now.AddDays(-365)).Sum(d => d.Bedrag);
         return Ok(totaal);
     }
+
+    [HttpGet("token")]
+    public async Task<IActionResult> GetToken([FromQuery] string email)
+    {
+        var gebruiker = await _userManager.FindByEmailAsync(email);
+        if (gebruiker == null)
+        {
+            return NotFound();
+        }
+        if (gebruiker.DonatieToken == null || gebruiker.DonatieToken == "")
+        {
+            return NotFound("Geen token gevonden");
+        }
+        return Ok(gebruiker.DonatieToken);
+    }
 }
 
 public class DonatieListenerDto
