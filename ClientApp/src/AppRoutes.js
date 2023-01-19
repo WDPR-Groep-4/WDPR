@@ -46,6 +46,22 @@ const AppRoutes = [
         element: <Medewerker />,
     },
     {
+        path: "/medewerker/programmering",
+        element: <Medewerker/>,
+    },
+    {
+        path: "/medewerker/artiesten",
+        element: <Medewerker/>,
+    },
+    {
+        path: "/medewerker/accounts",
+        element: <Medewerker/>,
+    },
+    {
+        path: "/medewerker/voorstellingen",
+        element: <Medewerker/>,
+    },
+    {
         path: "/account",
         element: (
             <RequireAuth loginPath={"/login"}>
