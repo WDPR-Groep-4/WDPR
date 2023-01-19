@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Carousel from "react-material-ui-carousel";
 import { Paper } from "@mui/material";
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Container } from "@mui/system";
 import Footer from "../../footer/Footer";
 import config from "../../../config.json";
+import { useAuthUser } from "react-auth-kit";
 
 function HomePage(props) {
     document.title = "Home" + config.title;
+    const params = useParams();
+    const { token } = params;
+    const auth = useAuthUser();
+    const email = auth.user ? auth.user.email : null;
+
+    //useEffect
+
     var items = [
         {
             id: 1,
@@ -43,6 +51,7 @@ function HomePage(props) {
             link: "/voorstelling/44",
         },
     ];
+
     return (
         <div>
             <div style={{ position: "relative", height: 300 }}>

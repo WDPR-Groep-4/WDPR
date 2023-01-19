@@ -33,11 +33,11 @@ export default function BetalingBedankt() {
                         }}
                     >
                         <Typography variant="h5" component={"h1"}>
-                            Bedankt voor uw bestelling
+                            Bedankt voor uw betaling
                         </Typography>
 
                         <Typography variant="body1" component={"p"}>
-                            Uw bestelling is geplaatst. U ontvangt uw tickets per mail.
+                            Uw betaling word zo snel mogelijk verwerkt
                         </Typography>
                     </Box>
                     <Button onClick={() => navigate("/")} variant="contained">
