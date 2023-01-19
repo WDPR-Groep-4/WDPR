@@ -12,8 +12,6 @@ export default function App() {
         queryFn: getVoorstellingen,
     });
 
-    console.log(data);
-
     return (
         <div>
             <Navbar />
