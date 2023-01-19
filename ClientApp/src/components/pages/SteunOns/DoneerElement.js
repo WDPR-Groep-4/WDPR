@@ -2,14 +2,30 @@ import { useAuthUser } from "react-auth-kit";
 import { Box, Typography, Button, Link } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import IngelogdEnToken from "./IngelogdEnToken";
 
 export default function DoneerElement(props) {
     const auth = useAuthUser();
-    const [gebruikerToken, setGebruikerToken] = useState("");
+    const [gebruikerToken, setGebruikerToken] = useState();
 
     useEffect(() => {
         async function fetchToken() {
-            const response = await axios.get();
+            const response = await axios
+                .get("/api/donatie/token", {
+                    params: {
+                        email: auth().email,
+                    },
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            if (response && response.data === "null") {
+                setGebruikerToken("");
+            }
+            if (response && response.data) {
+                setGebruikerToken(response.data);
+            }
         }
         fetchToken();
     }, []);
@@ -28,6 +44,14 @@ export default function DoneerElement(props) {
     }
 
     function Ingelogd() {
+        return gebruikerToken ? (
+            <IngelogdEnToken token={gebruikerToken} />
+        ) : (
+            <IngelogdZonderToken />
+        );
+    }
+
+    function IngelogdZonderToken() {
         return (
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 500 }}>
                 <Typography>
@@ -37,7 +61,7 @@ export default function DoneerElement(props) {
                 </Typography>
                 <Box
                     component={Link}
-                    href="https://ikdoneer.azurewebsites.net/Toegang/?url=https%3A%2F%2Fhettheaterlaak.nl%2F"
+                    href="https://ikdoneer.azurewebsites.net/Toegang/?url=https%3A%2F%2Fhettheaterlaak.nl%2Fapi%2Fdonatie%2Faddtoken"
                     sx={{ display: "flex", flexDirection: "column" }}
                 >
                     <Button variant="contained" sx={{ px: 8, maxWidth: 350 }}>

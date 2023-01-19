@@ -32,8 +32,14 @@ export default function FakePayPagina(props) {
 
         const succes = isSuccessful(rekeningNummer);
 
-        console.log("succes: ", succes);
+        if (props.isDonatie) {
+            donatieBetaling(rekeningNummer, succes);
+        } else {
+            ticketBetaling(rekeningNummer, succes);
+        }
+    };
 
+    async function ticketBetaling(formData, succes) {
         const response = await axios
             .post("/api/betaal/verify", {
                 reference: props.betaalId,
@@ -52,7 +58,27 @@ export default function FakePayPagina(props) {
             navigate("/winkelwagen/bedankt");
             clearWinkelwagen();
         }
-    };
+    }
+
+    async function donatieBetaling(formData, succes) {
+        const config = {
+            headers: { Authorization: `Bearer ${props.token}` },
+        };
+
+        const response = await axios.post(
+            "https://ikdoneer.azurewebsites.net/api/donatie",
+            {
+                Doel: "21",
+                Hoeveelheid: props.bedrag,
+                Tekst: "Dit is een donatie, gefeliciteerd",
+            },
+            config
+        );
+
+        if (response && response.status === 200) {
+            navigate("/winkelwagen/bedankt");
+        }
+    }
 
     function isSuccessful(rekeningNummer) {
         if (rekeningNummer === "NL55ABNA5660751954") {
@@ -67,10 +93,10 @@ export default function FakePayPagina(props) {
     return (
         <div
             style={{
-                height: "100vh",
+                height: props.achtergrond ? "100vh" : "auto",
                 width: "100%",
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: props.isDonatie ? "flex-start" : "center",
                 alignItems: "center",
                 pt: 10,
                 backgroundColor: "#f5f5f5",
@@ -88,7 +114,7 @@ export default function FakePayPagina(props) {
                 >
                     <div>
                         <Typography variant="h5" component="h1">
-                            u moet € {props.bedrag} betalen
+                            € {props.bedrag} te betalen
                         </Typography>
                         <Typography variant="body1" component="p">
                             Het account{" "}

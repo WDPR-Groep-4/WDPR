@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Backend;
 
@@ -19,7 +20,7 @@ public class DonatieController : ControllerBase
         _userManager = userManager;
     }
 
-    [HttpGet("listener")]
+    [HttpPost("listener")]
     public async Task<IActionResult> Listener(DonatieListenerDto donatieDto)
     {
         if (donatieDto == null)
@@ -44,7 +45,7 @@ public class DonatieController : ControllerBase
             var gebruiker = await _userManager.FindByEmailAsync(donatieDto.Email);
             if (gebruiker == null)
             {
-                return NotFound();
+                return NotFound("Gebruiker niet gevonden");
             }
             await _userManager.AddToRoleAsync(gebruiker, "Begunstiger");
         }
@@ -53,37 +54,48 @@ public class DonatieController : ControllerBase
     }
 
     [HttpPost("addtoken")]
-    public async Task<IActionResult> AddToken(string token, string email)
+    public async Task<IActionResult> AddToken([FromForm] string token)
     {
+        if (token == null)
+        {
+            return BadRequest();
+        }
+        var handler = new JwtSecurityToken(jwtEncodedString: token);
+        string email = handler.Claims.First(claim => claim.Type == "Email").Value;
+
         var gebruiker = await _userManager.FindByEmailAsync(email);
         if (gebruiker == null)
         {
-            return NotFound();
+            return NotFound("Gebruiker niet gevonden");
         }
+
         gebruiker.DonatieToken = token;
         await _userManager.UpdateAsync(gebruiker);
+
+        _logger.LogInformation("Donatie token toegevoegd aan gebruiker " + gebruiker.Email);
+
         return Ok();
     }
 
     [HttpGet("totaal")]
-    public async Task<IActionResult> GetTotaalDonaties(string email)
+    public async Task<IActionResult> GetTotaalDonaties([FromQuery] string email)
     {
         var gebruiker = await _userManager.FindByEmailAsync(email);
         if (gebruiker == null)
         {
-            return NotFound();
+            return NotFound("Gebruiker niet gevonden");
         }
         var totaal = _context.Donaties.Where(d => d.Email == gebruiker.Email).Sum(d => d.Bedrag);
         return Ok(totaal);
     }
 
     [HttpGet("lastyear")]
-    public async Task<IActionResult> GetTotaalLastYear(string email)
+    public async Task<IActionResult> GetTotaalLastYear([FromQuery] string email)
     {
         var gebruiker = await _userManager.FindByEmailAsync(email);
         if (gebruiker == null)
         {
-            return NotFound();
+            return NotFound("Gebruiker niet gevonden");
         }
         var totaal = _context.Donaties.Where(d => d.Email == gebruiker.Email && d.Datum > DateTime.Now.AddDays(-365)).Sum(d => d.Bedrag);
         return Ok(totaal);
@@ -95,11 +107,12 @@ public class DonatieController : ControllerBase
         var gebruiker = await _userManager.FindByEmailAsync(email);
         if (gebruiker == null)
         {
-            return NotFound();
+            return NotFound("Gebruiker niet gevonden");
         }
+
         if (gebruiker.DonatieToken == null || gebruiker.DonatieToken == "")
         {
-            return NotFound("Geen token gevonden");
+            return Ok("null");
         }
         return Ok(gebruiker.DonatieToken);
     }
