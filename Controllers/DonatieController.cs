@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend;
 
@@ -53,6 +55,7 @@ public class DonatieController : ControllerBase
         return Ok();
     }
 
+
     [HttpPost("addtoken")]
     public async Task<IActionResult> AddToken([FromForm] string token)
     {
@@ -77,6 +80,7 @@ public class DonatieController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Adminstrator")]
     [HttpGet("totaal")]
     public async Task<IActionResult> GetTotaalDonaties([FromQuery] string email)
     {
@@ -89,6 +93,7 @@ public class DonatieController : ControllerBase
         return Ok(totaal);
     }
 
+    [Authorize(Roles = "Adminstrator")]
     [HttpGet("lastyear")]
     public async Task<IActionResult> GetTotaalLastYear([FromQuery] string email)
     {
@@ -101,10 +106,12 @@ public class DonatieController : ControllerBase
         return Ok(totaal);
     }
 
+    [Authorize]
     [HttpGet("token")]
-    public async Task<IActionResult> GetToken([FromQuery] string email)
+    public async Task<IActionResult> GetToken()
     {
-        var gebruiker = await _userManager.FindByEmailAsync(email);
+        var userName = User.Identity.Name;
+        var gebruiker = await _userManager.Users.Where(u => u.UserName == userName).FirstOrDefaultAsync();
         if (gebruiker == null)
         {
             return NotFound("Gebruiker niet gevonden");
