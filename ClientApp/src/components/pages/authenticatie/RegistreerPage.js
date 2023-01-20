@@ -46,9 +46,22 @@ export default function RegistreerPage() {
                     }
                 });
 
-            if (response && response.status === 201) {
-                const email = form.current["email"].value;
-                const wachtwoord = form.current["wachtwoord"].value;
+                if (response && response.status === 201) {
+                    const email = form.current["email"].value;
+                    const wachtwoord = form.current["wachtwoord"].value;
+                
+                    // fetch user ID using email
+                    const userIdResponse = await axios.get(`/api/user/getIdByEmail?email=${email}`);
+                    const userId = userIdResponse.data;
+                
+                    // add interests for user
+                    for (let i = 0; i < selectedInterests.length; i++) {
+                      const interesseId = selectedInterests[i].id;
+                      await axios.post("/api/interesse/AddInteresseGast", {
+                        InteresseId: interesseId,
+                        GastId: userId
+                      });
+                    }
 
                 if (login(setError, email, wachtwoord, signIn)) {
                     navigate("/dashboard");
@@ -87,14 +100,24 @@ export default function RegistreerPage() {
 
     document.title = "Registreer" + config.title;
     const [interests, setInterests] = useState([]);
-    const [selectedInterests, setSelectedInterests] = useState([]);
+    const [selectedInterests, setSelectedInterests] = useState(["none"]);
 
     const handleInterestChange = (event) => {
-        setSelectedInterests(event.target.value);
+        let newSelectedInterests = [...event.target.value];
+        if(newSelectedInterests.includes("none")) {
+            newSelectedInterests = ["none"]
+            if(event.target.value.length > 1) {
+                newSelectedInterests = event.target.value.filter((interest) => interest !== "none");
+            }
+            if(event.target.value.length === 0) {
+                newSelectedInterests = ["none"];
+            }
+        }
+        setSelectedInterests(newSelectedInterests);
     };
 
 useEffect(() => {
-    axios.get('/api/interests').then(res => {
+    axios.get('/api/interesse/GetInteresses').then(res => {
         setInterests(res.data);
     });
 }, []);
@@ -177,10 +200,12 @@ useEffect(() => {
             value={selectedInterests}
             onChange={handleInterestChange}
         >
-            <MenuItem value="none">Geen interesse</MenuItem>
+            <MenuItem key="none" value="none" >
+    Geen interesse
+</MenuItem>
             {interests.map((interest) => (
-                <MenuItem key={interest.id} value={interest.name}>
-                    {interest.name}
+                <MenuItem key={interest.id} value={interest.interesseNaam}>
+                    {interest.interesseNaam}
                 </MenuItem>
             ))}
         </Select>

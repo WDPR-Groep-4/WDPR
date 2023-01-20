@@ -26,14 +26,14 @@ public class InteresseController : ControllerBase{
     public InteresseController(DatabaseContext context){
         _context = context;
     }
-    [HttpGet]
+    [HttpGet("GetInteresses")]
      public async Task<ActionResult<List<Interesse>>> GetInteresses()
     {
         var interesses = await _context.Interesses.ToListAsync();
         return interesses;
     }
     
-    [HttpPost("AddInteresse")]
+   [HttpPost("AddInteresse")]
     public async Task<ActionResult<Interesse>> PostInteresse([FromBody] Interest interesse){
         var newInteresse = new Interesse{
             InteresseNaam = interesse.InterestNaam
@@ -62,6 +62,19 @@ public class InteresseController : ControllerBase{
         }
         return NoContent();
     }
+    [HttpPost("AddInteresseGast")]
+    public async Task<ActionResult<InteresseGast>> PostInteresseGast([FromBody] InterestGast interesseGast){
+        var newInteresseGast = new InteresseGast{
+            InteresseId = interesseGast.InteresseId,
+            GastId = interesseGast.GastId
+        };
+        _context.InteresseGasten.Add(newInteresseGast);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction("GetInteresseGast", new {id = newInteresseGast.GastId}, newInteresseGast);
+    }
+
+
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteInteresse(int id){
         var interesse = await _context.Interesses.FindAsync(id);
@@ -75,8 +88,14 @@ public class InteresseController : ControllerBase{
     private bool InteresseExists(int id){
         return _context.Interesses.Any(e => e.Id == id);
     }
-   
+}
+   public class InterestGast{
+        public int InteresseId {get; set;}
+        public string GastId {get; set;}
+    }
     public class Interest{
+        public int Id {get; set;}
         public string  InterestNaam {get; set;}
 }
-}
+
+
