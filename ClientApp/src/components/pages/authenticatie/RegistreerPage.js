@@ -3,6 +3,14 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Footer from "../../footer/Footer";
+import {FormControl} from "@mui/material";
+import { useEffect } from "react";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Input from "@mui/material/Input";
+import Checkbox from "@mui/material/Checkbox";
+import ListItemText from "@mui/material/ListItemText";
+import {InputLabel} from "@mui/material";
 
 import checkLeegVeld from "./Validatie";
 import axios from "axios";
@@ -78,6 +86,18 @@ export default function RegistreerPage() {
     };
 
     document.title = "Registreer" + config.title;
+    const [interests, setInterests] = useState([]);
+    const [selectedInterests, setSelectedInterests] = useState([]);
+
+    const handleInterestChange = (event) => {
+        setSelectedInterests(event.target.value);
+    };
+
+useEffect(() => {
+    axios.get('/api/interests').then(res => {
+        setInterests(res.data);
+    });
+}, []);
 
     return (
         <div>
@@ -148,6 +168,23 @@ export default function RegistreerPage() {
                                 type="password"
                                 label="Herhaal wachtwoord"
                             />
+                            <FormControl>
+        <InputLabel id="interesse-label">Interesse</InputLabel>
+        <Select
+            labelId="interesse-label"
+            id="interesse"
+            multiple
+            value={selectedInterests}
+            onChange={handleInterestChange}
+        >
+            <MenuItem value="none">Geen interesse</MenuItem>
+            {interests.map((interest) => (
+                <MenuItem key={interest.id} value={interest.name}>
+                    {interest.name}
+                </MenuItem>
+            ))}
+        </Select>
+    </FormControl>
                         </form>
                         <Button variant="contained" color="primary" onClick={onSubmit}>
                             Registreer
@@ -165,3 +202,4 @@ export default function RegistreerPage() {
         </div>
     );
 }
+

@@ -23,7 +23,8 @@ const context = [
     "/api/betaal/verify",
     "/api/init",
     "/api/ticket",
-    "/api/ticket/qrcode"
+    "/api/ticket/qrcode", 
+    "/api/interesse",
 ];
 
 module.exports = function (app) {

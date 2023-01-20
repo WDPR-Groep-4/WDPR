@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace Backend;
 
 public class GebruikerRegistreer
 {
@@ -28,6 +32,7 @@ public class AuthController : ControllerBase
     private readonly SignInManager<Gebruiker> _signInManager;
     private readonly IEmailSender _emailSender;
     private readonly ILogger _logger;
+    private readonly DatabaseContext _context;
 
     public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager, IEmailSender emailSender, ILogger<AuthController> logger)
     {
@@ -61,6 +66,13 @@ public class AuthController : ControllerBase
 
 
         return !resultaat.Succeeded ? new BadRequestObjectResult(resultaat) : StatusCode(201);
+    }
+    [HttpGet]
+    [Route("registreer")]
+    public async Task<ActionResult<List<Interesse>>> GetInteresses()
+    {
+        var interesses = await _context.Interesses.ToListAsync();
+        return interesses;
     }
 
 
@@ -155,7 +167,7 @@ public class AuthController : ControllerBase
 
         return BadRequest();
     }
-
+   
 
 }
 
