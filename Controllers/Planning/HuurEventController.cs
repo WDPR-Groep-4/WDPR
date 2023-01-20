@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend;
 
@@ -85,6 +86,27 @@ public class HuurEventController : ControllerBase
         }
 
         return Ok();
+    }
+
+
+    [Authorize]
+    [HttpGet("all_from_single_email")]
+    public async Task<ActionResult<List<VerhuurEvent>>> GetAllHuurEventsFromEmail()
+    {
+        var userName = User.Identity.Name;
+        var user = await _userManager.Users.Where(u => u.UserName == userName).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var events = await _context.VerhuurEvents.Where(e => e.Eigenaar == user.Email).Include(e => e.DatumBereik).ToListAsync();
+        if (events == null)
+        {
+            return NotFound();
+        }
+        return events;
     }
 
 }
