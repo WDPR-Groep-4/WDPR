@@ -32,53 +32,8 @@ export default function FakePayPagina(props) {
 
         const succes = isSuccessful(rekeningNummer);
 
-        if (props.isDonatie) {
-            donatieBetaling(rekeningNummer, succes);
-        } else {
-            ticketBetaling(rekeningNummer, succes);
-        }
+        props.handleBetaal(formData, succes);
     };
-
-    async function ticketBetaling(formData, succes) {
-        const response = await axios
-            .post("/api/betaal/verify", {
-                reference: props.betaalId,
-                succes: succes,
-            })
-            .catch((error) => {
-                console.log(error);
-                if (error.response.data) {
-                    setError(error.response.data);
-                } else {
-                    setError("Er is iets mis gegaan");
-                }
-            });
-
-        if (response && response.status === 200) {
-            navigate("/winkelwagen/bedankt");
-            clearWinkelwagen();
-        }
-    }
-
-    async function donatieBetaling(formData, succes) {
-        const config = {
-            headers: { Authorization: `Bearer ${props.token}` },
-        };
-
-        const response = await axios.post(
-            "https://ikdoneer.azurewebsites.net/api/donatie",
-            {
-                Doel: "21",
-                Hoeveelheid: props.bedrag,
-                Tekst: "Dit is een donatie, gefeliciteerd",
-            },
-            config
-        );
-
-        if (response && response.status === 200) {
-            navigate("/winkelwagen/bedankt");
-        }
-    }
 
     function isSuccessful(rekeningNummer) {
         if (rekeningNummer === "NL55ABNA5660751954") {

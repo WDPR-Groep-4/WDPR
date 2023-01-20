@@ -15,17 +15,37 @@ import Footer from "../../footer/Footer";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
+import { useAuthHeader } from "react-auth-kit";
+import FakePayPagina from "../winkelwagen/Betaling/FakePayPage";
+import { useNavigate } from "react-router-dom";
 
 function ZaalhurenPage(props) {
-    const [date, setDate] = useState();
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
+    if (dd < 10) dd = "0" + dd;
+    if (mm < 10) mm = "0" + mm;
+
+    const formattedToday = yyyy + "-" + mm + "-" + dd + "T00:00";
+    const [date, setDate] = useState(formattedToday);
     const [error, setError] = useState();
     const [aantalUur, setAantalUur] = useState(1);
-    const [zaal, setZaal] = useState("1");
+    const [zaal, setZaal] = useState(1);
     const auth = useAuthUser();
+    const authHeader = useAuthHeader();
+    const [betaal, setBetaal] = useState(false);
+    const navigate = useNavigate();
 
-    function onSubmit(e) {
-        e.preventDefault();
+    function getPrijs(e) {
+        return aantalUur * 1000;
     }
+
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
+    };
 
     function handleAantalUurChange(e) {
         const uur = e.target.value;
@@ -34,26 +54,54 @@ function ZaalhurenPage(props) {
         }
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
         setError(null);
 
-        const response = axios.post("/api/zaalhuren", {
-            date,
-            aantalUur,
-            zaal,
-        });
+        const response = await axios
+            .get(
+                "/api/huurevent",
+                {
+                    params: {
+                        Start: date,
+                        AantalUren: aantalUur,
+                        ZaalId: zaal,
+                    },
+                },
+                yourConfig
+            )
+            .catch((err) => {
+                setError("Deze zaal is al bezet op deze dag");
+                console.log(err);
+            });
+
+        if (response && response.status === 200) {
+            setBetaal(true);
+        }
     }
 
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    let mm = today.getMonth() + 1; // Months start at 0!
-    let dd = today.getDate();
+    async function handleBetaal(formData, succes) {
+        if (succes) {
+            const response = await axios
+                .post(
+                    "/api/huurevent",
+                    {
+                        Start: date,
+                        AantalUren: aantalUur,
+                        ZaalId: zaal,
+                    },
+                    yourConfig
+                )
+                .catch((err) => {
+                    console.log(err);
+                    setError(err.response.data);
+                });
 
-    if (dd < 10) dd = "0" + dd;
-    if (mm < 10) mm = "0" + mm;
-
-    const formattedToday = yyyy + "-" + mm + "-" + dd + "T00:00";
+            if (response && response.status === 200) {
+                navigate("/winkelwagen/bedankt");
+            }
+        }
+    }
 
     function Page(props) {
         return (
@@ -125,7 +173,10 @@ function ZaalhurenPage(props) {
                         id="datetime-local"
                         label="Next appointment"
                         type="datetime-local"
-                        defaultValue={formattedToday}
+                        onChange={(e) => {
+                            setDate(e.target.value);
+                        }}
+                        value={date}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -153,14 +204,22 @@ function ZaalhurenPage(props) {
                     </Select>
                 </form>
 
-                <Button variant="contained" color="primary" onClick={onSubmit}>
+                <Button variant="contained" color="primary" onClick={handleSubmit}>
                     Verstuur
                 </Button>
             </Page>
         );
     }
 
-    return auth() ? <ZaalHuren /> : <NietIngelogd />;
+    return auth() ? (
+        betaal ? (
+            <FakePayPagina bedrag={getPrijs()} handleBetaal={handleBetaal} />
+        ) : (
+            <ZaalHuren />
+        )
+    ) : (
+        <NietIngelogd />
+    );
 }
 
 export default ZaalhurenPage;
