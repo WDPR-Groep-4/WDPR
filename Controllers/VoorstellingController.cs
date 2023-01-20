@@ -62,6 +62,12 @@ public class VoorstellingController : ControllerBase
         voorstelling.Beschrijving = created.Beschrijving;
         voorstelling.Genre = created.Genre;
         voorstelling.Afbeelding = created.Afbeelding;
+        voorstelling.Banner = created.Banner;
+        voorstelling.PrijzenPerRang = created.PrijzenPerRang;
+        voorstelling.ZaalId = created.ZaalId;
+        voorstelling.BegunstigerOnly = created.BegunstigerOnly;
+        voorstelling.Leeftijd = created.Leeftijd;
+
 
         await _context.Voorstellingen.AddAsync(voorstelling);
         await _context.SaveChangesAsync();
@@ -99,5 +105,9 @@ public class createVoorstelling{
     public string Beschrijving { get; set; }
     public string Genre { get; set; }
     public string Afbeelding { get; set; }
-
+    public string Banner { get; set; }
+    public List<RangPrijs> PrijzenPerRang { get; set; }
+    public int ZaalId { get; set; }
+    public bool BegunstigerOnly { get; set; }
+    public int Leeftijd { get; set; }
 }

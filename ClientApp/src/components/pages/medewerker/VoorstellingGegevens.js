@@ -196,7 +196,7 @@ export default function VoorstellingGegevens() {
             });
         if (response && response.data) {
             setVoorstellingen(response.data);
-            console.log(response.data)
+            //console.log(response.data)
         }
         return response.data;
     }
@@ -216,23 +216,22 @@ export default function VoorstellingGegevens() {
 
     }
 
-
     async function getVoorstellingEvents() {
         const response = await axios
-            .get("api/voorstellingevent")
+            .get("api/medewerker/voorstelling")
             .catch((err) => {
                 console.log(err);
             });
         if (response && response.data) {
             setVoorstellingEvents(response.data);
-            console.log(response.data)
+            //console.log(response.data);
         }
         return response.data;
     }
 
     async function addVoorstellingEvent(){
         const response = await axios
-            .post("api/voorstellingevent", {
+            .post("api/medewerker/voorstelling", {
                 datum: "2021-10-10",
                 zaalId: 1
             })
@@ -258,7 +257,9 @@ export default function VoorstellingGegevens() {
         return(
             <Box>
                 {voorstellingen.map((voorstelling) => (
-                    <Voorstelling key={voorstelling.voorstellingId} voorstelling={voorstelling} />
+                    <Box>
+                        <Voorstelling key={voorstelling.voorstellingId} voorstelling={voorstelling} />
+                    </Box>       
                 ))}
             </Box>
         )

@@ -25,14 +25,15 @@ public class MedewerkerController : ControllerBase
 
 [HttpGet]
 [Route("voorstelling/")]
-public async Task<ActionResult<Voorstelling>> GetShows()
+public async Task<ActionResult<Voorstelling>> GetVoorstellingEvents()
 {
-    var shows = await _context.Voorstellingen.ToListAsync();
-    if (shows == null)
+    var events = await _context.VoorstellingEvents.ToListAsync();
+    var voorstellingen = await _context.VoorstellingEvents.Include(v => v.Voorstelling).Include(v => v.Voorstelling.PrijzenPerRang).Include(v => v.DatumBereik).ToListAsync();
+    if (events == null)
     {
         return NotFound();
     }
-    return Ok(shows);
+    return Ok(events);
 }
 
 [HttpGet]
@@ -55,7 +56,7 @@ public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string u
 [Route("accounts/add/")]
 public async Task<ActionResult> AddUser([FromBody] createUser created)
 {
-    Gebruiker gebruiker = new Gebruiker();
+    Gebruiker gebruiker = new Gast();
     gebruiker.Voornaam = created.Voornaam;
     gebruiker.Achternaam = created.Achternaam;
     gebruiker.Email = created.Email;
