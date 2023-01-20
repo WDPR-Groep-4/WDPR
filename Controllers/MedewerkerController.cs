@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 
-
 namespace Backend.Controllers;
 
 [Route("api/[controller]")]
@@ -16,109 +15,107 @@ namespace Backend.Controllers;
 public class MedewerkerController : ControllerBase
 {
     private readonly DatabaseContext _context;
+    private readonly ILogger _logger;
 
 
-    public MedewerkerController(DatabaseContext context)
+    public MedewerkerController(DatabaseContext context, ILogger<MedewerkerController> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
-[HttpGet]
-[Route("voorstelling/")]
-public async Task<ActionResult<Voorstelling>> GetVoorstellingEvents()
-{
-    var events = await _context.VoorstellingEvents.ToListAsync();
-    var voorstellingen = await _context.VoorstellingEvents.Include(v => v.Voorstelling).Include(v => v.Voorstelling.PrijzenPerRang).Include(v => v.DatumBereik).ToListAsync();
-    if (events == null)
+    [HttpGet]
+    [Route("voorstelling/")]
+    public async Task<ActionResult<Voorstelling>> GetVoorstellingEvents()
     {
-        return NotFound();
+        var events = await _context.VoorstellingEvents.ToListAsync();
+        var voorstellingen = await _context.VoorstellingEvents.Include(v => v.Voorstelling).Include(v => v.Voorstelling.PrijzenPerRang).Include(v => v.DatumBereik).ToListAsync();
+        if (events == null)
+        {
+            return NotFound();
+        }
+        return Ok(events);
     }
-    return Ok(events);
-}
 
-[HttpGet]
-[Route("accounts/{userId}")]
-public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string userId)
-{
-    var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == userId);
-
-    if (user == null)
+    [HttpGet]
+    [Route("accounts/{userId}")]
+    public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string userId)
     {
-        Console.WriteLine("User not found");
-        return NotFound();
+        var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+        {
+            Console.WriteLine("User not found");
+            return NotFound();
+        }
+        return Ok(user);
     }
-    return Ok(user);
-}
 
 
 
-[HttpPost]
-[Route("accounts/add/")]
-public async Task<ActionResult> AddUser([FromBody] createUser created)
-{
-    Gebruiker gebruiker = new Gast();
-    gebruiker.Voornaam = created.Voornaam;
-    gebruiker.Achternaam = created.Achternaam;
-    gebruiker.Email = created.Email;
-    gebruiker.PhoneNumber = created.Telefoon;
-    await _context.Gebruikers.AddAsync(gebruiker);
-    await _context.SaveChangesAsync();
-    return Ok();
-}
+    [HttpPost]
+    [Route("accounts/add/")]
+    public async Task<ActionResult> AddUser([FromBody] createUser created)
+    {
+        Gebruiker gebruiker = new Gast();
+        gebruiker.Voornaam = created.Voornaam;
+        gebruiker.Achternaam = created.Achternaam;
+        gebruiker.Email = created.Email;
+        gebruiker.PhoneNumber = created.Telefoon;
+        await _context.Gebruikers.AddAsync(gebruiker);
+        await _context.SaveChangesAsync();
+        return Ok();
+    }
 
-[HttpDelete]
-[Route("accounts/delete/")]
-public async Task<ActionResult> DeleteUsers([FromQuery] string[] ids)
-{   
-    foreach (string id in ids) 
+    [HttpDelete]
+    [Route("accounts/delete/")]
+    public async Task<ActionResult> DeleteUsers([FromQuery] string id)
     {
         var gebruiker = await _context.Gebruikers.FindAsync(id);
         if (gebruiker == null)
         {
             return NotFound();
         }
-         _context.Gebruikers.Remove(gebruiker);
-         await _context.SaveChangesAsync();
+        _context.Gebruikers.Remove(gebruiker);
+        await _context.SaveChangesAsync();
 
-        
+        return Ok();
     }
-    await _context.SaveChangesAsync();
-    return Ok();
-}
 
 
-[HttpPut]
-[Route("accounts/update/")]
-public async Task<ActionResult> UpdateUser([FromQuery] string id, [FromBody] String voornaam, String achternaam, String email, String telefoon)
-{
-    var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == id);
-    if (user == null)
+    [HttpPut]
+    [Route("accounts/update/")]
+    public async Task<ActionResult> UpdateUser([FromQuery] string id, [FromBody] String voornaam, String achternaam, String email, String telefoon)
     {
-        return NotFound();
+        var user = await _context.Gebruikers.FirstOrDefaultAsync(u => u.Id == id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        user.Voornaam = voornaam;
+        user.Achternaam = achternaam;
+        user.Email = email;
+        user.PhoneNumber = telefoon;
+        await _context.SaveChangesAsync();
+        return Ok();
     }
-    user.Voornaam = voornaam;
-    user.Achternaam = achternaam;
-    user.Email = email;
-    user.PhoneNumber = telefoon;
-    await _context.SaveChangesAsync();
-    return Ok();
-}
 
-[HttpGet]
-public async Task<ActionResult<List<Gebruiker>>> GetUsers()
-{
-    var users = await _context.Gebruikers.ToListAsync();
-
-    if (users == null)
+    [HttpGet]
+    public async Task<ActionResult<List<Gebruiker>>> GetUsers()
     {
-        return NotFound();
+        var users = await _context.Gebruikers.ToListAsync();
+
+        if (users == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(users);
     }
-
-    return Ok(users);
-}
 }
 
-public class createUser{
+public class createUser
+{
     public string Voornaam { get; set; }
     public string Achternaam { get; set; }
     public string Email { get; set; }
