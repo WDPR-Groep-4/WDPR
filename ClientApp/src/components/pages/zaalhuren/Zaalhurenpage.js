@@ -12,7 +12,6 @@ import {
     MenuItem,
 } from "@mui/material";
 import Footer from "../../footer/Footer";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
 import { useAuthHeader } from "react-auth-kit";
