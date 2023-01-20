@@ -1,6 +1,7 @@
 namespace Backend;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -41,6 +42,7 @@ public class BetaalController : ControllerBase
         return betaling.Id;
     }
 
+    [Authorize(Roles = "Administrator")]
     [HttpDelete("delete")]
     public async Task<ActionResult> DeleteAllBetalingen()
     {
