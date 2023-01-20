@@ -35,6 +35,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import config from "../../../config.json";
 
 
 function createData(groep, voornaam, achternaam, type, rol) {
@@ -99,6 +100,7 @@ function Filtered(props){
 }
 
 export default function PrimarySearchAppBar() {
+  document.title = "Artiesten" + config.title;
   const [anchorEl, setAnchorEl] = React.useState(null);
   
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);

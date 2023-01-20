@@ -37,6 +37,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 import axios from 'axios';
 import { useEffect, useState } from "react";
+import config from "../../../config.json";
 
 const Search = styled('div')(({ theme }) => ({
 position: 'relative',
@@ -75,6 +76,7 @@ const rows = [
 */
 
 export default function PrimarySearchAppBar() {
+document.title = "Accounts Beheren" + config.title;
 const [anchorEl, setAnchorEl] = React.useState(null);
 const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 const [rol, setRol] = React.useState('');

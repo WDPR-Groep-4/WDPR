@@ -32,6 +32,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import TextField from "@mui/material/TextField";
+import config from "../../../config.json";
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -113,6 +114,7 @@ function addLeadingZero(number) {
   
 
 export default function VoorstellingGegevens() {
+    document.title = "Voorstellingen" + config.title;
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorEl2, setAnchorEl2] = React.useState(null);
     const [anchorEl3, setAnchorEl3] = React.useState(null);
