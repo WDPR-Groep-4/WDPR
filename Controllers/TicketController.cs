@@ -141,11 +141,11 @@ public class TicketController : ControllerBase
     }
 }
 
-    // public static async Task<Bitmap> GenerateQRCode(Guid guid)
-    // {
-    //     QRCodeGenerator qrGenerator = new QRCodeGenerator();
-    //     QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
-    //     QRCode qrCode = new QRCode(qrCodeData);
-    //     Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.White, Color.SteelBlue, true);
-    //     return qrCodeImage;
-    // }
+// public static async Task<Bitmap> GenerateQRCode(Guid guid)
+// {
+//     QRCodeGenerator qrGenerator = new QRCodeGenerator();
+//     QRCodeData qrCodeData = qrGenerator.CreateQrCode(guid.ToString(), QRCodeGenerator.ECCLevel.Q);
+//     QRCode qrCode = new QRCode(qrCodeData);
+//     Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.White, Color.SteelBlue, true);
+//     return qrCodeImage;
+// }

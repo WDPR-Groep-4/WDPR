@@ -28,7 +28,6 @@ public class BetaalController : ControllerBase
             return BadRequest("No items in cart");
         }
 
-        _logger.LogInformation("1e product aantal: " + betalingDto.WinkelwagenItems[0].Aantal);
 
         Betaling betaling = new Betaling();
         betaling.Email = betalingDto.Email;
@@ -98,7 +97,6 @@ public class BetaalController : ControllerBase
         {
             betaling.Succes = true;
 
-            _logger.LogInformation("Reference: " + reference);
             var winkelwagenItems = await _context.Betalingen.Where(w => w.Id == reference).SelectMany(w => w.WinkelwagenItems).ToListAsync();
             if (winkelwagenItems == null || winkelwagenItems.Count == 0)
             {
@@ -106,8 +104,7 @@ public class BetaalController : ControllerBase
             }
             foreach (WinkelwagenItem wItem in winkelwagenItems)
             {
-                _logger.LogWarning("ItemEventId: " + wItem.VoorstellingEventId);
-                var voorstellingEvent = await _context.VoorstellingEvents.Where(v => v.Id == wItem.VoorstellingEventId).FirstOrDefaultAsync();
+                var voorstellingEvent = await _context.VoorstellingEvents.Where(v => v.Id == wItem.VoorstellingEventId).Include(v => v.Voorstelling).Include(v => v.DatumBereik).FirstOrDefaultAsync();
                 if (voorstellingEvent == null)
                 {
                     return BadRequest("VoorstellingEvent not found");
@@ -119,12 +116,16 @@ public class BetaalController : ControllerBase
         {
             betaling.Succes = false;
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Payment processed with id: " + reference);
             return BadRequest("Payment failed (mogelijk niet genoeg saldo)");
         }
 
         betaling.Pending = false;
 
         await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Payment processed with id: " + reference);
+
         return Ok();
     }
 }

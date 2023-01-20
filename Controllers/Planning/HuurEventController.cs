@@ -1,23 +1,31 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class HuurEventController : ControllerBase
 {
     private readonly ILogger<HuurEventController> _logger;
     private readonly DatabaseContext _context;
+    private readonly UserManager<Gebruiker> _userManager;
 
-    public HuurEventController(ILogger<HuurEventController> logger, DatabaseContext databaseContext)
+    public HuurEventController(ILogger<HuurEventController> logger, DatabaseContext databaseContext, UserManager<Gebruiker> userManager)
     {
         _logger = logger;
         _context = databaseContext;
+        _userManager = userManager;
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> HuurZaal(HuurEventDto huurEventDto)
     {
+        var userFromContext = HttpContext.User;
+        Gebruiker? user = await _userManager.FindByNameAsync(userFromContext.Identity.Name);
+
         if (huurEventDto.AantalUren < 1 || huurEventDto.AantalUren > 8)
         {
             return BadRequest("Incorrect aantal uren");
@@ -33,7 +41,7 @@ public class HuurEventController : ControllerBase
 
         var verhuurEvent = new VerhuurEvent
         {
-            Eigenaar = huurEventDto.Email,
+            Eigenaar = user.Email,
             Zaal = huurEventDto.ZaalId,
             DatumBereik = new DatumBereik
             {
@@ -41,7 +49,7 @@ public class HuurEventController : ControllerBase
                 Tot = huurEventDto.Start.AddHours(huurEventDto.AantalUren)
             }
         };
-        
+
         DatumBereik datumBereik = new DatumBereik
         {
             Van = huurEventDto.Start,
@@ -55,6 +63,27 @@ public class HuurEventController : ControllerBase
 
         await _context.Events.AddAsync(verhuurEvent);
         await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Event booked door {0} op {1}", user.Email, DateTime.Now);
+
+        return Ok();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> IsVrij([FromQuery] HuurEventDto huurEventDto)
+    {
+
+        DatumBereik bereik = new DatumBereik
+        {
+            Van = huurEventDto.Start,
+            Tot = huurEventDto.Start.AddHours(huurEventDto.AantalUren)
+        };
+
+        if (!PlanningUtils.IsDatumVrij(bereik, huurEventDto.ZaalId, _context))
+        {
+            return BadRequest("Datum en/of zaal is niet beschikbaar");
+        }
+
         return Ok();
     }
 
@@ -62,7 +91,6 @@ public class HuurEventController : ControllerBase
 
 public class HuurEventDto
 {
-    public string Email { get; set; }
     public DateTime Start { get; set; }
     public int AantalUren { get; set; }
     public int ZaalId { get; set; }
