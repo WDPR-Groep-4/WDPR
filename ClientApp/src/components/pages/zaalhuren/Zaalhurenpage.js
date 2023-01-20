@@ -14,12 +14,14 @@ import {
 import Footer from "../../footer/Footer";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import axios from "axios";
+import { useAuthUser } from "react-auth-kit";
 
 function ZaalhurenPage(props) {
     const [date, setDate] = useState();
     const [error, setError] = useState();
     const [aantalUur, setAantalUur] = useState(1);
     const [zaal, setZaal] = useState("1");
+    const auth = useAuthUser();
 
     function onSubmit(e) {
         e.preventDefault();
@@ -53,91 +55,112 @@ function ZaalhurenPage(props) {
 
     const formattedToday = yyyy + "-" + mm + "-" + dd + "T00:00";
 
-    console.log(date);
-
-    return (
-        <div>
-            <div
-                style={{
-                    height: "100vh",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    pt: 10,
-                    backgroundColor: "#f5f5f5",
-                }}
-            >
-                <Card variant="outlined">
-                    <Box
-                        sx={{
-                            width: 300,
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 3,
-                            margin: 3,
-                        }}
-                    >
-                        <div>
-                            <Typography variant="h5" component="h1">
-                                Zaal huren
-                            </Typography>
-                            <Typography variant="body1" component="p">
-                                Vul de gegevens in om een zaal te huren
-                            </Typography>
-                        </div>
-                        {error && <Alert severity="error">{error}</Alert>}
-                        <form
-                            style={{
-                                width: "100%",
+    function Page(props) {
+        return (
+            <div>
+                <div
+                    style={{
+                        height: "100vh",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        pt: 10,
+                        backgroundColor: "#f5f5f5",
+                    }}
+                >
+                    <Card variant="outlined">
+                        <Box
+                            sx={{
+                                width: 300,
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 16,
+                                gap: 3,
+                                margin: 3,
                             }}
                         >
-                            <TextField
-                                id="datetime-local"
-                                label="Next appointment"
-                                type="datetime-local"
-                                sx={{ width: 250 }}
-                                defaultValue={formattedToday}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <TextField
-                                name="aantalUur"
-                                type="number"
-                                label="Aantal uur"
-                                value={aantalUur}
-                                onChange={handleAantalUurChange}
-                            />
-
-                            <Select
-                                name="zaal"
-                                label="Zaal"
-                                sx={{ width: 250 }}
-                                value={zaal}
-                                onChange={(e) => {
-                                    setZaal(e.target.value);
-                                }}
-                            >
-                                <MenuItem value="1">Zaal 1</MenuItem>
-                                <MenuItem value="2">Zaal 2</MenuItem>
-                                <MenuItem value="3">Zaal 3</MenuItem>
-                                <MenuItem value="4">Zaal 4</MenuItem>
-                            </Select>
-                        </form>
-
-                        <Button variant="contained" color="primary" onClick={onSubmit}>
-                            Verstuur
-                        </Button>
-                    </Box>
-                </Card>
+                            {props.children}
+                        </Box>
+                    </Card>
+                </div>
+                <Footer />
             </div>
-            <Footer />
-        </div>
-    );
+        );
+    }
+
+    function NietIngelogd() {
+        return (
+            <Page>
+                <Typography variant="h5" component="h1">
+                    Zaal huren
+                </Typography>
+                <Typography variant="body1" component="p">
+                    U moet ingelogd zijn om een zaal te kunnen huren
+                </Typography>
+            </Page>
+        );
+    }
+
+    function ZaalHuren() {
+        return (
+            <Page>
+                <div>
+                    <Typography variant="h5" component="h1">
+                        Zaal huren
+                    </Typography>
+                    <Typography variant="body1" component="p">
+                        Vul de gegevens in om een zaal te huren
+                    </Typography>
+                </div>
+                {error && <Alert severity="error">{error}</Alert>}
+                <form
+                    style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 16,
+                    }}
+                >
+                    <TextField
+                        id="datetime-local"
+                        label="Next appointment"
+                        type="datetime-local"
+                        defaultValue={formattedToday}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        name="aantalUur"
+                        type="number"
+                        label="Aantal uur"
+                        value={aantalUur}
+                        onChange={handleAantalUurChange}
+                    />
+
+                    <Select
+                        name="zaal"
+                        label="Zaal"
+                        value={zaal}
+                        onChange={(e) => {
+                            setZaal(e.target.value);
+                        }}
+                    >
+                        <MenuItem value="1">Zaal 1</MenuItem>
+                        <MenuItem value="2">Zaal 2</MenuItem>
+                        <MenuItem value="3">Zaal 3</MenuItem>
+                        <MenuItem value="4">Zaal 4</MenuItem>
+                    </Select>
+                </form>
+
+                <Button variant="contained" color="primary" onClick={onSubmit}>
+                    Verstuur
+                </Button>
+            </Page>
+        );
+    }
+
+    return auth() ? <ZaalHuren /> : <NietIngelogd />;
 }
 
 export default ZaalhurenPage;
