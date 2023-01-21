@@ -64,7 +64,7 @@ export default function DoneerElement(props) {
                     href="https://ikdoneer.azurewebsites.net/Toegang/?url=https%3A%2F%2Fhettheaterlaak.nl%2Fapi%2Fdonatie%2Faddtoken"
                     sx={{ display: "flex", flexDirection: "column" }}
                 >
-                    <Button variant="contained" sx={{ px: 8, maxWidth: 350 }}>
+                    <Button variant="contained" sx={{ px: 8, maxWidth: 350 }} aria-label="IkDoneer koppelen">
                         IkDoneer
                     </Button>
                 </Box>

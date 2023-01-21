@@ -21,7 +21,7 @@ export default function FilterSortButton(props) {
             >
                 {props.children}
             </DrawerCompleet>
-            <IconButton sx={{ p: 1 }} onClick={() => setOpenDrawer(!openDrawer)}>
+            <IconButton sx={{ p: 1 }} onClick={() => setOpenDrawer(!openDrawer)} aria-label="Sorteeropties">
                 <FilterListIcon />
             </IconButton>
         </>

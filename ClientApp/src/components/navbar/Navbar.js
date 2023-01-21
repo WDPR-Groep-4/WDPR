@@ -41,6 +41,7 @@ export default function Navbar(props) {
         >
           {navLinks.map((link) => (
             <Button
+              aria-label={link.name}
               tabIndex={0}
               key={link.name}
               component={Link}
@@ -61,6 +62,7 @@ export default function Navbar(props) {
             <PersonIcon />
           </AccountButton>
           <IconButton
+            aria-label="Winkelwagen"
             color="inherit"
             sx={{ fontWeight: 600 }}
             component={Link}
