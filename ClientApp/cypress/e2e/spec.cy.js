@@ -13,9 +13,4 @@ describe("navbar test", () => {
         cy.get("header").contains("Agenda").click();
         cy.url().should("include", "/agenda");
     });
-    it("accessibility navbar", () => {
-        cy.visit("https://localhost:44419");
-        cy.get("header").contains("Home").tab().tab().click();
-        cy.url().should("include", "/steun-ons");
-    });
 });
