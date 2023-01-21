@@ -19,6 +19,9 @@ namespace Backend
         public DbSet<VerhuurEvent> VerhuurEvents { get; set; }
         public DbSet<VoorstellingEvent> VoorstellingEvents { get; set; }
         public DbSet<Betaling> Betalingen { get; set; }
+        public DbSet<Interesse> Interesses { get; set; }
+        public DbSet<InteresseGast> InteresseGasten { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +35,16 @@ namespace Backend
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey<DatumBereik>(e => e.Id);
+            modelBuilder.Entity<InteresseGast>()
+                .HasKey(ig => new { ig.GastId, ig.InteresseId });
+            modelBuilder.Entity<InteresseGast>()
+                .HasOne(ig => ig.Gast)
+                .WithMany(g => g.Interesses)
+                .HasForeignKey(ig => ig.GastId);
+            modelBuilder.Entity<InteresseGast>()
+                .HasOne(ig => ig.Interesse)
+                .WithMany(i => i.Gasten)
+                .HasForeignKey(ig => ig.InteresseId);
         }
     }
 

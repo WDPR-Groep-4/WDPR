@@ -1,4 +1,4 @@
 public class Gast : Gebruiker
 {
-    public List<Interesse> Interesses { get; set; }
+    public List<InteresseGast> Interesses { get; set; }
 }

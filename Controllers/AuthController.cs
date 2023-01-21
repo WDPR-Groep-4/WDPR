@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace Backend;
 
 public class GebruikerRegistreer
 {
@@ -28,13 +32,15 @@ public class AuthController : ControllerBase
     private readonly SignInManager<Gebruiker> _signInManager;
     private readonly IEmailSender _emailSender;
     private readonly ILogger _logger;
+    private readonly DatabaseContext _context;
 
-    public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager, IEmailSender emailSender, ILogger<AuthController> logger)
+    public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager, IEmailSender emailSender, ILogger<AuthController> logger, DatabaseContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
         _logger = logger;
+        _context = context;
     }
 
 
@@ -69,8 +75,6 @@ public class AuthController : ControllerBase
 
         return !resultaat.Succeeded ? new BadRequestObjectResult(resultaat) : StatusCode(201);
     }
-
-
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] GebruikerLogin gebruikerLogin)
@@ -108,6 +112,7 @@ public class AuthController : ControllerBase
         await _emailSender.SendEmailAsync(gebruiker.Email, "Bevestig uw email", confirmationLink);
         return Ok();
     }
+    
 
     [HttpPost]
     [Route("bevestig")]
@@ -162,9 +167,16 @@ public class AuthController : ControllerBase
 
         return BadRequest();
     }
-
-
-}
+    
+  [HttpGet]
+    [Route("getidbyemail")]
+    public async Task<ActionResult<String>> GetIdByEmail([FromQuery] string email){
+        var gebruiker = await _userManager.FindByEmailAsync(email);
+        if(gebruiker == null){
+            return NotFound();
+        }
+        return gebruiker.Id;
+    }
 
 public class GebruikerLogin
 {
@@ -191,4 +203,5 @@ public class ResetWachtwoordDTO
 public class Email
 {
     public string email { get; set; }
+}
 }
