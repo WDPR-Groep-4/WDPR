@@ -95,6 +95,7 @@ public class TicketController : ControllerBase
         logger.LogInformation(aantal.ToString());
 
         List<Ticket> tickets = new List<Ticket>();
+        Dictionary<Image, string> ticketImages = new Dictionary<Image, string>();
 
         for (int i = 0; i < aantal; i++)
         {
@@ -107,7 +108,8 @@ public class TicketController : ControllerBase
             context.AddAsync(ticket);
             context.SaveChangesAsync();
 
-            // email qr
+            ticketImages.Add(GenerateTicketImage(ticket).Result, ticket.TicketId.ToString());
+            // email ticketImages
         }
 
 
