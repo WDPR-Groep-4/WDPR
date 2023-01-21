@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Carousel from "react-material-ui-carousel";
 import { Paper } from "@mui/material";
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Container } from "@mui/system";
 import Footer from "../../footer/Footer";
 import config from "../../../config.json";
+import { useAuthUser } from "react-auth-kit";
 
 function HomePage(props) {
     document.title = "Home" + config.title;
+    const params = useParams();
+    const { token } = params;
+    const auth = useAuthUser();
+    const email = auth.user ? auth.user.email : null;
+
+    //useEffect
+
     var items = [
         {
             id: 1,
@@ -16,7 +24,7 @@ function HomePage(props) {
             description: "Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "/voorstelling/41",
+            link: "/voorstelling/63",
         },
         {
             id: 2,
@@ -24,7 +32,7 @@ function HomePage(props) {
             description: "Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "/voorstelling/42",
+            link: "/voorstelling/63",
         },
         {
             id: 3,
@@ -32,7 +40,7 @@ function HomePage(props) {
             description: "Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "/voorstelling/43",
+            link: "/voorstelling/63",
         },
         {
             id: 4,
@@ -40,9 +48,10 @@ function HomePage(props) {
             description: "Wegens succes verlengd tot 1 mei 2077!",
             image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
             width: "100%",
-            link: "/voorstelling/44",
+            link: "/voorstelling/63",
         },
     ];
+
     return (
         <div>
             <div style={{ position: "relative", height: 300 }}>

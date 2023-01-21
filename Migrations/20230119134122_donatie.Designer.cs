@@ -3,6 +3,7 @@ using System;
 using Backend;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230119134122_donatie")]
+    partial class donatie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
@@ -172,9 +175,6 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("DonatieToken")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -241,28 +241,18 @@ namespace Backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("GastId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("InteresseNaam")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Interesses");
-                });
+                    b.HasIndex("GastId");
 
-            modelBuilder.Entity("InteresseGast", b =>
-                {
-                    b.Property<string>("GastId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("InteresseId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("GastId", "InteresseId");
-
-                    b.HasIndex("InteresseId");
-
-                    b.ToTable("InteresseGasten");
+                    b.ToTable("Interesse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -521,21 +511,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Interesse", b =>
                 {
-                    b.HasOne("Gast", "Gast")
+                    b.HasOne("Gast", null)
                         .WithMany("Interesses")
-                        .HasForeignKey("GastId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Interesse", "Interesse")
-                        .WithMany("Gasten")
-                        .HasForeignKey("InteresseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Gast");
-
-                    b.Navigation("Interesse");
+                        .HasForeignKey("GastId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -618,11 +596,6 @@ namespace Backend.Migrations
                 {
                     b.Navigation("DatumBereik")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Interesse", b =>
-                {
-                    b.Navigation("Gasten");
                 });
 
             modelBuilder.Entity("Voorstelling", b =>

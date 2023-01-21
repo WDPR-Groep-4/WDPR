@@ -18,9 +18,7 @@ export default function BetaalPopup(props) {
 
     document.title = "Betalen" + config.title;
 
-
-    async function handleBetaal(email, event) {
-        event.preventDefault();
+    async function handleBetaal(email) {
         try {
             setError(null);
 
@@ -61,16 +59,18 @@ export default function BetaalPopup(props) {
             }
 
             if (betaalIdResponse.status === 200) {
+                console.log("betaalIdResponse.data: ");
                 setBetaal(true);
                 setBetaalId(betaalIdResponse.data);
             }
         } catch (error) {
             console.log(error);
         }
-    };
+    }
 
     useEffect(() => {
         if (account()) {
+            console.log("tststts");
             handleBetaal(account().email);
         }
     }, []);
@@ -114,7 +114,7 @@ export default function BetaalPopup(props) {
                         </div>
                         {error && <Alert severity="error">{error}</Alert>}
                         <form
-                            onSubmit={(e) => handleBetaal(form.current.email.value, e)}
+                            onSubmit={(e) => handleBetaal(form.current.email.value)}
                             ref={form}
                             style={{
                                 width: "100%",

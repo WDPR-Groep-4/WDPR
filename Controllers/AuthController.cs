@@ -48,6 +48,14 @@ public class AuthController : ControllerBase
     [Route("registreer")]
     public async Task<ActionResult<Gebruiker>> Registreer([FromBody] GebruikerRegistreer gebruikerRegistreer)
     {
+        //check if email domain is in Services/emailDenyList.txt
+        var emailDenyList = System.IO.File.ReadAllLines("Services/emailDenyList.txt");
+        string gebruikerDomain = gebruikerRegistreer.Email.Split('@')[1];
+        if (emailDenyList.Contains(gebruikerDomain))
+        {
+            return BadRequest("Email domain is not allowed");
+        }
+
         var gebruiker = new Gebruiker
         {
             UserName = gebruikerRegistreer.Email,
@@ -64,7 +72,6 @@ public class AuthController : ControllerBase
 
             return StatusCode(201);
         }
-
 
         return !resultaat.Succeeded ? new BadRequestObjectResult(resultaat) : StatusCode(201);
     }

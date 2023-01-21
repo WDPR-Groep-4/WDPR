@@ -5,10 +5,18 @@ import { Link } from "react-router-dom";
 
 export default function Footer(props) {
     return (
-        <Box bgcolor={blue[700]} sx={{ width: "100%", color: "white" }}>
+        <Box
+            bgcolor={blue[700]}
+            sx={{ width: "100%", color: "white", overflow: "hidden" }}
+        >
             <Container
                 maxWidth="xl"
-                sx={{ display: "flex", justifyContent: "space-around", p: 3 }}
+                sx={{
+                    display: "flex",
+                    flexDirection: { sm: "column", md: "row" },
+                    justifyContent: "space-around",
+                    p: 3,
+                }}
             >
                 <Stack>
                     <ListItem sx={{ textAlign: "center" }}>

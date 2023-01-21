@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SixLabors.ImageSharp;
 
 
 public class EmailSender : IEmailSender
@@ -59,7 +58,7 @@ public class EmailSender : IEmailSender
                                : $"Failure Email to {toEmail}");
     }
 
-    public async Task Execute(string apiKey, string subject, string message, string toEmail, Bitmap image)
+    public async Task Execute(string apiKey, string subject, string message, string toEmail, Dictionary<Image, string> images)
     {
         var client = new SendGridClient(apiKey);
         var msg = new SendGridMessage()
@@ -70,10 +69,15 @@ public class EmailSender : IEmailSender
             HtmlContent = message
         };
         msg.AddTo(new EmailAddress(toEmail));
-        using (var stream = new System.IO.MemoryStream())
+        foreach (var image in images)
         {
-            image.Save(stream, ImageFormat.Png);
-            msg.AddAttachment("ticket.png", Convert.ToBase64String(stream.ToArray()));
+            using (var ms = new MemoryStream())
+            {
+                image.Key.SaveAsPng(ms);
+                var bytes = ms.ToArray();
+                var file = Convert.ToBase64String(bytes);
+                msg.AddAttachment(image.Value, file);
+            }
         }
 
 
