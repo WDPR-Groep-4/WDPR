@@ -3,19 +3,23 @@ import { Box, Typography, Button, Link } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import IngelogdEnToken from "./IngelogdEnToken";
+import { useAuthHeader } from "react-auth-kit";
 
 export default function DoneerElement(props) {
     const auth = useAuthUser();
     const [gebruikerToken, setGebruikerToken] = useState();
+    const authHeader = useAuthHeader();
+
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
+    };
 
     useEffect(() => {
         async function fetchToken() {
             const response = await axios
-                .get("/api/donatie/token", {
-                    params: {
-                        email: auth().email,
-                    },
-                })
+                .get("/api/donatie/token", yourConfig)
                 .catch((err) => {
                     console.log(err);
                 });

@@ -116,6 +116,11 @@ function HomePage(props) {
                 <Button component={Link} to="/steun-ons" variant="contained">
                     Steun ons
                 </Button>
+                <h3>Zaal huren</h3>
+                <p>Als u een zaal wilt huren voor een evenement, klik dan hieronder.</p>
+                <Button component={Link} to="/zaal-huren" variant="contained">
+                    Zaal huren
+                </Button>
             </div>
             <Footer />
         </div>

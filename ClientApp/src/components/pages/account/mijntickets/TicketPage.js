@@ -5,117 +5,107 @@ import { useState } from "react";
 import axios from "axios";
 import { useAuthHeader } from "react-auth-kit";
 import TicketItem from "./TicketItem";
-import config from "../../../../config.json";
+import dconfig from "../../../../config.json";
 
 export default function TicketPage(props) {
-  const [error, setError] = useState();
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
-  const form = useRef(null);
-  const authHeader = useAuthHeader();
-  const [tickets, setTickets] = useState([]);
-  const [header, setHeader] = useState();
+    const [error, setError] = useState();
+    const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
+    const form = useRef(null);
+    const [tickets, setTickets] = useState([]);
+    const [header, setHeader] = useState();
 
-  document.title = "Mijn Tickets" + config.title;
+    document.title = "Mijn Tickets" + dconfig.title;
 
-  const yourConfig = {
-    headers: {
-      Authorization: authHeader(),
-    },
-  };
+    const authHeader = useAuthHeader();
 
-  useEffect(() => {
-    const account = async () => {
-      const response = await axios
-        .get("/api/account", yourConfig)
-        .catch((err) => {
-          console.log(err);
-        });
-      console.log(response.data);
-      if (response.status === 200) {
-        setUser(response.data);
-        setLoading(false);
-      }
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
     };
-    account();
-    getTickets();
-  }, []);
 
-  useEffect(() => {
-    if (user.email) {
-      getTickets();
+    useEffect(() => {
+        getTickets();
+    }, []);
+
+    useEffect(() => {
+        if (user.email) {
+            getTickets();
+        }
+    }, [user.email]);
+
+    async function getTickets() {
+        // if (loading) return;
+        try {
+            const response = await axios.get(
+                `api/ticket/all_from_single_email`,
+                yourConfig
+            );
+            if (response && response.data) {
+                console.log(response.data);
+                setTickets(response.data);
+                setHeader(response.headers["x-pagination"]);
+                setLoading(false);
+            }
+            return response.data;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     }
-  }, [user.email]);
 
-  async function getTickets() {
-    if (loading) return;
-    try {
-      console.log(`api/ticket/all_from_single_email?email=${user.email}`);
-      const response = await axios.get(
-        `api/ticket/all_from_single_email?email=${user.email}`
-      );
-      if (response && response.data) {
-        setTickets(response.data);
-        setHeader(response.headers["x-pagination"]);
-      }
-      return response.data;
-    } catch (err) {
-      console.log(err);
-      return err;
+    function ticketElements() {
+        return tickets.map((ticket) => (
+            <TicketItem ticket={ticket} key={ticket.ticketId} />
+        ));
     }
-  }
 
-  function ticketElements() {
-    return tickets.map((ticket) => (
-      <TicketItem ticket={ticket} key={ticket.ticketId} />
-    ));
-  }
+    return (
+        <Container maxWidth="xl">
+            <Box sx={{ p: 3 }}>
+                <Typography variant="h5" component={"h2"}>
+                    Mijn tickets
+                </Typography>
+                <div>
+                    {loading ? (
+                        <Typography variant="body1" component={"p"}>
+                            Gegevens laden...
+                        </Typography>
+                    ) : (
+                        <form
+                            ref={form}
+                            style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 16,
+                            }}
+                        >
+                            {error && <Alert severity="error">{error}</Alert>}
 
-  return (
-    <Container maxWidth="xl">
-      <Box sx={{ p: 3 }}>
-        <Typography variant="h5" component={"h2"}>
-          Mijn tickets
-        </Typography>
-        <div>
-          {loading ? (
-            <Typography variant="body1" component={"p"}>
-              Gegevens laden...
-            </Typography>
-          ) : (
-            <form
-              ref={form}
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-              }}
-            >
-              {error && <Alert severity="error">{error}</Alert>}
-
-              <div
-                style={{
-                  height: "300px",
-                  justifyContent: "center",
-                  display: "block",
-                  pt: 10,
-                }}
-              >
-                {ticketElements()}
-                <Box
-                  sx={{
-                    width: "100%",
-                    my: 4,
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                ></Box>
-              </div>
-            </form>
-          )}
-        </div>
-      </Box>
-    </Container>
-  );
+                            <div
+                                style={{
+                                    height: "300px",
+                                    justifyContent: "center",
+                                    display: "block",
+                                    pt: 10,
+                                }}
+                            >
+                                {ticketElements()}
+                                <Box
+                                    sx={{
+                                        width: "100%",
+                                        my: 4,
+                                        display: "flex",
+                                        justifyContent: "center",
+                                    }}
+                                ></Box>
+                            </div>
+                        </form>
+                    )}
+                </div>
+            </Box>
+        </Container>
+    );
 }
