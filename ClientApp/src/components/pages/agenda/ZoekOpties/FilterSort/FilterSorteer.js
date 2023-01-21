@@ -30,6 +30,7 @@ export default function FilterSorteer(props) {
                         value={sorteren}
                         label="Sorteren"
                         onChange={(e) => setSorteren(e.target.value)}
+                        aria-label="Sorteren"
                     >
                         <MenuItem value={"Datum"}>Datum</MenuItem>
                         <MenuItem value={"Titel"}>Titel</MenuItem>

@@ -53,6 +53,7 @@ export default function AccountButton(props) {
                 aria-controls={openAccount ? "composition-menu" : undefined}
                 aria-expanded={openAccount ? "true" : undefined}
                 aria-haspopup="true"
+                aria-label="Account"
                 onClick={handleToggleAccount}
             >
                 {props.children}

@@ -134,6 +134,7 @@ export default function BetaalPopup(props) {
                             variant="contained"
                             color="primary"
                             onClick={(e) => handleBetaal(form.current.email.value, e)}
+                            aria-label="Email toevoegen aan bestelling"
                         >
                             Verstuur
                         </Button>

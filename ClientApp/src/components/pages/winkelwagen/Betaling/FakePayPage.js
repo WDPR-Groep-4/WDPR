@@ -147,7 +147,7 @@ export default function FakePayPagina(props) {
                             label="Rekeningnummer"
                         />
                     </form>
-                    <Button variant="contained" color="primary" onClick={onSubmit}>
+                    <Button variant="contained" color="primary" onClick={onSubmit} aria-label="Verstuur betaling">
                         Verstuur
                     </Button>
                 </Box>
