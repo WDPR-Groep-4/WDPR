@@ -82,7 +82,7 @@ public class InteresseController : ControllerBase{
     }
     /*[HttpGet]
     public async Task<ActionResult<List<Interesse>>> GetCurrentUserInteresses(){
-     */   
+     */    
     
 
 

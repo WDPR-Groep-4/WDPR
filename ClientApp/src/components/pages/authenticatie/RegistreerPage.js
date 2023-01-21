@@ -67,26 +67,26 @@ export default function RegistreerPage() {
                         setError(error.description);
                     }
                 });
-                const email = form.current["email"].value;
+                /*const email = form.current["email"].value;
                 const wachtwoord = form.current["wachtwoord"].value;
             
                 // fetch user ID using email
                 const userIdResponse = await axios.get("/api/auth/getidbyemail?email=" + email);
                 console.log(userIdResponse);
                 const userId = userIdResponse.data;
-            
                 // add interests for user
-            
                 for (let i = 0; i < selectedInterests.length; i++) {
                 
-                    const interesseId =     selectedInterests[i].split(".")[0];
+                    const interesseId = selectedInterests[i].split(".")[0];
 
                     await axios.post("/api/interesse/AddInteresseGast", 
                     {
                       InteresseId: interesseId,
                       GastId: userId
                     });
+                    console.log("Interesse toegevoegd");
                   }
+                  */
                   
                 if (response && response.status === 201) {
                     const email = form.current["email"].value;
@@ -94,17 +94,20 @@ export default function RegistreerPage() {
                 
                     // fetch user ID using email
                     const userIdResponse = await axios.get("/api/auth/getidbyemail?email=" + email);
-                    console.log(userIdResponse);
-                    const userId = userIdResponse.data;
+                console.log(userIdResponse);
+                const userId = userIdResponse.data;
+                // add interests for user
+                for (let i = 0; i < selectedInterests.length; i++) {
                 
-                    // add interests for user
-                    for (let i = 0; i < selectedInterests.length; i++) {
-                      const interesseId = selectedInterests[i].interesseId;
-                      await axios.post("/api/interesse/AddInteresseGast", {
-                        InteresseId: interesseId,
-                        GastId: userId
-                      });
-                    }
+                    const interesseId = selectedInterests[i].split(".")[0];
+
+                    await axios.post("/api/interesse/AddInteresseGast", 
+                    {
+                      InteresseId: interesseId,
+                      GastId: userId
+                    });
+                    console.log("Interesse toegevoegd");
+                  }
 
                 if (login(setError, email, wachtwoord, signIn)) {
                     navigate("/dashboard");

@@ -60,7 +60,7 @@ public class AuthController : ControllerBase
         if (resultaat.Succeeded)
         {
             await _userManager.AddToRoleAsync(gebruiker, "Gebruiker");
-            await sendConfirmationEmail(gebruiker);
+           // await sendConfirmationEmail(gebruiker);
 
             return StatusCode(201);
         }
@@ -97,7 +97,7 @@ public class AuthController : ControllerBase
         return Unauthorized();
     }
 
-    public async Task<ActionResult> sendConfirmationEmail(Gebruiker gebruiker)
+   /* public async Task<ActionResult> sendConfirmationEmail(Gebruiker gebruiker)
     {
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(gebruiker);
         _logger.LogInformation("Token: " + token);
@@ -105,6 +105,7 @@ public class AuthController : ControllerBase
         await _emailSender.SendEmailAsync(gebruiker.Email, "Bevestig uw email", confirmationLink);
         return Ok();
     }
+    */
 
     [HttpPost]
     [Route("bevestig")]
