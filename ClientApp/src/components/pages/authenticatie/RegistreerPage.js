@@ -93,6 +93,7 @@ export default function RegistreerPage() {
                     const wachtwoord = form.current["wachtwoord"].value;
                 
                     // fetch user ID using email
+                    if(selectedInterests[0] !== "0.Geen Interesse") {
                     const userIdResponse = await axios.get("/api/auth/getidbyemail?email=" + email);
                 console.log(userIdResponse);
                 const userId = userIdResponse.data;
@@ -108,6 +109,7 @@ export default function RegistreerPage() {
                     });
                     console.log("Interesse toegevoegd");
                   }
+                }
 
                 if (login(setError, email, wachtwoord, signIn)) {
                     navigate("/dashboard");
