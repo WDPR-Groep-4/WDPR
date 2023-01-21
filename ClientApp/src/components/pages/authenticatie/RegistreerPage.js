@@ -24,6 +24,28 @@ export default function RegistreerPage() {
     const [error, setError] = useState();
     const signIn = useSignIn();
     const navigate = useNavigate();
+    const [interests, setInterests] = useState([]);
+    const [selectedInterests, setSelectedInterests] = useState(["0.Geen Interesse"]);
+
+    const handleInterestChange = (event) => {
+        let newSelectedInterests = [...event.target.value];
+        if(newSelectedInterests.includes("0.Geen Interesse")) {
+            newSelectedInterests = ["0.Geen Interesse"]
+            if(event.target.value.length > 1) {
+                newSelectedInterests = event.target.value.filter((interest) => interest !== "0.Geen Interesse");
+            }
+            if(event.target.value.length === 0) {
+                newSelectedInterests = ["0.Geen Interesse"];
+            }
+        }
+        console.log(newSelectedInterests);
+        setSelectedInterests(newSelectedInterests);
+    };
+    useEffect(() => {
+        axios.get('/api/interesse/GetInteresses').then(res => {
+            setInterests(res.data);
+        });
+    }, []);
 
     const registreer = async () => {
         try {
@@ -45,18 +67,39 @@ export default function RegistreerPage() {
                         setError(error.description);
                     }
                 });
+                const email = form.current["email"].value;
+                const wachtwoord = form.current["wachtwoord"].value;
+            
+                // fetch user ID using email
+                const userIdResponse = await axios.get("/api/auth/getidbyemail?email=" + email);
+                console.log(userIdResponse);
+                const userId = userIdResponse.data;
+            
+                // add interests for user
+            
+                for (let i = 0; i < selectedInterests.length; i++) {
+                
+                    const interesseId =     selectedInterests[i].split(".")[0];
 
+                    await axios.post("/api/interesse/AddInteresseGast", 
+                    {
+                      InteresseId: interesseId,
+                      GastId: userId
+                    });
+                  }
+                  
                 if (response && response.status === 201) {
                     const email = form.current["email"].value;
                     const wachtwoord = form.current["wachtwoord"].value;
                 
                     // fetch user ID using email
-                    const userIdResponse = await axios.get(`/api/user/getIdByEmail?email=${email}`);
+                    const userIdResponse = await axios.get("/api/auth/getidbyemail?email=" + email);
+                    console.log(userIdResponse);
                     const userId = userIdResponse.data;
                 
                     // add interests for user
                     for (let i = 0; i < selectedInterests.length; i++) {
-                      const interesseId = selectedInterests[i].id;
+                      const interesseId = selectedInterests[i].interesseId;
                       await axios.post("/api/interesse/AddInteresseGast", {
                         InteresseId: interesseId,
                         GastId: userId
@@ -99,28 +142,7 @@ export default function RegistreerPage() {
     };
 
     document.title = "Registreer" + config.title;
-    const [interests, setInterests] = useState([]);
-    const [selectedInterests, setSelectedInterests] = useState(["none"]);
 
-    const handleInterestChange = (event) => {
-        let newSelectedInterests = [...event.target.value];
-        if(newSelectedInterests.includes("none")) {
-            newSelectedInterests = ["none"]
-            if(event.target.value.length > 1) {
-                newSelectedInterests = event.target.value.filter((interest) => interest !== "none");
-            }
-            if(event.target.value.length === 0) {
-                newSelectedInterests = ["none"];
-            }
-        }
-        setSelectedInterests(newSelectedInterests);
-    };
-
-useEffect(() => {
-    axios.get('/api/interesse/GetInteresses').then(res => {
-        setInterests(res.data);
-    });
-}, []);
 
     return (
         <div>
@@ -200,13 +222,13 @@ useEffect(() => {
             value={selectedInterests}
             onChange={handleInterestChange}
         >
-            <MenuItem key="none" value="none" >
+            <MenuItem key="none" value="0.Geen Interesse" >
     Geen interesse
 </MenuItem>
             {interests.map((interest) => (
-                <MenuItem key={interest.id} value={interest.interesseNaam}>
-                    {interest.interesseNaam}
-                </MenuItem>
+              <MenuItem key={interest.id} value={`${interest.id}. ${interest.interesseNaam}`}>
+              {interest.interesseNaam}
+            </MenuItem>
             ))}
         </Select>
     </FormControl>

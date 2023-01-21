@@ -72,6 +72,18 @@ public class InteresseController : ControllerBase{
         await _context.SaveChangesAsync();
         return CreatedAtAction("GetInteresseGast", new {id = newInteresseGast.GastId}, newInteresseGast);
     }
+    [HttpGet("GetInteresseIdByName/{name}")]
+    public async Task<ActionResult<Interesse>> GetInteresseIdByName(string name){
+        var interesse = await _context.Interesses.FirstOrDefaultAsync(i => i.InteresseNaam == name);
+        if(interesse == null){
+            return NotFound();
+        }
+        return interesse;
+    }
+    /*[HttpGet]
+    public async Task<ActionResult<List<Interesse>>> GetCurrentUserInteresses(){
+     */   
+    
 
 
 

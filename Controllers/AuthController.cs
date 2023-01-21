@@ -34,12 +34,13 @@ public class AuthController : ControllerBase
     private readonly ILogger _logger;
     private readonly DatabaseContext _context;
 
-    public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager, IEmailSender emailSender, ILogger<AuthController> logger)
+    public AuthController(UserManager<Gebruiker> userManager, SignInManager<Gebruiker> signInManager, IEmailSender emailSender, ILogger<AuthController> logger, DatabaseContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailSender = emailSender;
         _logger = logger;
+        _context = context;
     }
 
 
@@ -67,15 +68,6 @@ public class AuthController : ControllerBase
 
         return !resultaat.Succeeded ? new BadRequestObjectResult(resultaat) : StatusCode(201);
     }
-    [HttpGet]
-    [Route("registreer")]
-    public async Task<ActionResult<List<Interesse>>> GetInteresses()
-    {
-        var interesses = await _context.Interesses.ToListAsync();
-        return interesses;
-    }
-
-
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] GebruikerLogin gebruikerLogin)
@@ -167,9 +159,16 @@ public class AuthController : ControllerBase
 
         return BadRequest();
     }
-   
-
-}
+    
+  [HttpGet]
+    [Route("getidbyemail")]
+    public async Task<ActionResult<String>> GetIdByEmail([FromQuery] string email){
+        var gebruiker = await _userManager.FindByEmailAsync(email);
+        if(gebruiker == null){
+            return NotFound();
+        }
+        return gebruiker.Id;
+    }
 
 public class GebruikerLogin
 {
@@ -196,4 +195,5 @@ public class ResetWachtwoordDTO
 public class Email
 {
     public string email { get; set; }
+}
 }

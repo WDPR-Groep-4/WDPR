@@ -25,6 +25,9 @@ const context = [
     "/api/ticket",
     "/api/ticket/qrcode", 
     "/api/interesse",
+    "/api/auth/getidbyemail",
+    "/api/interesse/AddInteresseGast",
+    "/api/interesse/GetInteressesByGastId",
 ];
 
 module.exports = function (app) {
