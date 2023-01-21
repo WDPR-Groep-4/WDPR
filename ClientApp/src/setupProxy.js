@@ -31,6 +31,7 @@ const context = [
     "/api/ticket/qrcode",
     "/api/donatie/token",
     "/api/donatie",
+    "/api/huurevent",
 ];
 
 module.exports = function (app) {

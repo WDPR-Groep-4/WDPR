@@ -14,79 +14,52 @@ export default function Footer(props) {
                 sx={{
                     display: "flex",
                     flexDirection: { sm: "column", md: "row" },
+                    flexWrap: { sm: "wrap", md: "nowrap"},
                     justifyContent: "space-around",
                     p: 3,
                 }}
             >
                 <Stack>
-                    <ListItem sx={{ textAlign: "center" }}>
-                        <Typography variant="h6">Algemeen</Typography>
-                    </ListItem>
-                    <ListItem component={Link} to="/">
-                        <Button variant="text" color="inherit">
+                        <Typography variant="h6" sx={{ textAlign: "center", pt: 1 }}>Algemeen</Typography>
+                        <Button variant="text" color="inherit" component={Link} to="/" sx={{ p: 1.5 }}>
                             Home
                         </Button>
-                    </ListItem>
-                    <ListItem component={Link} to="/steun-ons">
-                        <Button variant="text" color="inherit">
+                        <Button variant="text" color="inherit" component={Link} to="/steun-ons" sx={{ p: 1.5 }}>
                             Steun ons
                         </Button>
-                    </ListItem>
-                    <ListItem component={Link} to="/over-ons">
-                        <Button variant="text" color="inherit">
+                        <Button variant="text" color="inherit" component={Link} to="/over-ons" sx={{ p: 1.5 }}>
                             Over ons
                         </Button>
-                    </ListItem>
                 </Stack>
                 <Stack>
-                    <ListItem sx={{ textAlign: "center" }}>
-                        <Typography variant="h6">Voorstellingen</Typography>
-                    </ListItem>
-                    <ListItem component={Link} to="/agenda">
-                        <Button variant="text" color="inherit">
+                        <Typography variant="h6" sx={{ textAlign: "center", pt: 1 }}>Voorstellingen</Typography>
+                        <Button variant="text" color="inherit" component={Link} to="/agenda" sx={{ p: 1.5 }}>
                             Agenda
                         </Button>
-                    </ListItem>
-                    <ListItem component={Link} to="/winkelwagen">
-                        <Button variant="text" color="inherit">
+                        <Button variant="text" color="inherit" component={Link} to="/winkelwagen" sx={{ p: 1.5 }}>
                             WinkelWagen
                         </Button>
-                    </ListItem>
                 </Stack>
                 <Stack>
-                    <ListItem sx={{ textAlign: "center" }}>
-                        <Typography variant="h6">Mijn Theater Laak</Typography>
-                    </ListItem>
-                    <ListItem component={Link} to="/account">
-                        <Button variant="text" color="inherit">
+                    <Typography variant="h6" sx={{ textAlign: "center", pt: 1 }}>Mijn Theater Laak</Typography>
+                        <Button variant="text" color="inherit" component={Link} to="/account" sx={{ p: 1.5 }}>
                             Account
                         </Button>
-                    </ListItem>
-                    <ListItem component={Link} to="/account/mijntickets">
-                        <Button variant="text" color="inherit">
+                        <Button variant="text" color="inherit" component={Link} to="/mijntickets" sx={{ p: 1.5 }}>
                             Mijn tickets
                         </Button>
-                    </ListItem>
-                    <ListItem component={Link} to="/account/donaties">
-                        <Button variant="text" color="inherit">
+                        <Button variant="text" color="inherit" component={Link} to="/account/donaties" sx={{ p: 1.5 }}>
                             Mijn donaties
                         </Button>
-                    </ListItem>
                 </Stack>
                 <Stack>
-                    <ListItem sx={{ textAlign: "center" }}>
-                        <Typography variant="h6">Aanmelden</Typography>
-                    </ListItem>
-                    <ListItem component={Link} to="/login">
-                        <Button variant="text" color="inherit">
+                    <Typography variant="h6" sx={{ textAlign: "center", pt: 1 }}>Aanmelden</Typography>
+                        <Button variant="text" color="inherit" component={Link} to="/login" sx={{ p: 1.5 }}>
                             Login
                         </Button>
-                    </ListItem>
-                    <ListItem component={Link} to="/registreer">
-                        <Button variant="text" color="inherit">
+                        <Button variant="text" color="inherit" component={Link} to="/registreer" sx={{ p: 1.5 }}>
                             Registreer
                         </Button>
-                    </ListItem>
                 </Stack>
             </Container>
         </Box>

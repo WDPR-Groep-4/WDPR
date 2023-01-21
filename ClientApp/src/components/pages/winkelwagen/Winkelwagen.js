@@ -124,6 +124,7 @@ export default function Winkelwagen(props) {
                             disableElevation
                             component={Link}
                             to="/betaling"
+                            aria-label="Naar betalen"
                         >
                             Betalen
                         </Button>

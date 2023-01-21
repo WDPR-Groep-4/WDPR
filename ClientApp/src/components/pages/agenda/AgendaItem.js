@@ -136,6 +136,7 @@ export default function AgendaItem(props) {
                 variant="contained"
                 component={Link}
                 to={"/voorstelling/" + voorstellingEvent.id}
+                aria-label={"Ticket pagina openen voor " + voorstelling.titel + " op " + GetDatumString(datum)}
             >
                 Tickets
             </Button>

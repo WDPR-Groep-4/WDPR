@@ -6,17 +6,21 @@ import { useWinkelWagen } from "../../../services/WinkelwagenContext";
 import { useAuthUser } from "react-auth-kit";
 import config from "../../../config.json";
 import FakePayPagina from "./Betaling/FakePayPage";
+import { useNavigate } from "react-router-dom";
 
 export default function BetaalPopup(props) {
     const [betaal, setBetaal] = useState(false);
     const [betaalId, setBetaalId] = useState("");
-    const { state, totaalWinkelwagen } = useWinkelWagen();
+    const { state, totaalWinkelwagen, clearWinkelwagen } = useWinkelWagen();
     const totaal = totaalWinkelwagen();
     const account = useAuthUser();
     const [error, setError] = useState("");
     const form = useRef(null);
+    const navigate = useNavigate();
 
     document.title = "Betalen" + config.title;
+
+    console.log(state.winkelwagen);
 
     async function handleBetaal(email) {
         try {
@@ -75,8 +79,35 @@ export default function BetaalPopup(props) {
         }
     }, []);
 
+    console.log("betaalId: " + betaalId);
+
+    async function ticketBetaling(formData, succes) {
+        const response = await axios
+            .post("/api/betaal/verify", {
+                reference: betaalId,
+                succes: succes,
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error.response.data) {
+                    setError(error.response.data);
+                } else {
+                    setError("Er is iets mis gegaan");
+                }
+            });
+
+        if (response && response.status === 200) {
+            navigate("/winkelwagen/bedankt");
+            clearWinkelwagen();
+        }
+    }
+
     return betaal && betaalId ? (
-        <FakePayPagina bedrag={totaal} betaalId={betaalId} />
+        <FakePayPagina
+            bedrag={totaal}
+            betaalId={betaalId}
+            handleBetaal={ticketBetaling}
+        />
     ) : (
         <Body />
     );
@@ -134,6 +165,7 @@ export default function BetaalPopup(props) {
                             variant="contained"
                             color="primary"
                             onClick={(e) => handleBetaal(form.current.email.value, e)}
+                            aria-label="Email toevoegen aan bestelling"
                         >
                             Verstuur
                         </Button>

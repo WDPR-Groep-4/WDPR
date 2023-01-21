@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers;
 
@@ -14,6 +15,7 @@ public class AccountController : ControllerBase
         _userManager = userManager;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<AccountDTO>> Get()
     {

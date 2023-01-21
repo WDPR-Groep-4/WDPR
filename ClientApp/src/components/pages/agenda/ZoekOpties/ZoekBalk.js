@@ -24,7 +24,7 @@ export default function ZoekBalk(props) {
                     size="small"
                 />
             </form>
-            <Button variant="contained" onClick={handleSubmit}>
+            <Button variant="contained" onClick={handleSubmit} aria-label="Zoek">
                 <SearchIcon />
             </Button>
         </Box>
