@@ -15,7 +15,7 @@ describe("navbar test", () => {
     });
     it("accessibility navbar", () => {
         cy.visit("https://localhost:44419");
-        cy.get("header").contains("Home").tab().tab().tab().click();
+        cy.get("header").contains("Home").tab().tab().click();
         cy.url().should("include", "/steun-ons");
     });
 });
