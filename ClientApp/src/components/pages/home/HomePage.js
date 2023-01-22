@@ -71,6 +71,7 @@ function HomePage(props) {
                             Bekijk de mooiste voorstellingen in het theater van de regio.
                         </p>
                             <Button
+                                component={Link}
                                 to="/agenda"
                                 sx={{
                                     color: "white",

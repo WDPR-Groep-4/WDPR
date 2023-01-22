@@ -190,7 +190,7 @@ export default function VoorstellingGegevens() {
 
     async function getVoorstellingen() {
         const response = await axios
-            .get("api/voorstelling")
+            .get("api/voorstelling", yourConfig)
             .catch((err) => {
                 console.log(err);
             });
@@ -214,7 +214,7 @@ export default function VoorstellingGegevens() {
         const Rang3 = document.getElementById("rang3").value;   
 
         try{
-            const response = await axios.post("api/voorstelling", {Titel, Beschrijving, Genre, Afbeelding, Banner, Leeftijd, Begunstigers, Rang1, Rang2, Rang3});
+            const response = await axios.post("api/voorstelling", {Titel, Beschrijving, Genre, Afbeelding, Banner, Leeftijd, Begunstigers, Rang1, Rang2, Rang3}, yourConfig);
             console.log(response.data);
         }catch (error) {
             console.log(error);
@@ -235,7 +235,7 @@ export default function VoorstellingGegevens() {
         const Rang3 = document.getElementById("editRang3").value;
 
         try{
-            const response = await axios.put(`api/voorstelling/${props}`, {Titel, Beschrijving, Genre, Afbeelding, Banner, Leeftijd, Begunstigers, Rang1, Rang2, Rang3});
+            const response = await axios.put(`api/voorstelling/${props}`, {Titel, Beschrijving, Genre, Afbeelding, Banner, Leeftijd, Begunstigers, Rang1, Rang2, Rang3}, yourConfig);
             console.log(response.data);
         }catch (error) {
             console.log(error);
@@ -244,7 +244,7 @@ export default function VoorstellingGegevens() {
 
     async function deleteVoorstelling(props){
         try{
-            const response = await axios.delete(`api/voorstelling/${props}`);
+            const response = await axios.delete(`api/voorstelling/${props}`, yourConfig);
             console.log(response.data);
         }catch (error) {
             console.log(error);
@@ -255,7 +255,7 @@ export default function VoorstellingGegevens() {
 
     async function getVoorstellingEvents() {
         const response = await axios
-            .get("api/voorstellingevent/all")
+            .get("api/voorstellingevent/all", yourConfig)
             .catch((err) => {
                 console.log(err);
             });
@@ -284,7 +284,7 @@ export default function VoorstellingGegevens() {
 
 
         const response = await axios
-            .post("api/voorstellingevent", {VoorstellingId, Van, Tot, Datum, Zaal})
+            .post("api/voorstellingevent", {VoorstellingId, Van, Tot, Datum, Zaal}, yourConfig)
             .catch((err) => {
                 console.log(err);
             }
@@ -309,7 +309,7 @@ export default function VoorstellingGegevens() {
 
     async function deleteVoorstellingEvent(props){
         try{
-            const response = await axios.delete(`api/voorstellingevent/${props}`);
+            const response = await axios.delete(`api/voorstellingevent/${props}`, yourConfig);
             console.log(response.data);
             getVoorstellingEvents();
         }catch (error) {

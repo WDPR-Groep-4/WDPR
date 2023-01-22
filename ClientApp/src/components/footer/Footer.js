@@ -27,8 +27,8 @@ export default function Footer(props) {
                         <Button variant="text" color="inherit" component={Link} to="/steun-ons" sx={{ p: 1.5 }}>
                             Steun ons
                         </Button>
-                        <Button variant="text" color="inherit" component={Link} to="/over-ons" sx={{ p: 1.5 }}>
-                            Over ons
+                        <Button variant="text" color="inherit" component={Link} to="/steun-ons" sx={{ p: 1.5 }}>
+                            Zaal huren
                         </Button>
                 </Stack>
                 <Stack>
@@ -37,7 +37,7 @@ export default function Footer(props) {
                             Agenda
                         </Button>
                         <Button variant="text" color="inherit" component={Link} to="/winkelwagen" sx={{ p: 1.5 }}>
-                            WinkelWagen
+                            Winkelwagen
                         </Button>
                 </Stack>
                 <Stack>
@@ -47,9 +47,6 @@ export default function Footer(props) {
                         </Button>
                         <Button variant="text" color="inherit" component={Link} to="/mijntickets" sx={{ p: 1.5 }}>
                             Mijn tickets
-                        </Button>
-                        <Button variant="text" color="inherit" component={Link} to="/account/donaties" sx={{ p: 1.5 }}>
-                            Mijn donaties
                         </Button>
                 </Stack>
                 <Stack>

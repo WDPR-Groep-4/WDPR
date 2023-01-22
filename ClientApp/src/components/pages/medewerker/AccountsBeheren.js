@@ -181,7 +181,7 @@ export default function PrimarySearchAppBar() {
     }
 
     async function getGebruikers() {
-        const response = await axios.get("/api/account").catch((err) => {
+        const response = await axios.get("/api/account", yourConfig).catch((err) => {
             console.log(err);
         });
         if (response && response.data) {
@@ -255,7 +255,7 @@ export default function PrimarySearchAppBar() {
     async function deleteGebruiker(props) {
         console.log(props);
         try {
-            const response = await axios.delete(`/api/account/${props}`);
+            const response = await axios.delete(`/api/account/${props}`, yourConfig);
             if (response.status == 200) {
                 console.log("succes");
             }
@@ -280,7 +280,7 @@ export default function PrimarySearchAppBar() {
                 email,
                 telefoon,
 
-            });
+            }, yourConfig);
             console.log(response.data);
             getGebruikers();
             // handle the response data here

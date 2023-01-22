@@ -55,7 +55,7 @@ export default function Account(props) {
         if (userRol == null || id == undefined) {
             return userRol;
         }
-        axios.get(`api/account/${id}/rol`)
+        axios.get(`api/account/${id}/rol`, yourConfig)
             .then(res => {
                 setUserRol(res.data);
             })
