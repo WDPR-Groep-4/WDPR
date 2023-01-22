@@ -15,7 +15,7 @@ public class DonatieController : ControllerBase
     private readonly UserManager<Gebruiker> _userManager;
 
 
-    public DonatieController(DatabaseContext context, ILogger<BetaalController> logger, UserManager<Gebruiker> userManager)
+    public DonatieController(DatabaseContext context, ILogger<DonatieController> logger, UserManager<Gebruiker> userManager)
     {
         _context = context;
         _logger = logger;
