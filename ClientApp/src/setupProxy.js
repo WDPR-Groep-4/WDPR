@@ -31,6 +31,13 @@ const context = [
     "/api/ticket/qrcode",
     "/api/donatie/token",
     "/api/donatie",
+    "/api/medewerker",
+    "/api/medewerker/accounts",
+    "/api/medewerker/accounts/add",
+    "/api/medewerker/accounts/get",
+    "/api/medewerker/accounts/delete",
+    "/api/medewerker/voorstellingen",
+    "/api/medewerker/planning",
     "/api/huurevent",
 ];
 
