@@ -258,6 +258,7 @@ export default function PrimarySearchAppBar() {
 
             });
             console.log(response.data);
+            getGebruikers();
             // handle the response data here
         } catch (error) {
             console.log(error);
@@ -293,9 +294,6 @@ export default function PrimarySearchAppBar() {
                         </Popper>
                         <IconButton color="inherit" onClick={deleteGebruikers}>
                             <DeleteIcon />
-                        </IconButton>
-                        <IconButton color="inherit" onClick={getGebruikersSearch}>
-                            <EditIcon />
                         </IconButton>
                     </Box>
                 </Toolbar>
