@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Backend;
@@ -150,8 +151,9 @@ public class VoorstellingEventController : ControllerBase
         return Ok(events);
     }
 
-    [HttpPost("voorstellingen")]
-    public async Task<ActionResult<VoorstellingEvent>> PostVoorstellingEvent([FromQuery] VoorstellingEventDto? voorstellingEventDto)
+    [HttpPost]
+    [Authorize(Roles = "Administrator, Medewerker")]
+    public async Task<ActionResult> PostVoorstellingEvent([FromBody] CreateVoorstellingEvent voorstellingEventDto)
     {
         var voorstelling = await _context.Voorstellingen.FindAsync(voorstellingEventDto.VoorstellingId);
         if (voorstelling == null)
@@ -159,16 +161,20 @@ public class VoorstellingEventController : ControllerBase
             return NotFound();
         }
 
+        var van = DateTime.Parse(voorstellingEventDto.Datum + " " + voorstellingEventDto.Van);
+        var tot = DateTime.Parse(voorstellingEventDto.Datum + " " + voorstellingEventDto.Van);
+
         DatumBereik datumBereik = new DatumBereik
         {
-            Id = voorstellingEventDto.Id,
-            Van = voorstellingEventDto.Van,
-            Tot = voorstellingEventDto.Tot
+            Van = van,
+            Tot = tot
         };
+        
         var voorstellingEvent = new VoorstellingEvent
         {
             Voorstelling = voorstelling,
-            DatumBereik = datumBereik
+            DatumBereik = datumBereik,
+            Zaal = voorstellingEventDto.Zaal
         };
 
         if (!PlanningUtils.IsDatumVrij(voorstellingEvent.DatumBereik, voorstellingEvent.Zaal, _context))
@@ -182,6 +188,21 @@ public class VoorstellingEventController : ControllerBase
         {
             id = voorstellingEvent.Id
         }, voorstellingEvent);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrator, Medewerker")]
+    public async Task<ActionResult> DeleteVoorstellingEvent(int id)
+    {
+        var voorstellingEvent = await _context.Events.FindAsync(id);
+        if (voorstellingEvent == null)
+        {
+            return NotFound();
+        }
+
+        _context.Events.Remove(voorstellingEvent);
+        await _context.SaveChangesAsync();
+        return NoContent();
     }
 
 
@@ -201,4 +222,11 @@ public class VoorstellingEventParameters : QueryStringParameters
     public string? SearchQuery { get; set; } = "";
 }
 
+public class CreateVoorstellingEvent{
+    public int VoorstellingId { get; set; }
+    public string? Van { get; set; }
+    public string? Tot { get; set; }
+    public string? Datum { get; set; }
+    public int Zaal { get; set; }
+}
 

@@ -23,6 +23,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import TableRow from "@mui/material/TableRow";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import { useAuthHeader } from "react-auth-kit";
 
 
 import Dialog from '@mui/material/Dialog';
@@ -34,36 +37,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from "@mui/material/TextField";
 import config from "../../../config.json";
 
-
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  }));
-  
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-    width: '20ch',
-    },
-},
-}));
 
 function convertDateString(dateString) {
     const date = new Date(dateString);
@@ -102,6 +75,10 @@ function GetMaandString(maand) {
     return maanden[maand - 1];
 }
 
+const date = new Date();
+const dateNow = date.getFullYear() + "-" + addLeadingZero(date.getMonth() + 1) + "-" + addLeadingZero(date.getDate());
+const timeNow = addLeadingZero(date.getHours()) + ":" + addLeadingZero(date.getMinutes());
+
 function addLeadingZero(number) {
     let str = number.toString();
     if (str.length === 1) {
@@ -120,9 +97,32 @@ export default function VoorstellingGegevens() {
     const [anchorEl3, setAnchorEl3] = React.useState(null);
     const [voorstellingEvents, setVoorstellingEvents] = useState([]);
     const [voorstellingen, setVoorstellingen] = useState([]);
+    const [voorstelling, setVoorstelling] = useState([]);
     const [openDialog, setOpenDialog] = React.useState(false);
     const [selected, setSelected] = React.useState([]);
     const [expanded, setExpanded] = React.useState(false);
+    const [user, setUser] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const authHeader = useAuthHeader();
+
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
+    };
+    useEffect(() => {
+        const account = async () => {
+            const response = await axios.get("/api/account", yourConfig).catch((err) => {
+                console.log(err);
+            });
+            if (response.status === 200) {
+                setUser(response.data);
+                setLoading(false);
+            }
+        };
+        account();
+    }, []);
 
 
     const open = Boolean(anchorEl);
@@ -196,7 +196,7 @@ export default function VoorstellingGegevens() {
             });
         if (response && response.data) {
             setVoorstellingen(response.data);
-            //console.log(response.data)
+            console.log(response.data)
         }
         return response.data;
     }
@@ -206,15 +206,52 @@ export default function VoorstellingGegevens() {
         const Beschrijving = document.getElementById("beschrijving").value;
         const Genre = document.getElementById("genre").value;
         const Afbeelding = document.getElementById("afbeelding").value;
+        const Banner = document.getElementById("banner").value;
+        const Leeftijd = document.getElementById("leeftijd").value;
+        const Begunstigers = document.getElementById("begunstiger").value;
+        const Rang1 = document.getElementById("rang1").value;
+        const Rang2 = document.getElementById("rang2").value;
+        const Rang3 = document.getElementById("rang3").value;   
 
         try{
-            const response = await axios.post("api/voorstelling", {Titel, Beschrijving, Genre, Afbeelding});
+            const response = await axios.post("api/voorstelling", {Titel, Beschrijving, Genre, Afbeelding, Banner, Leeftijd, Begunstigers, Rang1, Rang2, Rang3});
             console.log(response.data);
         }catch (error) {
             console.log(error);
         }
 
     }
+
+    async function editVoorstelling(props){
+        const Titel = document.getElementById("editTitel").value;
+        const Beschrijving = document.getElementById("editBeschrijving").value;
+        const Genre = document.getElementById("editGenre").value;
+        const Afbeelding = document.getElementById("editAfbeelding").value;
+        const Banner = document.getElementById("editBanner").value;
+        const Leeftijd = document.getElementById("editLeeftijd").value;
+        const Begunstigers = document.getElementById("editBegunstiger").value;
+        const Rang1 = document.getElementById("editRang1").value;
+        const Rang2 = document.getElementById("editRang2").value;
+        const Rang3 = document.getElementById("editRang3").value;
+
+        try{
+            const response = await axios.put(`api/voorstelling/${props}`, {Titel, Beschrijving, Genre, Afbeelding, Banner, Leeftijd, Begunstigers, Rang1, Rang2, Rang3});
+            console.log(response.data);
+        }catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function deleteVoorstelling(props){
+        try{
+            const response = await axios.delete(`api/voorstelling/${props}`);
+            console.log(response.data);
+        }catch (error) {
+            console.log(error);
+        }
+    }
+
+    
 
     async function getVoorstellingEvents() {
         const response = await axios
@@ -229,12 +266,25 @@ export default function VoorstellingGegevens() {
         return response.data;
     }
 
-    async function addVoorstellingEvent(){
+    function addVoorstelllingEventElement(props){
+        addVoorstellingEvent(props);
+    }
+
+    async function addVoorstellingEvent(props){
+        const Zaal = document.getElementById("zaal").value;
+        const Van = document.getElementById("van").value;
+        const Tot = document.getElementById("tot").value;
+        const Datum = document.getElementById("datum").value;
+        const VoorstellingId = props;
+
+        if (Zaal == "" || Zaal== null){
+            return;
+        }
+        console.log(VoorstellingId);
+
+
         const response = await axios
-            .post("api/medewerker/voorstelling", {
-                datum: "2021-10-10",
-                zaalId: 1
-            })
+            .post("api/voorstellingevent", {VoorstellingId, Van, Tot, Datum, Zaal})
             .catch((err) => {
                 console.log(err);
             }
@@ -242,9 +292,32 @@ export default function VoorstellingGegevens() {
         if (response && response.data) {
             console.log(response.data)
         }
+        
         return response.data;
     }
 
+    function deleteVoorstellingEvents(){
+        if (selected.length == 0){
+            console.log("Selecteer eerst een event om te verwijderen");
+            return;
+        }
+        console.log(selected);
+        selected.map((id) => (
+            deleteVoorstellingEvent(id.id)
+        ));
+    }
+
+    async function deleteVoorstellingEvent(props){
+        try{
+            const response = await axios.delete(`api/voorstellingevent/${props}`);
+            console.log(response.data);
+            getVoorstellingEvents();
+        }catch (error) {
+            console.log(error);
+        }
+    }
+
+    
 
     function voorstellingElement(){
         if (voorstellingEvents.length == 0){
@@ -308,7 +381,7 @@ export default function VoorstellingGegevens() {
                         <Typography sx={{ml:3, mr:3, mt:2, fontWeight:"bold"}}>Selecteer een voorstelling om te verwijderen</Typography>
                         {voorstellingen.map((voorstelling) => (
                             <Box sx={{m:3}}>
-                                <MenuItem key={voorstelling.voorstellingId} onClick={handleClose2}>{voorstelling.titel}</MenuItem>
+                                <MenuItem key={voorstelling.voorstellingId}>{voorstelling.titel}</MenuItem>
                             </Box>
                         ))}
                     </Menu>              
@@ -344,10 +417,7 @@ export default function VoorstellingGegevens() {
                         </div>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Button sx={{height:50, fontSize:18, width:250, m:2, mr:3}}size="large" color="primary" variant="contained">Wijzig Afbeelding</Button>                        
-                        <Button sx={{height:50, fontSize:18, width:250, m:3}}size="large" color="primary" variant="contained">Wijzig Titel</Button>
-                        <Button sx={{height:50, fontSize:18, width:250, m:3}}size="large" color="primary" variant="contained">Wijzig Genre</Button>
-                        <Button sx={{height:50, fontSize:18, width:250, m:3}}size="large" color="primary" variant="contained">Wijzig Beschrijving</Button>                        
+                        <EditForm key={props.voorstelling.voorstellingid} voorstelling={props.voorstelling}/>                     
                         <Box sx={{ display: 'block', m:2 }}>
                             {filtered.map((voorstelling) => (
                                 <Card key={voorstelling.voorstellingId} variant="outlined" sx={{width:500, height:150, display:'container', mt:3}}>
@@ -369,15 +439,14 @@ export default function VoorstellingGegevens() {
                                 </Card>
                             ))}
                             <Box>
-                                <Button sx={{height:50, fontSize:18, width:300}} variant="contained">
-                                    Voeg voorstelling toe
-                                </Button>
-                                <Button sx={{height:50, m:3, fontSize:18, width:300}} variant="outlined">
+                                <Button onClick={(e) => {e.preventDefault(); deleteVoorstellingEvents()}} sx={{height:50, m:3, fontSize:18, width:300}} variant="outlined">
                                     Verwijder Voorstelling
                                 </Button>
                                 
                                 
+                                
                             </Box>
+                            <VoorstellingEventForm voorstelling={props.voorstelling.voorstellingId}/>
                             
                             <Dialog
                                 open={openDialog}
@@ -478,11 +547,214 @@ export default function VoorstellingGegevens() {
                     defaultValue=""
                     />
                 </Box>
+                <Box sx={{display:'flex'}}>
+                    <TextField
+                    required
+                    id="banner"
+                    label="Banner"
+                    defaultValue=""
+                    />
+                    <Box sx={{px:3}}>
+                        <InputLabel id="demo-simple-select-label">Leeftijd</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="leeftijd"
+                            label="Leeftijd"
+                            onChange={handleChange}
+                            defaultValue={0}
+                        >
+                            <MenuItem value={0}>N/A</MenuItem>
+                            <MenuItem value={6}>6+</MenuItem>
+                            <MenuItem value={16}>12+</MenuItem>
+                            <MenuItem value={18}>18+</MenuItem>
+                            
+                        </Select>
+                    </Box>
+                    <Box sx={{px:10}}>
+                        <InputLabel id="demo-simple-select-label">Begunstigers Exclusive</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="begunstiger"
+                            label="Begunstigers Exclusive"
+                            onChange={handleChange}
+                        >
+                            <MenuItem value={true}>Ja</MenuItem>
+                            <MenuItem value={false}>Nee</MenuItem>
+                        </Select>
+                    </Box>
+                </Box>
+                <Box sx={{display:'flex'}}>
+                    <TextField
+                    required
+                    id="rang1"
+                    label="Prijs rang 1"
+                    defaultValue=""
+                    />
+                    <TextField
+                    required
+                    id="rang2"
+                    label="Prijs rang 2"
+                    defaultValue=""
+                    />
+                    <TextField
+                    required
+                    id="rang3"
+                    label="Prijs rang 3"
+                    defaultValue=""
+                    />
+                </Box>
+
             </form>
             <Box display={"flex"}>
                 <Button onClick={addVoorstelling} variant="" fullWidth="true">Voeg toe</Button>
             </Box>
           </Box>     
+        )
+    }
+
+    function EditForm(props) {
+        return (
+            <Box component="form" asignItems="center" 
+                    sx={{
+                      '& .MuiTextField-root': { m: 3, },
+                    }}
+                    noValidate
+                    autoComplete="off">
+              <form id = "addUserForm">
+                <Box sx={{display:'flex'}}>
+                    <TextField
+                    required
+                    id="editTitel"
+                    label="Titel"
+                    defaultValue={props.voorstelling.titel}
+                    />
+                    <TextField
+                    required
+                    id="editBeschrijving"
+                    label="Beschrijving"
+                    defaultValue={props.voorstelling.beschrijving}
+                    />
+                    <TextField
+                    required
+                    id="editGenre"
+                    label="Genre"
+                    defaultValue={props.voorstelling.genre}
+                    />
+                    <TextField
+                    required
+                    id="editAfbeelding"
+                    label="Afbeelding"
+                    defaultValue={props.voorstelling.afbeelding}
+                    />
+                </Box>
+                <Box sx={{display:'flex'}}>
+                    <TextField
+                    required
+                    id="editBanner"
+                    label="Banner"
+                    defaultValue={props.voorstelling.banner}
+                    />
+                    <Box sx={{px:3}}>
+                        <InputLabel id="demo-simple-select-label">Leeftijd</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="editLeeftijd"
+                            label="Leeftijd"
+                            onChange={handleChange}
+                            defaultValue={props.voorstelling.leeftijd}
+                        >
+                            <MenuItem value={0}>N/A</MenuItem>
+                            <MenuItem value={6}>6+</MenuItem>
+                            <MenuItem value={16}>12+</MenuItem>
+                            <MenuItem value={18}>18+</MenuItem>
+                            
+                        </Select>
+                    </Box>
+                    <Box sx={{px:10}}>
+                        <InputLabel id="demo-simple-select-label">Begunstigers Exclusive</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="editBegunstiger"
+                            label="Begunstigers Exclusive"
+                            onChange={handleChange}
+                            defaultValue={props.voorstelling.begunstigerOnly}
+                        >
+                            <MenuItem value={true}>Ja</MenuItem>
+                            <MenuItem value={false}>Nee</MenuItem>
+                        </Select>
+                    </Box>
+                </Box>
+                <Box sx={{display:'flex'}}>
+                    <TextField
+                    required
+                    id="editRang1"
+                    label="Prijs rang 1"
+                    defaultValue={props.voorstelling.prijzenPerRang[0].prijs}
+                    />
+                    <TextField
+                    required
+                    id="editRang2"
+                    label="Prijs rang 2"
+                    defaultValue={props.voorstelling.prijzenPerRang[1].prijs}
+                    />
+                    <TextField
+                    required
+                    id="editRang3"
+                    label="Prijs rang 3"
+                    defaultValue={props.voorstelling.prijzenPerRang[2].prijs}
+                    />
+                </Box>
+
+            </form>
+            <Box display={"flex"}>
+                <Button variant="contained" fullWidth="true">Pas aan</Button>
+            </Box>
+          </Box>     
+        )
+    }
+
+    function VoorstellingEventForm(props){
+        return(
+            <Box component="form" asignItems="center" 
+                    sx={{
+                      '& .MuiTextField-root': { m: 3, },
+                    }}
+                    noValidate
+                    autoComplete="off">
+              <form id = "addVoorstellingEvent">
+                <Box sx={{display:'flex'}}>
+                    
+                    <TextField
+                    required
+                    id="zaal"
+                    label="Zaal"
+                    defaultValue=""
+                    />
+                    <TextField
+                    required
+                    id="van"
+                    label="Van"
+                    defaultValue={timeNow}
+                    />
+                    <TextField
+                    required
+                    id="tot"
+                    label="Tot"
+                    defaultValue={timeNow}
+                    />
+                    <TextField
+                    required
+                    id="datum"
+                    label="Datum"
+                    defaultValue={dateNow}
+                    />
+                </Box>
+            </form>
+            <Box display={"flex"}>
+                <Button onClick={(e) => {e.preventDefault(); addVoorstelllingEventElement(props.voorstelling)}} variant="contained" fullWidth="true">Voeg toe</Button>
+            </Box>
+          </Box> 
+            
         )
     }
     
