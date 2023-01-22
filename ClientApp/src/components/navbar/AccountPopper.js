@@ -72,6 +72,20 @@ export default function AccountPopper(props) {
                                     >
                                         Mijn tickets
                                     </MenuItem>
+                                    <MenuItem
+                                        onClick={props.handleCloseAccount}
+                                        component={Link}
+                                        to="/zaal-huren"
+                                    >
+                                        Zaal huren
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={props.handleCloseAccount}
+                                        component={Link}
+                                        to="/medewerker"
+                                    >
+                                        Medewerkersmenu
+                                    </MenuItem>
                                     <Divider />
                                     <MenuItem onClick={handleLogout}>
                                         <ListItemIcon>
