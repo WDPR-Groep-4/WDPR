@@ -34,7 +34,7 @@ public class VoorstellingController : ControllerBase
     public async Task<ActionResult<VoorstellingEvent>> GetVoorstellingEvent(int eventId)
     {
         var voorstellingEvent = await _context.VoorstellingEvents.Where(v => v.Id == eventId).Include(v => v.Voorstelling).Include(v => v.Voorstelling.PrijzenPerRang).Include(v => v.DatumBereik).FirstOrDefaultAsync();
-        
+
         if (voorstellingEvent == null)
         {
             return NotFound("VoorstellingEvent not found");
@@ -53,6 +53,7 @@ public class VoorstellingController : ControllerBase
         return voorstellingen;
     }
 
+    [Authorize(Roles = "Medewerker, Administrator")]
     [HttpPost]
     public async Task<ActionResult> PostVoorstelling([FromBody] createVoorstelling created)
     {
@@ -74,6 +75,7 @@ public class VoorstellingController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Medewerker, Administrator")]
     [HttpPut("{id}")]
     public async Task<ActionResult<Voorstelling>> PutVoorstelling(int id, Voorstelling voorstelling)
     {
@@ -86,6 +88,7 @@ public class VoorstellingController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles = "Medewerker, Administrator")]
     [HttpDelete("{id}")]
     public async Task<ActionResult<Voorstelling>> DeleteVoorstelling(int id)
     {

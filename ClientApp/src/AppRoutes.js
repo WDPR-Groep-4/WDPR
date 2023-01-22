@@ -19,6 +19,7 @@ import BetaalPagina from "./components/pages/winkelwagen/BetaalPagina";
 import VerifyPagina from "./components/pages/winkelwagen/VerifyPagina";
 import TicketPage from "./components/pages/account/mijntickets/TicketPage";
 import BetalingBedankt from "./components/pages/winkelwagen/Betaling/BetalingBedankt";
+import ZaalhurenPage from "./components/pages/zaalhuren/Zaalhurenpage";
 
 const AppRoutes = [
     {
@@ -124,6 +125,10 @@ const AppRoutes = [
     {
         path: "/winkelwagen/bedankt",
         element: <BetalingBedankt />,
+    },
+    {
+        path: "/zaal-huren",
+        element: <ZaalhurenPage />,
     },
 ];
 

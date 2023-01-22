@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend;
 
@@ -26,6 +27,7 @@ public class InitController : ControllerBase
         return start.AddDays(_random.Next(range));
     }
 
+    [Authorize(Roles = "Administrator")]
     [HttpGet]
     public Task PopulateEventDatabase()
     {
@@ -61,6 +63,7 @@ public class InitController : ControllerBase
         return Task.CompletedTask;
     }
 
+    [Authorize(Roles = "Administrator")]
     [HttpGet("clear")]
     public Task ClearEventDatabase()
     {

@@ -23,6 +23,11 @@ const context = [
     "/api/betaal/verify",
     "/api/init",
     "/api/ticket",
+    
+    "/api/interesse",
+    "/api/auth/getidbyemail",
+    "/api/interesse/AddInteresseGast",
+    "/api/interesse/GetInteressesByGastId",
     "/api/ticket/qrcode",
     "/api/donatie/token",
     "/api/donatie",
@@ -33,6 +38,7 @@ const context = [
     "/api/medewerker/accounts/delete",
     "/api/medewerker/voorstellingen",
     "/api/medewerker/planning",
+    "/api/huurevent",
 ];
 
 module.exports = function (app) {

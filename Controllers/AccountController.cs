@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers;
 
@@ -45,6 +46,7 @@ public class AccountController : ControllerBase
         return Ok(users);
     }
 
+    [Authorize]
     [HttpGet]
     [Route("{userId}")]
     public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string userId)
@@ -73,6 +75,36 @@ public class AccountController : ControllerBase
         var rol = await _userManager.GetRolesAsync(user);
         return Ok(rol);
     }
+    /*
+    [HttpPut]
+    public async Task<ActionResult<List<InteresseGast>>> putInteresse([FromBody] List<InteresseGast> interesseGasten)
+    {
+        var userFromContext = HttpContext.User;
+        Gebruiker? user = await _userManager.FindByNameAsync(userFromContext.Identity.Name);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        List<Interesse> interesses = new();
+        foreach (var interesseGast in interesseGasten)
+        {
+            Interesse interesse = new()
+            {
+                Naam = interesseGast.Naam,
+                Beschrijving = interesseGast.Beschrijving,
+                Gebruiker = user
+            };
+            interesses.Add(interesse);
+        }
+
+        user.Interesses = interesses;
+        await _userManager.UpdateAsync(user);
+
+        return Ok(interesseGasten);
+    }
+    */
+  
 
 //     [HttpGet]
 //     [Route("all/")]
@@ -164,5 +196,6 @@ public class AccountDTO
     public string Voornaam { get; set; }
     public string Achternaam { get; set; }
     public string Email { get; set; }
+    public List<Interesse> Interesses { get; set; }
 }
 
