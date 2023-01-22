@@ -81,7 +81,7 @@ public class TicketController : ControllerBase
         {
             return NotFound();
         }
-        Image qrCodeImage = await GenerateTicketImage(ticket);
+        Image qrCodeImage = GenerateTicketImage(ticket);
         using (var stream = new MemoryStream())
         {
             qrCodeImage.Save(stream, new PngEncoder());
@@ -111,6 +111,7 @@ public class TicketController : ControllerBase
         logger.LogInformation(aantal.ToString());
 
         List<Ticket> tickets = new List<Ticket>();
+        Dictionary<Image<Rgba32>, string> ticketImages = new Dictionary<Image<Rgba32>, string>();
 
         for (int i = 0; i < aantal; i++)
         {
@@ -123,13 +124,14 @@ public class TicketController : ControllerBase
             context.AddAsync(ticket);
             context.SaveChangesAsync();
 
-            // email qr
+            ticketImages.Add(GenerateTicketImage(ticket), ticket.TicketId.ToString());
         }
 
+        //email tickets
 
         return tickets;
     }
-    public static async Task<Image<Rgba32>> GenerateTicketImage(Ticket ticket)
+    public static Image<Rgba32> GenerateTicketImage(Ticket ticket)
     {
         QRCodeGenerator qrGenerator = new QRCodeGenerator();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(ticket.TicketId.ToString(), QRCodeGenerator.ECCLevel.Q);
