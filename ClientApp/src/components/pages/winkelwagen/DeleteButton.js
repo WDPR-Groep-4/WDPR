@@ -66,6 +66,7 @@ export default function DeleteButton(props) {
             fontSize: 10,
             color: "#727272",
           }}
+          aria-label="Product verwijderen"
       >
         Verwijderen
       </Button>

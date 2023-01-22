@@ -4,6 +4,7 @@ import { useState } from "react";
 import PersoonlijkeGegevens from "./PersoonlijkeGegevens";
 import config from "../../../config.json";
 import MijnTickets from "./mijntickets/TicketPage";
+import MijnHuurEventsPage from "./mijnHuurEvents/MijnHuurEventsPage";
 
 export default function AccountPage(props) {
     const [value, setValue] = useState(0);
@@ -36,7 +37,7 @@ export default function AccountPage(props) {
                         >
                             <Tab label="Persoonlijke gegevens" />
                             <Tab label="Mijn tickets" />
-                            <Tab label="Interesses" />
+                            <Tab label="Gehuurde zalen" />
                             <Tab label="Donaties" />
                         </Tabs>
                     </Box>
@@ -58,7 +59,7 @@ export default function AccountPage(props) {
                             <MijnTickets />
                         </TabPanel>
                         <TabPanel value={value} index={2}>
-                            Interesses
+                            <MijnHuurEventsPage />
                         </TabPanel>
                         <TabPanel value={value} index={3}>
                             Donaties

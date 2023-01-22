@@ -10,26 +10,6 @@ import { useEffect, useState } from "react";
 export default function SteunOnsPage(props) {
     const auth = useAuthUser();
 
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const token = params ? params.get("token") : null;
-
-        async function fetchToken() {
-            const response = await axios
-                .post("/api/donatie/addtoken", {
-                    token: token,
-                    email: auth().email,
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-            console.log(response.data);
-        }
-        if (token) {
-            fetchToken();
-        }
-    }, []);
-
     document.title = "Steun Ons" + config.title;
 
     return (

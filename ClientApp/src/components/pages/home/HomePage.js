@@ -81,8 +81,8 @@ function HomePage(props) {
                         <p>
                             Bekijk de mooiste voorstellingen in het theater van de regio.
                         </p>
-                        <Link to="/agenda">
                             <Button
+                                to="/agenda"
                                 sx={{
                                     color: "white",
                                     backgroundColor: "primary.main",
@@ -93,7 +93,6 @@ function HomePage(props) {
                             >
                                 AGENDA
                             </Button>
-                        </Link>
                     </Container>
                 </div>
             </div>
@@ -116,6 +115,11 @@ function HomePage(props) {
                 <p> Help ons om het theater te onderhouden en te verbeteren.</p>
                 <Button component={Link} to="/steun-ons" variant="contained">
                     Steun ons
+                </Button>
+                <h3>Zaal huren</h3>
+                <p>Als u een zaal wilt huren voor een evenement, klik dan hieronder.</p>
+                <Button component={Link} to="/zaal-huren" variant="contained">
+                    Zaal huren
                 </Button>
             </div>
             <Footer />

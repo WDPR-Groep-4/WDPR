@@ -1,11 +1,12 @@
 import { Box, Container } from "@mui/system";
 import { Pagination, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import config from "../../../config.json";
 import AgendaItem from "./AgendaItem";
 import axios from "axios";
 import Footer from "../../footer/Footer";
 import AgendaOptiesBar from "./ZoekOpties/AgendaOptiesBar";
+import { useAuthHeader } from "react-auth-kit";
+import config from "../../../config.json";
 
 export default function AgendaPage() {
     document.title = "Agenda" + config.title;
@@ -19,21 +20,30 @@ export default function AgendaPage() {
         genre: "Alle",
     });
     const [sorteren, setSorteren] = useState("Datum");
+    const authHeader = useAuthHeader();
 
-    console.log("filters", filters);
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
+    };
 
     useEffect(() => {
         async function getVoorstellingEvents() {
             const response = await axios
-                .get("api/voorstellingevent", {
-                    params: {
-                        PageSize: pageSize,
-                        PageNumber: currentPage,
-                        OrderBy: sorteren,
-                        SearchQuery: zoekInput,
-                        Genre: filters.genre,
+                .get(
+                    "api/voorstellingevent",
+                    {
+                        params: {
+                            PageSize: pageSize,
+                            PageNumber: currentPage,
+                            OrderBy: sorteren,
+                            SearchQuery: zoekInput,
+                            Genre: filters.genre,
+                        },
                     },
-                })
+                    yourConfig
+                )
                 .catch((err) => {
                     console.log(err);
                 });
