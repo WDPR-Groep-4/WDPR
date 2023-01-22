@@ -29,14 +29,10 @@ export default function RegistreerPage() {
 
     const handleInterestChange = (event) => {
         let newSelectedInterests = [...event.target.value];
-        if(newSelectedInterests.includes("0.Geen Interesse")) {
-            newSelectedInterests = ["0.Geen Interesse"]
-            if(event.target.value.length > 1) {
-                newSelectedInterests = event.target.value.filter((interest) => interest !== "0.Geen Interesse");
-            }
-            if(event.target.value.length === 0) {
-                newSelectedInterests = ["0.Geen Interesse"];
-            }
+        if(newSelectedInterests.length === 0) {
+            newSelectedInterests.push("0.Geen Interesse");
+        }else if (newSelectedInterests.includes("0.Geen Interesse")) {
+            newSelectedInterests = newSelectedInterests.filter((interest) => interest !== "0.Geen Interesse");
         }
         console.log(newSelectedInterests);
         setSelectedInterests(newSelectedInterests);

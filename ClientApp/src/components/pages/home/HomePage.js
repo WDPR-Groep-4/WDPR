@@ -7,6 +7,8 @@ import { Container } from "@mui/system";
 import Footer from "../../footer/Footer";
 import config from "../../../config.json";
 import { useAuthUser } from "react-auth-kit";
+import { useState } from "react";
+import axios from "axios";
 
 function HomePage(props) {
     document.title = "Home" + config.title;
@@ -14,43 +16,30 @@ function HomePage(props) {
     const { token } = params;
     const auth = useAuthUser();
     const email = auth.user ? auth.user.email : null;
+    const [voorstellingen, setVoorstellingen] = useState([]);
+    
 
     //useEffect
+    useEffect(() => {
+        async function getVoorstellingen() {
+            const response = await axios.get("api/homepage/getrandomvoorstellingen");
+            if (response && response.data) {
+                setVoorstellingen(response.data);
+            }
+        }
+        getVoorstellingen();
+    }, []);
+    const items = voorstellingen.map((voorstelling) => {
+        return {
+            id: voorstelling.id,
+            name: voorstelling.titel,
+            description: voorstelling.beschrijving,
+            image: voorstelling.banner,
+            width: "100%",
+            //link: `/voorstelling/${voorstelling.id}`,
+        }
+    });
 
-    var items = [
-        {
-            id: 1,
-            name: "Soldaat van Oranje",
-            description: "Wegens succes verlengd tot 1 mei 2077!",
-            image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
-            width: "100%",
-            link: "/voorstelling/63",
-        },
-        {
-            id: 2,
-            name: "Soldaat van Oranje",
-            description: "Wegens succes verlengd tot 1 mei 2077!",
-            image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
-            width: "100%",
-            link: "/voorstelling/63",
-        },
-        {
-            id: 3,
-            name: "Soldaat van Oranje",
-            description: "Wegens succes verlengd tot 1 mei 2077!",
-            image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
-            width: "100%",
-            link: "/voorstelling/63",
-        },
-        {
-            id: 4,
-            name: "Soldaat van Oranje",
-            description: "Wegens succes verlengd tot 1 mei 2077!",
-            image: "https://www.soldaatvanoranje.nl/wp-content/uploads/2018/12/svo_share-3.jpg",
-            width: "100%",
-            link: "/voorstelling/63",
-        },
-    ];
 
     return (
         <div>
@@ -82,6 +71,7 @@ function HomePage(props) {
                             Bekijk de mooiste voorstellingen in het theater van de regio.
                         </p>
                             <Button
+                                component={Link}
                                 to="/agenda"
                                 sx={{
                                     color: "white",
@@ -98,7 +88,7 @@ function HomePage(props) {
             </div>
             <div style={{ maxWidth: "700px", margin: "auto" }}>
                 <Carousel interval={4000} sx={{}}>
-                    {items.map((item, i) => (
+                    {items.map((item) => (
                         <Item key={item.id} item={item} />
                     ))}
                 </Carousel>
@@ -136,13 +126,14 @@ function Item(props) {
                     justifyContent: "center",
                 }}
             >
-                <a href={props.item.link}>
+                <a //</div>href={props.item.link}
+                >
                     <div style={{ position: "relative" }}>
                         <div style={{ display: "flex", flexWrap: "wrap" }}>
                             <img
                                 src={props.item.image}
                                 alt={props.item.name}
-                                style={{ maxHeight: "45vh" }}
+                                style={{width: '100%', height: '300px', objectFit: 'cover'}}
                             />
                             <div
                                 style={{

@@ -39,6 +39,7 @@ const context = [
     "/api/medewerker/voorstellingen",
     "/api/medewerker/planning",
     "/api/huurevent",
+    "/api/homepage/getrandomvoorstellingen",
 ];
 
 module.exports = function (app) {

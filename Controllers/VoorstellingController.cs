@@ -64,12 +64,27 @@ public class VoorstellingController : ControllerBase
         voorstelling.Genre = created.Genre;
         voorstelling.Afbeelding = created.Afbeelding;
         voorstelling.Banner = created.Banner;
-        voorstelling.PrijzenPerRang = created.PrijzenPerRang;
-        voorstelling.ZaalId = created.ZaalId;
         voorstelling.BegunstigerOnly = created.BegunstigerOnly;
         voorstelling.Leeftijd = created.Leeftijd;
-
-
+        voorstelling.ZaalId = 0;
+        RangPrijs rangPrijs1 = new RangPrijs(){
+            Rang = 1,
+            Prijs = double.Parse(created.Rang1)
+        };
+        RangPrijs rangPrijs2 = new RangPrijs(){
+            Rang = 2,
+            Prijs = double.Parse(created.Rang2)
+        };
+        RangPrijs rangPrijs3 = new RangPrijs(){
+            Rang = 3,
+            Prijs = double.Parse(created.Rang3)
+        };
+        List<RangPrijs> rangPrijzen = new List<RangPrijs>(){
+            rangPrijs1,
+            rangPrijs2,
+            rangPrijs3
+        };
+        voorstelling.PrijzenPerRang = rangPrijzen;
         await _context.Voorstellingen.AddAsync(voorstelling);
         await _context.SaveChangesAsync();
         return Ok();
@@ -77,13 +92,15 @@ public class VoorstellingController : ControllerBase
 
     [Authorize(Roles = "Medewerker, Administrator")]
     [HttpPut("{id}")]
-    public async Task<ActionResult<Voorstelling>> PutVoorstelling(int id, Voorstelling voorstelling)
+    public async Task<ActionResult> PutVoorstelling(string id, [FromBody] Voorstelling created)
     {
-        if (id != voorstelling.VoorstellingId)
-        {
-            return BadRequest();
-        }
-        _context.Entry(voorstelling).State = EntityState.Modified;
+
+        if (!id.Equals(created.VoorstellingId))
+    {
+        return BadRequest();
+    }
+        
+        _context.Entry(created).State = EntityState.Modified;
         await _context.SaveChangesAsync();
         return NoContent();
     }
@@ -109,8 +126,10 @@ public class createVoorstelling{
     public string Genre { get; set; }
     public string Afbeelding { get; set; }
     public string Banner { get; set; }
-    public List<RangPrijs> PrijzenPerRang { get; set; }
-    public int ZaalId { get; set; }
-    public bool BegunstigerOnly { get; set; }
     public int Leeftijd { get; set; }
+    public bool BegunstigerOnly { get; set; }
+    public string Rang1 { get; set; }
+    public string Rang2 { get; set; }
+    public string Rang3 { get; set; }
+    
 }
