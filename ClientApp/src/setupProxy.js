@@ -27,6 +27,7 @@ const context = [
     "/api/donatie/token",
     "/api/donatie",
     "/api/huurevent",
+    "/api/homepage/getrandomvoorstellingen",
 ];
 
 module.exports = function (app) {
