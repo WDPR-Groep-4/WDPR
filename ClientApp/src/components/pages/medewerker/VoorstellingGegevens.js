@@ -25,6 +25,7 @@ import Checkbox from "@mui/material/Checkbox";
 import TableRow from "@mui/material/TableRow";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
+import { useAuthHeader } from "react-auth-kit";
 
 
 import Dialog from '@mui/material/Dialog';
@@ -35,37 +36,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import TextField from "@mui/material/TextField";
 import config from "../../../config.json";
-
-
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  }));
-  
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-    width: '20ch',
-    },
-},
-}));
 
 
 function convertDateString(dateString) {
@@ -131,6 +101,28 @@ export default function VoorstellingGegevens() {
     const [openDialog, setOpenDialog] = React.useState(false);
     const [selected, setSelected] = React.useState([]);
     const [expanded, setExpanded] = React.useState(false);
+    const [user, setUser] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const authHeader = useAuthHeader();
+
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
+    };
+    useEffect(() => {
+        const account = async () => {
+            const response = await axios.get("/api/account", yourConfig).catch((err) => {
+                console.log(err);
+            });
+            if (response.status === 200) {
+                setUser(response.data);
+                setLoading(false);
+            }
+        };
+        account();
+    }, []);
 
 
     const open = Boolean(anchorEl);
@@ -288,6 +280,7 @@ export default function VoorstellingGegevens() {
         if (Zaal == "" || Zaal== null){
             return;
         }
+        console.log(VoorstellingId);
 
 
         const response = await axios
@@ -299,6 +292,7 @@ export default function VoorstellingGegevens() {
         if (response && response.data) {
             console.log(response.data)
         }
+        
         return response.data;
     }
 

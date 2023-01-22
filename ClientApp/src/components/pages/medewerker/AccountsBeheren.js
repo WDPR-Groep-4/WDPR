@@ -38,6 +38,7 @@ import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import config from "../../../config.json";
+import { useAuthHeader } from "react-auth-kit";
 
 const Search = styled("div")(({ theme }) => ({
     position: "relative",
@@ -76,13 +77,36 @@ const rows = [
 */
 
 export default function PrimarySearchAppBar() {
-    document.title = "Accounts Beheren" + config.title;
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [rol, setRol] = React.useState("");
     const [selected, setSelected] = React.useState([]);
     const [rows, setRows] = React.useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState([null]);
+    
+    const authHeader = useAuthHeader();
+
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
+    };
+    useEffect(() => {
+        const account = async () => {
+            const response = await axios.get("/api/account", yourConfig).catch((err) => {
+                console.log(err);
+            });
+            if (response.status === 200) {
+                setUser(response.data);
+                setLoading(false);
+            }
+        };
+        account();
+    }, []);
+    document.title = "Accounts Beheren" + config.title;
 
     const handleChange = (event) => {
         setRol(event.target.value);

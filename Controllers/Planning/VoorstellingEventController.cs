@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Backend;
@@ -151,6 +152,7 @@ public class VoorstellingEventController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Administrator, Medewerker")]
     public async Task<ActionResult> PostVoorstellingEvent([FromBody] CreateVoorstellingEvent voorstellingEventDto)
     {
         var voorstelling = await _context.Voorstellingen.FindAsync(voorstellingEventDto.VoorstellingId);
@@ -189,6 +191,7 @@ public class VoorstellingEventController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrator, Medewerker")]
     public async Task<ActionResult> DeleteVoorstellingEvent(int id)
     {
         var voorstellingEvent = await _context.Events.FindAsync(id);

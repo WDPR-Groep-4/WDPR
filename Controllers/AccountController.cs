@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -39,6 +40,7 @@ public class AccountController : ControllerBase
     // }
 
     [HttpGet]
+    [Authorize(Roles = "Administrator, Medewerker")]
     public async Task<IActionResult> GetUsers()
     {
         var users = _userManager.Users.ToList();
@@ -47,6 +49,7 @@ public class AccountController : ControllerBase
 
     [HttpGet]
     [Route("{userId}")]
+    [Authorize(Roles = "Administrator, Medewerker")]
     public async Task<ActionResult<List<Gebruiker>>> SearchUser([FromRoute] string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
@@ -61,6 +64,7 @@ public class AccountController : ControllerBase
 
     [HttpGet]
     [Route("{userId}/rol")]
+    [Authorize(Roles = "Administrator, Medewerker")]
     public async Task<ActionResult<List<Gebruiker>>> UserRol([FromRoute] string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
@@ -89,6 +93,7 @@ public class AccountController : ControllerBase
 // }
 
     [HttpPost]
+    [Authorize(Roles = "Administrator, Medewerker")]
     public async Task<IActionResult> Create([FromBody] createUser gebruiker)
     {
         var user = new Gebruiker { UserName = gebruiker.Email, Email = gebruiker.Email , Voornaam = gebruiker.Voornaam, Achternaam = gebruiker.Achternaam, PhoneNumber = gebruiker.Telefoon};
@@ -112,6 +117,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Administrator, Medewerker")]
     public async Task<IActionResult> Delete(string id)
     {
         var user = await _userManager.FindByIdAsync(id);

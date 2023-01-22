@@ -1,12 +1,14 @@
 import { Container, Tabs, Tab, Card, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import {useEffect, useState } from "react";
 import VoorstellingenGegevens from "./VoorstellingGegevens";
 import Artiesten from "./Artiesten";
 import AccountsBeheren from "./AccountsBeheren";
 import config from "../../../config.json";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useAuthHeader } from "react-auth-kit";
+
 
 
 
@@ -14,10 +16,34 @@ import axios from "axios";
 export default function MedewerkerPage() {
     document.title = "Medewerker" + config.title;
     const [value, setValue] = useState(0);
-    
+    const [user, setUser] = useState([null]);
+    const [loading, setLoading] = useState(true);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const authHeader = useAuthHeader();
+
+    const yourConfig = {
+        headers: {
+            Authorization: authHeader(),
+        },
+    };
+    useEffect(() => {
+        const account = async () => {
+            const response = await axios.get("/api/account", yourConfig).catch((err) => {
+                console.log(err);
+            });
+            if (response.status === 200) {
+                setUser(response.data);
+                setLoading(false);
+            }
+        };
+        account();
+    }, []);
+
+   
 
    
 
