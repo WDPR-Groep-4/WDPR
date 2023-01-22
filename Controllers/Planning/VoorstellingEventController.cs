@@ -137,6 +137,19 @@ public class VoorstellingEventController : ControllerBase
         return voorstellingEvents;
     }
 
+    [HttpGet]
+    [Route("all")]
+    public async Task<ActionResult<Voorstelling>> GetVoorstellingEvents()
+    {
+        var events = await _context.VoorstellingEvents.ToListAsync();
+        var voorstellingen = await _context.VoorstellingEvents.Include(v => v.Voorstelling).Include(v => v.Voorstelling.PrijzenPerRang).Include(v => v.DatumBereik).ToListAsync();
+        if (events == null)
+        {
+            return NotFound();
+        }
+        return Ok(events);
+    }
+
     [HttpPost("voorstellingen")]
     public async Task<ActionResult<VoorstellingEvent>> PostVoorstellingEvent([FromQuery] VoorstellingEventDto? voorstellingEventDto)
     {

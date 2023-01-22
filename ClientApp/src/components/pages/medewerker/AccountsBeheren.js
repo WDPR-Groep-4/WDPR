@@ -83,7 +83,6 @@ export default function PrimarySearchAppBar() {
     const [selected, setSelected] = React.useState([]);
     const [rows, setRows] = React.useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [searchTerm, setSearchTerm] = React.useState(null);
 
     const handleChange = (event) => {
         setRol(event.target.value);
@@ -96,7 +95,6 @@ export default function PrimarySearchAppBar() {
 
     const handleClick = (event) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
-        search();
     };
 
     const selectClick = (event, name) => {
@@ -138,13 +136,17 @@ export default function PrimarySearchAppBar() {
     };
 
     function search() {
-        setSearchTerm(document.getElementById("searchbox").value);
+        const searchTerm = "/api/account/" + document.getElementById("searchbox").value;
         zoekGebruiker(searchTerm);
     }
 
     async function zoekGebruiker(searchTerm) {
+        if (document.getElementById("searchbox").value == null || document.getElementById("searchbox").value == "") {
+            getGebruikers();
+            return;
+        }
         const response = await axios
-            .get(`/api/medewerker/accounts/${searchTerm}`)
+            .get(searchTerm)
             .catch((err) => {
                 console.log(err);
             });
@@ -154,19 +156,8 @@ export default function PrimarySearchAppBar() {
         }
     }
 
-    async function zoekGebruikerr(searchTerm) {
-        axios
-            .get(`/api/medewerker/accounts/${searchTerm}`)
-            .then((response) => {
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
     async function getGebruikers() {
-        const response = await axios.get("/api/medewerker").catch((err) => {
+        const response = await axios.get("/api/account").catch((err) => {
             console.log(err);
         });
         if (response && response.data) {
@@ -175,12 +166,14 @@ export default function PrimarySearchAppBar() {
     }
 
     async function getGebruikersSearch() {
-        if (searchTerm == null || searchTerm == "") {
+        if (document.getElementById("searchbox").value == null || document.getElementById("searchbox").value == "") {
             getGebruikers();
         } else {
-            zoekGebruiker(searchTerm);
+            zoekGebruiker(document.getElementById("searchbox").value);
         }
     }
+
+
 
     function rowElement() {
         if (rows.length == 0) {
@@ -201,7 +194,7 @@ export default function PrimarySearchAppBar() {
                     <TableCell padding="checkbox">
                         <Checkbox checked={isSelected(account.id)} />
                     </TableCell>
-                    <Account account={account} key={account.id} />
+                    <Account account={account} key={account.id}/>
                 </TableRow>
             ));
         }
@@ -225,22 +218,25 @@ export default function PrimarySearchAppBar() {
         }
     }
 
-    async function deleteGebruiker() {
+    function deleteGebruikers() {
         if (selected.length == 0) {
             console.log("Selecteer eerst een gebruiker om te verwijderen");
             return;
         }
-        console.log(selected);
+        selected.map((id) => {
+            deleteGebruiker(id);
+        });
+    }
+
+    async function deleteGebruiker(props) {
+        console.log(props);
         try {
-            const response = await axios.delete("/api/medewerker/accounts/delete", {
-                params: {
-                    id: id,
-                },
-            });
+            const response = await axios.delete(`/api/account/${props}`);
             if (response.status == 200) {
                 console.log("succes");
             }
             console.log("deleted");
+            getGebruikers();
         } catch (error) {
             console.log(error);
         }
@@ -253,11 +249,13 @@ export default function PrimarySearchAppBar() {
         const telefoon = document.getElementById("telefoon").value;
 
         try {
-            const response = await axios.post("/api/medewerker/accounts/add", {
+            const response = await axios.post("/api/account", {
+                rol,
                 voornaam,
                 achternaam,
                 email,
                 telefoon,
+
             });
             console.log(response.data);
             // handle the response data here
@@ -293,7 +291,7 @@ export default function PrimarySearchAppBar() {
                         <Popper id={id} open={open} anchorEl={anchorEl}>
                             <AccountForm />
                         </Popper>
-                        <IconButton color="inherit" onClick={deleteGebruiker}>
+                        <IconButton color="inherit" onClick={deleteGebruikers}>
                             <DeleteIcon />
                         </IconButton>
                         <IconButton color="inherit" onClick={getGebruikersSearch}>
@@ -350,26 +348,7 @@ export default function PrimarySearchAppBar() {
             >
                 <form id="addUserForm">
                     <Box sx={{ display: "flex" }}>
-                        <TextField
-                            required
-                            id="voornaam"
-                            label="Voornaam"
-                            defaultValue=""
-                        />
-                        <TextField
-                            required
-                            id="achternaam"
-                            label="Achternaam"
-                            defaultValue=""
-                        />
-                        <TextField required id="email" label="Email" defaultValue="" />
-                        <TextField
-                            required
-                            id="telefoon"
-                            label="Telefoonnummer"
-                            defaultValue=""
-                        />
-                        <Box padding={3}>
+                    <Box padding={3}>
                             <FormControl sx={{ width: 100 }}>
                                 <InputLabel id="demo-simple-select-label">Rol</InputLabel>
                                 <Select
@@ -379,12 +358,31 @@ export default function PrimarySearchAppBar() {
                                     label="Rol"
                                     onChange={handleChange}
                                 >
-                                    <MenuItem value={3}>Gebruiker</MenuItem>
-                                    <MenuItem value={2}>Artiest</MenuItem>
-                                    <MenuItem value={1}>Medewerker</MenuItem>
+                                    <MenuItem value={"Gast"}>Gast</MenuItem>
+                                    <MenuItem value={"Artiest"}>Artiest</MenuItem>
+                                    <MenuItem value={"Medewerker"}>Medewerker</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
+                        <TextField
+                            required
+                            id="voornaam"
+                            label="Voornaam"
+
+                        />
+                        <TextField
+                            required
+                            id="achternaam"
+                            label="Achternaam"
+
+                        />
+                        <TextField required id="email" label="Email" defaultValue="" />
+                        <TextField
+                            required
+                            id="telefoon"
+                            label="Telefoonnummer"
+
+                        />     
                     </Box>
                 </form>
                 <Box display={"flex"}>

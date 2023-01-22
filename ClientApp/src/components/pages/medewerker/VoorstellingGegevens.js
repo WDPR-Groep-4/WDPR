@@ -218,7 +218,7 @@ export default function VoorstellingGegevens() {
 
     async function getVoorstellingEvents() {
         const response = await axios
-            .get("api/medewerker/voorstelling")
+            .get("api/voorstellingevent/all")
             .catch((err) => {
                 console.log(err);
             });

@@ -5,6 +5,8 @@ import TableCell from '@mui/material/TableCell';
 import { TableRow } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 
 export default function Account(props) {
@@ -13,7 +15,7 @@ export default function Account(props) {
     const achternaam = props.account.achternaam;
     const email = props.account.email;
     const telefoonnummer = props.account.phoneNumber;
-    const rol = props.account.rol;
+    const [userRol, setUserRol] = useState([null]);
 
     return(
         <>
@@ -23,8 +25,31 @@ export default function Account(props) {
             <TableCell align="left">{achternaam}</TableCell>
             <TableCell align="left">{email}</TableCell>
             <TableCell align="left">{telefoonnummer}</TableCell>
-            <TableCell align="left">{rol}</TableCell>
-            
+            <TableCell align="left">{getRol(props.account.id)}</TableCell>
         </>
     )
-}
+
+    function getRol(id) {
+        if (userRol == null || id == undefined) {
+            return userRol;
+        }
+        axios.get(`api/account/${id}/rol`)
+            .then(res => {
+                setUserRol(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+            return userRol;
+        }
+        
+    }
+
+    
+
+
+    
+
+
+
