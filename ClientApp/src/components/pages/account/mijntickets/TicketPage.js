@@ -42,7 +42,7 @@ export default function TicketPage(props) {
                 `api/ticket/all_from_single_email`,
                 yourConfig
             );
-            if (response && response.data) {
+            if (response && response.data && Array.isArray(response.data)) {
                 console.log(response.data);
                 setTickets(response.data);
                 setHeader(response.headers["x-pagination"]);

@@ -30,8 +30,8 @@ export default function AgendaPage() {
 
     useEffect(() => {
         async function getVoorstellingEvents() {
-            const response = await axios
-                .get(
+            try {
+                const response = await axios.get(
                     "api/voorstellingevent",
                     {
                         params: {
@@ -43,15 +43,14 @@ export default function AgendaPage() {
                         },
                     },
                     yourConfig
-                )
-                .catch((err) => {
-                    console.log(err);
-                });
-            if (response && response.data) {
-                setVoorstellingEvents(response.data);
-                setHeader(response.headers["x-pagination"]);
+                );
+                if (response && response.data && Array.isArray(response.data)) {
+                    setVoorstellingEvents(response.data);
+                    setHeader(response.headers["x-pagination"]);
+                }
+            } catch (err) {
+                console.log(err);
             }
-            return response.data;
         }
         getVoorstellingEvents();
     }, [currentPage, zoekInput, sorteren, filters.genre]);
