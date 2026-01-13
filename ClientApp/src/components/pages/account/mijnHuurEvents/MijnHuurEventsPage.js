@@ -27,7 +27,7 @@ export default function MijnHuurEventsPage() {
                 `api/huurevent/all_from_single_email`,
                 yourConfig
             );
-            if (response && response.data && Array.isArray(response.data)) {
+            if (response && response.data) {
                 setVerhuurEvents(response.data);
                 setIsLoading(false);
                 console.log(response.data);

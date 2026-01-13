@@ -38,17 +38,9 @@ export default function RegistreerPage() {
         setSelectedInterests(newSelectedInterests);
     };
     useEffect(() => {
-        async function getInterests() {
-            try {
-                const res = await axios.get('/api/interesse/GetInteresses');
-                if (res && res.data && Array.isArray(res.data)) {
-                    setInterests(res.data);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        getInterests();
+        axios.get('/api/interesse/GetInteresses').then(res => {
+            setInterests(res.data);
+        });
     }, []);
 
     const registreer = async () => {

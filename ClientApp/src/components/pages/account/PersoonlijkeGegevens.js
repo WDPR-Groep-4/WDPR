@@ -20,15 +20,13 @@ export default function PersoonlijkeGegevens(props) {
 
     useEffect(() => {
         const account = async () => {
-            try {
-                const response = await axios.get("/api/account", yourConfig);
-                console.log(response.data);
-                if (response && response.status === 200 && typeof response.data === 'object' && response.data !== null) {
-                    setUser(response.data);
-                    setLoading(false);
-                }
-            } catch (err) {
+            const response = await axios.get("/api/account", yourConfig).catch((err) => {
                 console.log(err);
+            });
+            console.log(response.data);
+            if (response.status === 200) {
+                setUser(response.data);
+                setLoading(false);
             }
         };
         account();

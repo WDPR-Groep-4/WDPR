@@ -22,13 +22,9 @@ function HomePage(props) {
     //useEffect
     useEffect(() => {
         async function getVoorstellingen() {
-            try {
-                const response = await axios.get("api/homepage/getrandomvoorstellingen");
-                if (response && response.data && Array.isArray(response.data)) {
-                    setVoorstellingen(response.data);
-                }
-            } catch (error) {
-                console.error("Error fetching voorstellingen:", error);
+            const response = await axios.get("api/homepage/getrandomvoorstellingen");
+            if (response && response.data) {
+                setVoorstellingen(response.data);
             }
         }
         getVoorstellingen();
